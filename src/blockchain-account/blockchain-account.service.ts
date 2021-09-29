@@ -4,7 +4,7 @@ import {BlockchainAccountModel} from "./blockchain-account.model";
 import {Account} from "symbol-sdk";
 import {SymbolFactoryService} from "../symbol/symbol-factory.service";
 import {CryptoService} from "../crypto/crypto.service";
-import {EncryptedData} from "../crypto/encrypted-data";
+import {Encrypted} from "../crypto/encrypted-data";
 
 export class BlockchainAccountService {
     constructor(
@@ -50,7 +50,7 @@ export class BlockchainAccountService {
             userId: model.userId,
             address: model.address,
             publicKey: model.publicKey,
-            privateKey: this.cryptoService.decrypt(EncryptedData.deserialize(model.encryptedPrivateKey)),
+            privateKey: this.cryptoService.decrypt(Encrypted.deserialize<string>(model.encryptedPrivateKey)),
         };
     }
 }
