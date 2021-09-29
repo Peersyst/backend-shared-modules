@@ -1,4 +1,4 @@
-export class EncryptedData<T> {
+export class Encrypted<T> {
     constructor(
         public iv: string,
         public data: string,
@@ -10,8 +10,8 @@ export class EncryptedData<T> {
         return `${this.iv}:${this.data}:${this.mac}:${this.hash}`;
     }
 
-    static deserialize<T>(serialized: string): EncryptedData<T> {
+    static deserialize<T>(serialized: string): Encrypted<T> {
         const [iv, data, mac, hash] = serialized.split(":");
-        return new EncryptedData(iv, data, mac, hash);
+        return new Encrypted(iv, data, mac, hash);
     }
 }

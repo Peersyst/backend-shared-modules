@@ -1,6 +1,6 @@
 import * as crypto from "crypto";
 import {Inject, Injectable} from "@nestjs/common";
-import {EncryptedData} from "./encrypted-data";
+import {Encrypted} from "./encrypted-data";
 import {CRYPTO_MODULE_OPTIONS} from "./crypto.constants";
 import {CryptoModuleOptions} from "./crypto.module";
 
@@ -16,7 +16,7 @@ export class CryptoService {
         this.encryptionKey = Buffer.from(options.encryptionKey, "base64");
     }
 
-    public encrypt<T>(plain: T): EncryptedData<T> {
+    public encrypt<T>(plain: T): Encrypted<T> {
         const text = JSON.stringify(plain);
         const iv = crypto.randomBytes(16);
         const cipher = crypto.createCipheriv(this.ALGORITHM, this.encryptionKey, iv);
@@ -25,7 +25,7 @@ export class CryptoService {
 
         const hash = crypto.createHash("sha256").update(text, "utf8").digest().toString("base64");
 
-        return new EncryptedData(
+        return new Encrypted(
             iv.toString("base64"),
             enc,
             cipher.getAuthTag().toString("base64"),
@@ -33,7 +33,7 @@ export class CryptoService {
         );
     }
 
-    public decrypt<T>(enc: EncryptedData<T>): T {
+    public decrypt<T>(enc: Encrypted<T>): T {
         const decipher = crypto.createDecipheriv(this.ALGORITHM, this.encryptionKey, Buffer.from(enc.iv, "base64"));
         decipher.setAuthTag(Buffer.from(enc.mac, "base64"));
         let str = decipher.update(enc.data, "base64", "utf8");
