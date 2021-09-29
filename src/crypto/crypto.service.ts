@@ -16,7 +16,8 @@ export class CryptoService {
         this.encryptionKey = Buffer.from(options.encryptionKey, "base64");
     }
 
-    public encrypt(text: string): EncryptedData {
+    public encrypt<T>(plain: T): EncryptedData<T> {
+        const text = JSON.stringify(plain);
         const iv = crypto.randomBytes(16);
         const cipher = crypto.createCipheriv(this.ALGORITHM, this.encryptionKey, iv);
         let enc = cipher.update(text, "utf8", "base64");
@@ -32,12 +33,12 @@ export class CryptoService {
         );
     }
 
-    public decrypt(enc: EncryptedData): string {
+    public decrypt<T>(enc: EncryptedData<T>): T {
         const decipher = crypto.createDecipheriv(this.ALGORITHM, this.encryptionKey, Buffer.from(enc.iv, "base64"));
         decipher.setAuthTag(Buffer.from(enc.mac, "base64"));
         let str = decipher.update(enc.data, "base64", "utf8");
         str += decipher.final("utf8");
-        return str;
+        return JSON.parse(str);
     }
 
     public encryptFile(data: Buffer): Buffer {
