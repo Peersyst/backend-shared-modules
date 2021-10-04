@@ -12,6 +12,7 @@
     "prepare": "npm run build"
   },
   "dependencies": {
+    "js-sha3": "github:Propine/js-sha3#5ae72e8b",
     "symbol-sdk": "^1.0.1"
   },
   "devDependencies": {
