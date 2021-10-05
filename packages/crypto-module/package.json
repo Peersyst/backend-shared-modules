@@ -3,7 +3,6 @@
   "version": "0.1.1",
   "description": "Crypto backend module",
   "author": "Adrià Carrera <acarrera@peersyst.com>",
-  "private": true,
   "main": "index.js",
   "types": "index.d.ts",
   "scripts": {
@@ -19,5 +18,8 @@
   },
   "peerDependencies": {
     "@nestjs/common": "^6.0.0 || ^7.0.0 || ^8.0.0"
+  },
+  "publishConfig": {
+    "access": "restricted"
   }
 }
