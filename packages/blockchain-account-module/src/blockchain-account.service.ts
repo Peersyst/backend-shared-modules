@@ -2,9 +2,8 @@ import {BlockchainAccountEntity} from "./blockchain-account.entity";
 import {InjectModel} from "@nestjs/sequelize";
 import {BlockchainAccountModel} from "./blockchain-account.model";
 import {Account} from "symbol-sdk";
-import {SymbolFactoryService} from "../symbol/symbol-factory.service";
-import {CryptoService} from "../crypto/crypto.service";
-import {Encrypted} from "../crypto/encrypted-data";
+import {SymbolFactoryService} from "@peersyst/symbol-backend-module";
+import {CryptoService, Encrypted} from "@peersyst/crypto-backend-module";
 
 export class BlockchainAccountService {
     constructor(

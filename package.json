@@ -4,29 +4,17 @@
   "description": "Peersyst backend shared modules",
   "author": "Adrià Carrera <acarrera@peersyst.com>",
   "private": true,
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rimraf dist && tsc",
-    "prepare": "npm run build"
+    "clean": "lerna run clean",
+    "build": "lerna run build",
+    "publish": "lerna publish"
   },
   "devDependencies": {
     "@types/node": "^16.7.6",
-    "@nestjs/common": "8.0.6",
-    "@nestjs/core": "8.0.6",
-    "@nestjs/sequelize": "0.2.0",
-    "sequelize": "^6.3.5",
-    "sequelize-typescript": "^2.0.0",
-    "symbol-sdk": "^1.0.1",
-    "reflect-metadata": "0.1.13",
-    "rimraf": "^3.0.2",
+    "lerna": "^4.0.0",
     "typescript": "^4.4.2"
-  },
-  "peerDependencies": {
-    "@nestjs/common": "^6.0.0 || ^7.0.0 || ^8.0.0",
-    "@nestjs/sequelize": "0.2.0",
-    "sequelize": "^6.3.5",
-    "sequelize-typescript": "^2.0.0"
   }
 }
