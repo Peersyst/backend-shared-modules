@@ -13,5 +13,5 @@
     "incremental": true,
     "skipLibCheck": true
   },
-  "include": ["/packages/**/*.ts", "/packages/**/*.spec.ts"]
+  "include": ["/**/*.ts", "/**/*.spec.ts"]
 }
