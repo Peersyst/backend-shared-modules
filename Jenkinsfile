@@ -31,8 +31,9 @@ pipeline {
             }
             steps {
                 withCredentials([string(credentialsId: 'npm-publish-token', variable: 'NPM_TOKEN')]) {
-                sh "echo //registry.npmjs.org/:_authToken=${env.NPM_TOKEN} > .npmrc"
-                sh 'lerna publish --yes'
+                    sh "echo //registry.npmjs.org/:_authToken=${env.NPM_TOKEN} > .npmrc"
+                    sh 'lerna publish --yes'
+                }
             }
         }
     }
