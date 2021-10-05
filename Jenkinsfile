@@ -30,7 +30,8 @@ pipeline {
             }
             steps {
                 withCredentials([string(credentialsId: 'npm-publish-token', variable: 'NPM_TOKEN')]) {
-                    sh 'npx lerna publish minor --skip-git --yes --registry //registry.npmjs.org/:_authToken=$NPM_TOKEN'
+                    sh "echo //registry.npmjs.org/:_authToken=${env.NPM_TOKEN} > .npmrc"
+                    sh 'npx lerna publish minor --skip-git --yes'
                 }
             }
         }
