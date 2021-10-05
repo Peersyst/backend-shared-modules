@@ -1,6 +1,6 @@
 {
   "name": "@peersyst/symbol-backend-module",
-  "version": "0.0.0",
+  "version": "0.1.1",
   "description": "Symbol backend module",
   "author": "Adrià Carrera <acarrera@peersyst.com>",
   "private": true,
