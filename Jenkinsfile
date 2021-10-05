@@ -22,7 +22,7 @@ pipeline {
                 branch 'main'
             }
             steps {
-                sh 'lerna bootstrap'
+                sh 'npx lerna bootstrap'
             }
         }
         stage('Lerna publish') {
@@ -32,7 +32,7 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'npm-publish-token', variable: 'NPM_TOKEN')]) {
                     sh "echo //registry.npmjs.org/:_authToken=${env.NPM_TOKEN} > .npmrc"
-                    sh 'lerna publish --yes'
+                    sh 'npx lerna publish --yes'
                 }
             }
         }
