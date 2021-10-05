@@ -30,8 +30,7 @@ pipeline {
             }
             steps {
                 withCredentials([string(credentialsId: 'npm-publish-token', variable: 'NPM_TOKEN')]) {
-                    sh "npm whoami"
-                    sh "npx lerna publish minor --skip-git --yes"
+                    sh "npx lerna publish minor ---no-git-tag-version --no-push --yes"
                 }
             }
         }
