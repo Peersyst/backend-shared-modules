@@ -24,3 +24,5 @@
 /**/*.js.map
 
 /**/tsconfig.tsbuildinfo
+
+.npmrc
