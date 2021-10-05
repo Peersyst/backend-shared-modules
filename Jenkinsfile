@@ -31,7 +31,7 @@ pipeline {
             }
             steps {
                 withCredentials([string(credentialsId: 'npm-publish-token', variable: 'NPM_TOKEN')]) {
-                    sh 'npx lerna publish --yes --registry //registry.npmjs.org/:_authToken=${env.NPM_TOKEN}'
+                    sh "npx lerna publish --yes --registry //registry.npmjs.org/:_authToken=${env.NPM_TOKEN}"
                 }
             }
         }
