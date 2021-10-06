@@ -24,6 +24,14 @@ pipeline {
                 sh 'npx lerna bootstrap'
             }
         }
+        stage('Build') {
+            when {
+                branch 'main'
+            }
+            steps {
+                sh 'npm run build'
+            }
+        }
         stage('Lerna publish') {
             when {
                 branch 'main'
