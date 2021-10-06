@@ -29,7 +29,9 @@ pipeline {
                 branch 'main'
             }
             steps {
-                sh 'npm run build'
+                withCredentials([string(credentialsId: 'npm-publish-token', variable: 'NPM_TOKEN')]) {
+                    sh 'npm run build'
+                }
             }
         }
         stage('Lerna publish') {
