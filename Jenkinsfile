@@ -13,7 +13,9 @@ pipeline {
                 branch 'main'
             }
             steps {
-                sh 'npm install'
+                withCredentials([string(credentialsId: 'npm-publish-token', variable: 'NPM_TOKEN')]) {
+                    sh 'npm install'
+                }
             }
         }
         stage('Lerna bootstrap') {
@@ -21,7 +23,9 @@ pipeline {
                 branch 'main'
             }
             steps {
-                sh 'npx lerna bootstrap'
+                withCredentials([string(credentialsId: 'npm-publish-token', variable: 'NPM_TOKEN')]) {
+                    sh 'npx lerna bootstrap'
+                }
             }
         }
         stage('Build') {
