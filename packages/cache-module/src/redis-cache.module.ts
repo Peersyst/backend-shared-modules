@@ -46,7 +46,7 @@ export class RedisCacheModule {
         return {
             module: RedisCacheModule,
             global: true,
-            imports: options.imports || [
+            imports: [
                 CacheModule.registerAsync({
                     useFactory: async () => ({
                         store: redisStore,
