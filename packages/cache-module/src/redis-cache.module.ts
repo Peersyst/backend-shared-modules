@@ -1,12 +1,22 @@
 import {CacheModule, DynamicModule, Global, Module, ModuleMetadata, Provider, Type} from '@nestjs/common';
 import { RedisCacheService } from './redis-cache.service';
 import * as redisStore from 'cache-manager-redis-store';
-import {REDIS_CACHE_MODULE_OPTIONS} from "./redis-cache.constants";
 
 export interface RedisCacheModuleOptions {
     redisHost: string;
     redisPort: number;
     redisPassword: string;
+}
+
+export interface RedisCacheOptionsFactory {
+    createCacheOptions(): Promise<RedisCacheModuleOptions> | RedisCacheModuleOptions;
+}
+
+export interface RedisCacheModuleAsyncOptions extends Pick<ModuleMetadata, 'imports'> {
+    useExisting?: Type<RedisCacheOptionsFactory>;
+    useClass?: Type<RedisCacheOptionsFactory>;
+    useFactory?: (...args: any[]) => Promise<RedisCacheModuleOptions> | RedisCacheModuleOptions;
+    inject?: any[];
 }
 
 @Global()
@@ -21,7 +31,7 @@ export class RedisCacheModule {
                     host: options.redisHost,
                     port: options.redisPort,
                     auth_pass: options.redisPassword,
-                  }),
+                }),
             ],
             providers: [
                 RedisCacheService,
@@ -29,6 +39,25 @@ export class RedisCacheModule {
             exports: [
                 RedisCacheService,
             ],
+        };
+    }
+
+    static registerAsync(options: RedisCacheModuleAsyncOptions): DynamicModule {
+        return {
+            module: RedisCacheModule,
+            global: true,
+            imports: options.imports || [
+                CacheModule.registerAsync({
+                    useFactory: async () => ({
+                        store: redisStore,
+                        host: (await options.useFactory()).redisHost,
+                        port: (await options.useFactory()).redisPort,
+                        auth_pass: (await options.useFactory()).redisPassword,
+                    }),
+                }),
+            ],
+            providers: [RedisCacheService],
+            exports: [RedisCacheService],
         };
     }
 }
