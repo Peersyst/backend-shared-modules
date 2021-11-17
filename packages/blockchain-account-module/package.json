@@ -1,6 +1,6 @@
 {
   "name": "@peersyst/blockchain-account-backend-module",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Blockchain Account backend module",
   "author": "Adrià Carrera <acarrera@peersyst.com>",
   "main": "index.js",
@@ -13,8 +13,8 @@
     "@nestjs/common": "8.0.6",
     "@nestjs/core": "8.0.6",
     "@nestjs/sequelize": "0.2.0",
-    "@peersyst/crypto-backend-module": "^0.4.0",
-    "@peersyst/symbol-backend-module": "^0.4.0",
+    "@peersyst/crypto-backend-module": "^0.5.0",
+    "@peersyst/symbol-backend-module": "^0.5.0",
     "@types/node": "^16.7.6",
     "reflect-metadata": "0.1.13",
     "rimraf": "^3.0.2",
