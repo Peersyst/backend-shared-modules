@@ -46,19 +46,7 @@ export class RedisCacheModule {
         return {
             module: RedisCacheModule,
             global: true,
-            imports: [
-                CacheModule.registerAsync({
-                    useFactory: async () => ({
-                        store: redisStore,
-                        host: (await options.useFactory()).redisHost,
-                        port: (await options.useFactory()).redisPort,
-                        auth_pass: (await options.useFactory()).redisPassword,
-                    }),
-                    imports: options.imports,
-                    inject: options.inject,
-                }),
-                ...options.imports,
-            ],
+            imports: options.imports || [],
             providers: [RedisCacheService],
             exports: [RedisCacheService],
         };
