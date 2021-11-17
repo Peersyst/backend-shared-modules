@@ -55,6 +55,7 @@ export class RedisCacheModule {
                         auth_pass: (await options.useFactory()).redisPassword,
                     }),
                 }),
+                ...options.imports,
             ],
             providers: [RedisCacheService],
             exports: [RedisCacheService],
