@@ -45,7 +45,6 @@ export class RedisCacheModule {
     static registerAsync(options: RedisCacheModuleAsyncOptions): DynamicModule {
         return {
             module: RedisCacheModule,
-            global: true,
             imports: options.imports || [],
             providers: [RedisCacheService],
             exports: [RedisCacheService],
