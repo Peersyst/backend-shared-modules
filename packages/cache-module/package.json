@@ -1,5 +1,5 @@
 {
-  "name": "cache-module",
+  "name": "@peersyst/cache-backend-module",
   "version": "0.0.1",
   "description": "",
   "main": "index.js",
