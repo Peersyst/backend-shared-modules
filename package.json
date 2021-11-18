@@ -10,6 +10,7 @@
   "scripts": {
     "clean": "lerna run clean",
     "build": "lerna run build",
+    "version": "lerna version",
     "publish": "lerna publish"
   },
   "devDependencies": {
