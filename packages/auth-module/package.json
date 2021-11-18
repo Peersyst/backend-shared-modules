@@ -1,0 +1,44 @@
+{
+  "name": "@peersyst/auth-module",
+  "version": "0.1.0",
+  "description": "Auth module",
+  "author": "Adrià Carrera <acarrera@peersyst.com>",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "build": "rimraf dist && tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@nanogiants/nestjs-swagger-api-exception-decorator": "^1.4.3",
+    "@nestjs/common": "7.6.15",
+    "@nestjs/config": "^0.6.3",
+    "@nestjs/core": "7.6.15",
+    "@nestjs/jwt": "7.2.0",
+    "@nestjs/passport": "7.1.5",
+    "@nestjs/platform-express": "7.6.15",
+    "@nestjs/swagger": "~4.8.0",
+    "express-openapi-validator": "^4.12.12",
+    "class-transformer": "^0.4.0",
+    "class-validator": "^0.13.1",
+    "passport": "^0.4.1",
+    "passport-google-oauth20": "^2.0.0",
+    "passport-jwt": "4.0.0",
+    "passport-local": "1.0.0",
+    "passport-twitter": "^1.0.4",
+    "reflect-metadata": "0.1.13",
+    "rxjs": "^6.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^16.7.6",
+    "@types/express": "4.17.11",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.4.2"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^6.0.0 || ^7.0.0 || ^8.0.0"
+  },
+  "publishConfig": {
+    "access": "restricted"
+  }
+}
