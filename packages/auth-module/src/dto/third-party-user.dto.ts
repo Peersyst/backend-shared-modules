@@ -4,7 +4,7 @@ export enum AuthType {
     TWITTER = "twitter",
 }
 
-export interface ThirdPartyUserDto {
+export interface ThirdPartyUserDtoI {
     email: string;
     name: string;
     accessToken: string;

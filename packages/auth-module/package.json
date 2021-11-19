@@ -2,7 +2,7 @@
   "name": "@peersyst/auth-module",
   "version": "0.7.0",
   "description": "Auth module",
-  "author": "Adrià Carrera <acarrera@peersyst.com>",
+  "author": "Joan Grau <jgrau@peersyst.com>",
   "main": "index.js",
   "types": "index.d.ts",
   "scripts": {

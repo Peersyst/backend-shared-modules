@@ -1,3 +1,3 @@
-export interface AuthCredentialsDto {
+export interface AuthCredentialsDtoI {
     access_token: string;
 }

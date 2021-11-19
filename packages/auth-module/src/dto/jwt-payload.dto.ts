@@ -1,6 +1,6 @@
 import { UserType } from "../entities/AuthUser";
 
-export interface JwtPayloadDTO {
+export interface JwtPayloadDTOI {
     email: string;
     id: number;
     type: UserType;

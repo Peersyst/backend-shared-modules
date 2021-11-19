@@ -1,7 +1,7 @@
 import { PassportStrategy } from "@nestjs/passport";
 import { Profile, Strategy } from "passport-twitter";
 import { Inject, Injectable } from "@nestjs/common";
-import { ThirdPartyUserDto } from "../dto/third-party-user.dto";
+import { ThirdPartyUserDtoI } from "../dto/third-party-user.dto";
 import { ConfigService } from "@nestjs/config";
 
 @Injectable()
@@ -19,7 +19,7 @@ export class TwitterStrategy extends PassportStrategy(Strategy, "twitter") {
 
     async validate(accessToken: string, _tokenSecret: string, profile: Profile, done: (error: any, user?: any) => void): Promise<any> {
         const { displayName, emails } = profile;
-        const user: ThirdPartyUserDto = {
+        const user: ThirdPartyUserDtoI = {
             email: emails[0].value,
             name: displayName,
             accessToken,
