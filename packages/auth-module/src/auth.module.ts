@@ -1,7 +1,7 @@
 import { DynamicModule, Module, Provider, Type } from "@nestjs/common";
 import { JwtModule } from "@nestjs/jwt";
 import { PassportModule } from "@nestjs/passport";
-import { AuthController } from "./auth.controller";
+import { AuthController, AuthGoogleController, AuthTwitterController } from "./auth.controller";
 import { AuthService } from "./auth.service";
 import { JwtStrategy } from "./strategies/jwt.strategy";
 import { LocalStrategy } from "./strategies/local.strategy";
@@ -12,11 +12,14 @@ import { TwitterStrategy } from "./strategies/twitter.strategy";
 export class AuthModule {
     static register(UserModule: Type, ConfigModule: Type, ConfigService: any, options: { googleAuth: boolean, twitterAuth: boolean }): DynamicModule {
         const providers: Provider[] = [LocalStrategy, JwtStrategy, AuthService];
+        const controllers: Type<any>[] = [AuthController];
         if (options.googleAuth) {
             providers.push(GoogleStrategy);
+            controllers.push(AuthGoogleController);
         }
         if (options.twitterAuth) {
             providers.push(TwitterStrategy);
+            controllers.push(AuthTwitterController);
         }
 
         return {
@@ -35,7 +38,7 @@ export class AuthModule {
                 UserModule,
             ],
             providers,
-            controllers: [AuthController],
+            controllers,
             exports: [AuthService],
         };
     }

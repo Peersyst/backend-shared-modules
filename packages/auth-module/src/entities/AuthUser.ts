@@ -11,13 +11,13 @@ export enum TwoFactorType {
 export interface AuthUserI {
     id: number;
     email: string;
-    type: UserType;
+    type: Required<UserType>;
     password: string;
 }
 
 export interface Auth2FAUserI {
     needs2fa: boolean;
-    twoFactorType: TwoFactorType | null;
+    twoFactorType: Required<TwoFactorType> | null;
     authenticatorSecret: string | null;
 }
 
