@@ -2,13 +2,13 @@ import { applyDecorators, ForbiddenException, SetMetadata, UnauthorizedException
 import { ApiBearerAuth } from "@nestjs/swagger";
 import { ApiException } from "@nanogiants/nestjs-swagger-api-exception-decorator";
 import { RolesGuard } from "./guards/roles.guard";
-import { UserType } from "./entities/AuthUser";
-import { TwoFactorAuthGuard } from "./guards/two-factor-auth.guard";
+import { WithUserType } from "./entities/AuthUser";
+// import { TwoFactorAuthGuard } from "./guards/two-factor-auth.guard";
 
-export function Authenticated(role?: UserType | string): MethodDecorator {
+export function Authenticated<T>(role?: WithUserType<T> | string): MethodDecorator {
     return applyDecorators(
         SetMetadata("role", role),
-        UseGuards(TwoFactorAuthGuard),
+        // UseGuards(TwoFactorAuthGuard),
         ApiBearerAuth(),
         UseGuards(RolesGuard),
         ApiException(() => UnauthorizedException),

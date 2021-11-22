@@ -1,7 +1,7 @@
-import { UserType } from "../entities/AuthUser";
+import { UserType, WithUserType } from "../entities/AuthUser";
 
-export interface PrivateAuthUserDtoI {
+export interface PrivateAuthUserDtoI<T = UserType> {
     id: number;
     email: string;
-    type: UserType | string;
+    type: WithUserType<T> | string;
 }

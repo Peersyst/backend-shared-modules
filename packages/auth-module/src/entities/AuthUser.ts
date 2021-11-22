@@ -2,16 +2,17 @@ export enum UserType {
     ADMIN = "admin",
     USER = "user",
 }
+export type WithUserType<T> = T & UserType;
 
 export enum TwoFactorType {
     EMAIL = "email",
     AUTHENTICATOR = "authenticator",
 }
 
-export interface AuthUserI {
+export interface AuthUserI<T = UserType> {
     id: number;
     email: string;
-    type: Required<UserType> | string;
+    type: WithUserType<T> | string;
     password: string;
 }
 

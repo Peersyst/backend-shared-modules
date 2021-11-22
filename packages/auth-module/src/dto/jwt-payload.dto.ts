@@ -1,9 +1,9 @@
-import { UserType } from "../entities/AuthUser";
+import { UserType, WithUserType } from "../entities/AuthUser";
 
-export interface JwtPayloadDTOI {
+export interface JwtPayloadDTOI<T = UserType> {
     email: string;
     id: number;
-    type: UserType | string;
+    type: WithUserType<T> | string;
     isTwoFactorAuthenticated?: boolean;
     needs2fa?: boolean;
 }
