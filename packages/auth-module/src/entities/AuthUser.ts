@@ -11,7 +11,7 @@ export enum TwoFactorType {
 export interface AuthUserI {
     id: number;
     email: string;
-    type: Required<UserType>;
+    type: Required<UserType> | string;
     password: string;
 }
 
