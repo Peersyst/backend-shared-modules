@@ -5,7 +5,7 @@ import { RolesGuard } from "./guards/roles.guard";
 import { UserType } from "./entities/AuthUser";
 import { TwoFactorAuthGuard } from "./guards/two-factor-auth.guard";
 
-export function Authenticated(role?: UserType): MethodDecorator {
+export function Authenticated(role?: UserType | string): MethodDecorator {
     return applyDecorators(
         SetMetadata("role", role),
         UseGuards(TwoFactorAuthGuard),
