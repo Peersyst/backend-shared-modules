@@ -3,7 +3,6 @@ import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { AuthService } from "./auth.service";
 import { LocalAuthGuard } from "./guards/local-auth.guard";
 import { ApiException } from "@nanogiants/nestjs-swagger-api-exception-decorator";
-import { LoginRequest } from "./login.request";
 import { AuthCredentialsDtoI } from "./dto/auth-credentials.dto";
 import { ApiErrorDecorators } from "./exception/error-response.decorator";
 import { GoogleAuthGuard } from "./guards/google-auth.guard";
@@ -12,6 +11,7 @@ import { AuthErrorCode } from "./exception/error-codes";
 import { ThirdPartyUserDtoI } from "./dto/third-party-user.dto";
 import { TwitterAuthGuard } from "./guards/twitter-auth.guard";
 import { ConfigService } from "@nestjs/config";
+import { ValidateEmailRequest, ResetPasswordRequest, LoginRequest } from "./requests";
 
 @ApiTags("authenticate")
 @Controller("auth")
@@ -90,5 +90,51 @@ export class AuthTwitterController {
         const { access_token } = await this.authService.twitterLogin(user);
         res.cookie("access_token", access_token, { expires: new Date(Date.now() + 60000) });
         res.redirect(this.configService.get("server.frontUrl"));
+    }
+}
+
+@ApiTags("authenticate")
+@Controller("auth")
+@ApiErrorDecorators()
+export class AuthValidateController {
+    constructor(
+        private readonly authService: AuthService,
+        @Inject(ConfigService) private configService: ConfigService
+    ) {}
+
+    @Post("verify-email")
+    @ApiOperation({ summary: "Verify user email" })
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    async verifyEmail(@Body() validateEmailRequest: ValidateEmailRequest): Promise<AuthCredentialsDtoI> {
+        const tokenData = await this.userService.verifyEmail(validateEmailRequest.token);
+        const user = await this.userService.findById(tokenData.userId);
+        const accessToken = await this.authService.login(user);
+        return accessToken;
+    }
+}
+
+@ApiTags("authenticate")
+@Controller("auth")
+@ApiErrorDecorators()
+export class AuthRecoverController {
+    constructor(
+        private readonly authService: AuthService,
+        @Inject(ConfigService) private configService: ConfigService
+    ) {}
+
+    @Post("recover-password")
+    @ApiOperation({ summary: "Request Password Reset" })
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types,@typescript-eslint/no-unused-vars
+    async requestResetPassword(@Query("email") email: string): Promise<void> {
+        await this.userService.requestResetPassword(email);
+        return;
+    }
+
+    @Post("reset-password")
+    @ApiOperation({ summary: "Password Reset" })
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types,@typescript-eslint/no-unused-vars
+    async resetPassword(@Query("token") token: string, @Body() resetPasswordRequestDto: ResetPasswordRequest): Promise<void> {
+        await this.userService.resetPassword(token, resetPasswordRequestDto.password);
+        return;
     }
 }
