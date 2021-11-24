@@ -5,7 +5,7 @@ import { RolesGuard } from "./guards/roles.guard";
 import { WithUserType } from "./entities/AuthUser";
 import { JwtAuthGuard } from "./guards/jwt-auth.guard";
 
-export function Authenticated<T>(role?: WithUserType<T> | string): MethodDecorator {
+export function Authenticated<T>(role?: WithUserType<T> | string | WithUserType<T>[] | string[]): MethodDecorator {
     return applyDecorators(
         SetMetadata("role", role),
         UseGuards(JwtAuthGuard),

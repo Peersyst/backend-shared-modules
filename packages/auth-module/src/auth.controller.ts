@@ -1,9 +1,9 @@
 import { Body, Controller, Post, Request, UnauthorizedException, UseGuards, Get, Response, Inject } from "@nestjs/common";
-import { ApiOperation, ApiTags } from "@nestjs/swagger";
+import { ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { AuthService } from "./auth.service";
 import { LocalAuthGuard } from "./guards/local-auth.guard";
 import { ApiException } from "@nanogiants/nestjs-swagger-api-exception-decorator";
-import { AuthCredentialsDtoI } from "./dto/auth-credentials.dto";
+import { AuthCredentialsDto } from "./dto/auth-credentials.dto";
 import { ApiErrorDecorators } from "./exception/error-response.decorator";
 import { GoogleAuthGuard } from "./guards/google-auth.guard";
 import { BusinessException } from "./exception/business.exception";
@@ -26,8 +26,9 @@ export class AuthController {
     @UseGuards(LocalAuthGuard)
     @Post("login")
     @ApiException(() => UnauthorizedException)
+    @ApiOkResponse({ type: AuthCredentialsDto })
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    async login(@Body() loginRequestDto: LoginRequest, @Request() req): Promise<AuthCredentialsDtoI> {
+    async login(@Body() loginRequestDto: LoginRequest, @Request() req): Promise<AuthCredentialsDto> {
         const accessToken = await this.authService.login(req.user);
         return accessToken;
     }
