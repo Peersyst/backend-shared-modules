@@ -3,13 +3,15 @@ import { JwtService } from "@nestjs/jwt";
 import { PrivateAuthUserDtoI } from "./dto/private-user.dto";
 import { AuthCredentialsDtoI } from "./dto/auth-credentials.dto";
 import { AuthType, ThirdPartyUserDtoI } from "./dto/third-party-user.dto";
+import { BusinessException } from "./exception/business.exception";
+import { AuthErrorCode } from "./exception/error-codes";
 
 export interface AuthUserServiceI {
-    userEmailPasswordMatch: (email: string, password: string) => Promise<PrivateAuthUserDtoI>;
+    userEmailPasswordMatch: (email: string, password: string) => Promise<PrivateAuthUserDtoI | null>;
     findOrCreate?: (thirdPartyUser: ThirdPartyUserDtoI, authType: AuthType) => Promise<PrivateAuthUserDtoI>;
 }
 export interface ThirdPartyUserServiceI {
-    userEmailPasswordMatch: (email: string, password: string) => Promise<PrivateAuthUserDtoI>;
+    userEmailPasswordMatch: (email: string, password: string) => Promise<PrivateAuthUserDtoI | null>;
     findOrCreate: (thirdPartyUser: ThirdPartyUserDtoI, authType: AuthType) => Promise<PrivateAuthUserDtoI>;
 }
 
@@ -20,8 +22,18 @@ export class AuthService {
         private readonly jwtService: JwtService,
     ) {}
 
-    async validateUser(email: string, pass: string): Promise<PrivateAuthUserDtoI | null> {
-        return await this.userService.userEmailPasswordMatch(email, pass);
+    async validateUser(email: string, pass: string): Promise<PrivateAuthUserDtoI> {
+        let user;
+        try {
+            user = await this.userService.userEmailPasswordMatch(email, pass);
+        } catch (error) {
+            throw new BusinessException(AuthErrorCode.INVALID_CREDENTIALS);
+        }
+
+        if (!user) {
+            throw new BusinessException(AuthErrorCode.INVALID_CREDENTIALS);
+        }
+        return user;
     }
 
     async login(user: PrivateAuthUserDtoI): Promise<AuthCredentialsDtoI> {

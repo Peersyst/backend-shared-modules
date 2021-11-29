@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Request, UnauthorizedException, UseGuards, Get, Response, Inject } from "@nestjs/common";
+import { Body, Controller, Post, Request, UseGuards, Get, Response, Inject } from "@nestjs/common";
 import { ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { AuthService } from "./auth.service";
 import { LocalAuthGuard } from "./guards/local-auth.guard";
@@ -25,7 +25,7 @@ export class AuthController {
     @ApiOperation({ summary: "Authenticate user with email" })
     @UseGuards(LocalAuthGuard)
     @Post("login")
-    @ApiException(() => UnauthorizedException)
+    @ApiException(() => new BusinessException(AuthErrorCode.INVALID_CREDENTIALS))
     @ApiOkResponse({ type: AuthCredentialsDto })
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     async login(@Body() loginRequestDto: LoginRequest, @Request() req): Promise<AuthCredentialsDto> {
