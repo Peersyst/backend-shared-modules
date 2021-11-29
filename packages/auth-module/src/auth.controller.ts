@@ -12,6 +12,10 @@ import { ThirdPartyUserDtoI } from "./dto/third-party-user.dto";
 import { TwitterAuthGuard } from "./guards/twitter-auth.guard";
 import { ConfigService } from "@nestjs/config";
 import { ValidateEmailRequest, ResetPasswordRequest, LoginRequest } from "./requests";
+import { ValidateEmailService } from "./validate-email.service";
+import { RecoverPasswordRequest } from "./requests/recover-password.request";
+import { RecoverPasswordService } from "./recover-password.service";
+import { PrivateAuthUserDtoI } from "./dto/private-user.dto";
 
 @ApiTags("authenticate")
 @Controller("auth")
@@ -100,18 +104,22 @@ export class AuthTwitterController {
 export class AuthValidateController {
     constructor(
         private readonly authService: AuthService,
-        @Inject(ConfigService) private configService: ConfigService
+        private readonly validateEmailService: ValidateEmailService,
     ) {}
 
     @Post("verify-email")
     @ApiOperation({ summary: "Verify user email" })
+    @ApiOkResponse({ type: AuthCredentialsDto })
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    async verifyEmail(@Body() validateEmailRequest: ValidateEmailRequest): Promise<AuthCredentialsDtoI> {
-        const tokenData = await this.userService.verifyEmail(validateEmailRequest.token);
-        const user = await this.userService.findById(tokenData.userId);
-        const accessToken = await this.authService.login(user);
+    async verifyEmail(@Body() validateEmailRequest: ValidateEmailRequest): Promise<AuthCredentialsDto> {
+        const tokenData = await this.validateEmailService.verifyEmailVerificationToken(validateEmailRequest.token);
+        const accessToken = await this.authService.validateUserEmail(tokenData.userId);
         return accessToken;
     }
+}
+
+export interface RecoverNotificationServiceI {
+    notificateRecoverPassword: (user: PrivateAuthUserDtoI, resetToken: string) => Promise<void>;
 }
 
 @ApiTags("authenticate")
@@ -120,22 +128,24 @@ export class AuthValidateController {
 export class AuthRecoverController {
     constructor(
         private readonly authService: AuthService,
-        @Inject(ConfigService) private configService: ConfigService
+        private readonly recoverPasswordService: RecoverPasswordService,
+        @Inject("NotificationService") private readonly notificationService: RecoverNotificationServiceI,
     ) {}
 
     @Post("recover-password")
     @ApiOperation({ summary: "Request Password Reset" })
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types,@typescript-eslint/no-unused-vars
-    async requestResetPassword(@Query("email") email: string): Promise<void> {
-        await this.userService.requestResetPassword(email);
-        return;
+    async requestResetPassword(@Body() recoverPasswordRequest: RecoverPasswordRequest): Promise<void> {
+        const user = await this.authService.getUserByEmail(recoverPasswordRequest.email);
+        const resetToken = await this.recoverPasswordService.createResetToken(user.id);
+        await this.notificationService.notificateRecoverPassword(user, resetToken);
     }
 
     @Post("reset-password")
     @ApiOperation({ summary: "Password Reset" })
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types,@typescript-eslint/no-unused-vars
-    async resetPassword(@Query("token") token: string, @Body() resetPasswordRequestDto: ResetPasswordRequest): Promise<void> {
-        await this.userService.resetPassword(token, resetPasswordRequestDto.password);
-        return;
+    async resetPassword(@Body() resetPasswordRequestDto: ResetPasswordRequest): Promise<void> {
+        const userId = await this.recoverPasswordService.verifyResetToken(resetPasswordRequestDto.token);
+        await this.authService.resetPassword(userId, resetPasswordRequestDto.password);
     }
 }

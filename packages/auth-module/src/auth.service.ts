@@ -3,20 +3,42 @@ import { JwtService } from "@nestjs/jwt";
 import { PrivateAuthUserDtoI } from "./dto/private-user.dto";
 import { AuthCredentialsDtoI } from "./dto/auth-credentials.dto";
 import { AuthType, ThirdPartyUserDtoI } from "./dto/third-party-user.dto";
+import { BusinessException } from "./exception/business.exception";
+import { AuthErrorCode } from "./exception/error-codes";
 
 export interface AuthUserServiceI {
     userEmailPasswordMatch: (email: string, password: string) => Promise<PrivateAuthUserDtoI>;
     findOrCreate?: (thirdPartyUser: ThirdPartyUserDtoI, authType: AuthType) => Promise<PrivateAuthUserDtoI>;
+    updateUserValidated?: (userId: number) => Promise<PrivateAuthUserDtoI>;
+    findByEmail?: (email: string) => Promise<PrivateAuthUserDtoI | null>;
+    resetPassword?: (userId: number, password: string) => Promise<void>;
 }
 export interface ThirdPartyUserServiceI {
     userEmailPasswordMatch: (email: string, password: string) => Promise<PrivateAuthUserDtoI>;
     findOrCreate: (thirdPartyUser: ThirdPartyUserDtoI, authType: AuthType) => Promise<PrivateAuthUserDtoI>;
+    updateUserValidated?: (userId: number) => Promise<PrivateAuthUserDtoI>;
+    findByEmail?: (email: string) => Promise<PrivateAuthUserDtoI | null>;
+    resetPassword?: (userId: number, password: string) => Promise<void>;
+}
+export interface ValidateEmailUserServiceI {
+    userEmailPasswordMatch: (email: string, password: string) => Promise<PrivateAuthUserDtoI>;
+    findOrCreate?: (thirdPartyUser: ThirdPartyUserDtoI, authType: AuthType) => Promise<PrivateAuthUserDtoI>;
+    updateUserValidated: (userId: number) => Promise<PrivateAuthUserDtoI>;
+    findByEmail?: (email: string) => Promise<PrivateAuthUserDtoI | null>;
+    resetPassword?: (userId: number, password: string) => Promise<void>;
+}
+export interface RecoverPasswordUserServiceI {
+    userEmailPasswordMatch: (email: string, password: string) => Promise<PrivateAuthUserDtoI>;
+    findOrCreate?: (thirdPartyUser: ThirdPartyUserDtoI, authType: AuthType) => Promise<PrivateAuthUserDtoI>;
+    updateUserValidated?: (userId: number) => Promise<PrivateAuthUserDtoI>;
+    findByEmail: (email: string) => Promise<PrivateAuthUserDtoI | null>;
+    resetPassword: (userId: number, password: string) => Promise<void>;
 }
 
 @Injectable()
 export class AuthService {
     constructor(
-        @Inject("UserService") private readonly userService: AuthUserServiceI | ThirdPartyUserServiceI,
+        @Inject("UserService") private readonly userService: AuthUserServiceI | ThirdPartyUserServiceI | ValidateEmailUserServiceI | RecoverPasswordUserServiceI,
         private readonly jwtService: JwtService,
     ) {}
 
@@ -29,6 +51,23 @@ export class AuthService {
         return {
             access_token: this.jwtService.sign(payload),
         };
+    }
+
+    async validateUserEmail(userId: number): Promise<AuthCredentialsDtoI> {
+        const user = await this.userService.updateUserValidated(userId);
+        return this.login(user);
+    }
+
+    async getUserByEmail(email: string): Promise<PrivateAuthUserDtoI> {
+        const user = await this.userService.findByEmail(email);
+        if (!user) {
+            throw new BusinessException(AuthErrorCode.USER_NOT_FOUND);
+        }
+        return user;
+    }
+
+    async resetPassword(userId: number, password: string): Promise<void> {
+        await this.userService.resetPassword(userId, password);
     }
 
     async googleLogin(googleUser: ThirdPartyUserDtoI): Promise<AuthCredentialsDtoI> {

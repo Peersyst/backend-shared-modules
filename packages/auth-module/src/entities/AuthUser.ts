@@ -31,3 +31,7 @@ export interface AuthTwitterUserI {
     twitterAuth: boolean;
     name: string;
 }
+
+export interface ValidateEmailUserI {
+    emailVerified?: boolean;
+}

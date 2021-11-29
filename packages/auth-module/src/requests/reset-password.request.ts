@@ -8,4 +8,10 @@ export class ResetPasswordRequest {
         pattern: "(?=.{8,})(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\\W_]).*",
     })
     password: string;
+
+    @ApiProperty({
+        type: "string",
+        required: true,
+    })
+    token: string;
 }
