@@ -206,27 +206,6 @@ import { AuthUserServiceI, RecoverPasswordUserServiceI } from "@peersyst/auth-mo
 export class UserService implements AuthUserServiceI, RecoverPasswordUserServiceI {...}
 ```
 
-- When you either create or register a user an email verification token should be created and sent:
-```typescript
-import { AuthUserServiceI, RecoverPasswordUserServiceI, TokenService } from "@peersyst/auth-module";
-
-@Injectable()
-export class UserService implements AuthUserServiceI, RecoverPasswordUserServiceI {
-    constructor(
-        @InjectRepository(User) private readonly userRepository: Repository<User>,
-        @Inject(MailService) private readonly mailService: MailService,
-        @Inject(ValidateEmailService) private readonly validateEmailService: ValidateEmailService,
-    ) {}
-    
-    async registerUser(registerUserRequest: RegisterUserRequest): Promise<PrivateUserDto> {
-        const entity = await this.userRepository.save(registerUserRequest);
-        const user = PrivateUserDto.fromEntity(entity);
-        const token = await this.validateEmailService.createEmailVerificationToken(user.id);
-        await this.mailService.sendEmailVerificationMessage(createUserRequest.email, token);
-    }
-}
-```
-
 ## Add 2 Factor Authenticated (work in progress)
 
 - Set twoFA to true in register module
