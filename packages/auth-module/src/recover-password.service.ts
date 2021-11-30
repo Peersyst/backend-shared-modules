@@ -30,7 +30,7 @@ export class RecoverPasswordService {
         if (!tokenEntity) {
             throw new BusinessException(AuthErrorCode.TOKEN_NOT_FOUND);
         } else if (tokenEntity.expiration < new Date()) {
-            throw new BusinessException(AuthErrorCode.TOKEN_ALREADY_VERIFIED);
+            throw new BusinessException(AuthErrorCode.TOKEN_EXPIRED);
         }
         return tokenEntity.userId;
     }

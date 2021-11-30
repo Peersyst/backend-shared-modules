@@ -167,7 +167,7 @@ import { AuthUserServiceI, ValidateEmailUserServiceI, TokenService } from "@peer
 export class UserService implements AuthUserServiceI, ValidateEmailUserServiceI {
     constructor(
         @InjectRepository(User) private readonly userRepository: Repository<User>,
-        @Inject(MailService) private readonly mailService: MailService,
+        @Inject(NotificationService) private readonly notificationService: NotificationService,
         @Inject(ValidateEmailService) private readonly validateEmailService: ValidateEmailService,
     ) {}
     
@@ -175,7 +175,7 @@ export class UserService implements AuthUserServiceI, ValidateEmailUserServiceI 
         const entity = await this.userRepository.save(registerUserRequest);
         const user = PrivateUserDto.fromEntity(entity);
         const token = await this.validateEmailService.createEmailVerificationToken(user.id);
-        await this.mailService.sendEmailVerificationMessage(createUserRequest.email, token);
+        await this.notificationService.sendEmailVerificationMessage(createUserRequest.email, token);
     }
 }
 ```

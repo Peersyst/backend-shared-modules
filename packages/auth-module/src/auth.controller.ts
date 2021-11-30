@@ -108,6 +108,8 @@ export class AuthValidateController {
     ) {}
 
     @Post("verify-email")
+    @ApiException(() => new BusinessException(AuthErrorCode.TOKEN_NOT_FOUND))
+    @ApiException(() => new BusinessException(AuthErrorCode.TOKEN_ALREADY_VERIFIED))
     @ApiOperation({ summary: "Verify user email" })
     @ApiOkResponse({ type: AuthCredentialsDto })
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -133,6 +135,8 @@ export class AuthRecoverController {
     ) {}
 
     @Post("recover-password")
+    @ApiException(() => new BusinessException(AuthErrorCode.USER_NOT_FOUND))
+    @ApiOkResponse()
     @ApiOperation({ summary: "Request Password Reset" })
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types,@typescript-eslint/no-unused-vars
     async requestResetPassword(@Body() recoverPasswordRequest: RecoverPasswordRequest): Promise<void> {
@@ -142,6 +146,9 @@ export class AuthRecoverController {
     }
 
     @Post("reset-password")
+    @ApiException(() => new BusinessException(AuthErrorCode.TOKEN_NOT_FOUND))
+    @ApiException(() => new BusinessException(AuthErrorCode.TOKEN_EXPIRED))
+    @ApiOkResponse()
     @ApiOperation({ summary: "Password Reset" })
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types,@typescript-eslint/no-unused-vars
     async resetPassword(@Body() resetPasswordRequestDto: ResetPasswordRequest): Promise<void> {

@@ -14,16 +14,18 @@ import { ResetToken } from "./entities/ResetToken";
 import { ValidateEmailService } from "./validate-email.service";
 import { RecoverPasswordService } from "./recover-password.service";
 
+export interface AuthModuleOptions {
+    googleAuth?: boolean;
+    twitterAuth?: boolean;
+    validateEmail?: boolean;
+    recoverPassword?: boolean;
+    twoFA?: boolean;
+    NotificationService?: Provider;
+}
+
 @Module({})
 export class AuthModule {
-    static register(UserModule: Type, ConfigModule: Type, ConfigService: any, options: {
-        googleAuth?: boolean,
-        twitterAuth?: boolean,
-        validateEmail?: boolean,
-        recoverPassword?: boolean,
-        twoFA?: boolean,
-        NotificationService?: Provider,
-    }): DynamicModule {
+    static register(UserModule: Type, ConfigModule: Type, ConfigService: any, options?: AuthModuleOptions): DynamicModule {
         const providers: Provider[] = [LocalStrategy, JwtStrategy, AuthService];
         const controllers: Type<any>[] = [AuthController];
         const imports: Array<Type<any> | DynamicModule | Promise<DynamicModule> | ForwardReference> = [
@@ -40,31 +42,36 @@ export class AuthModule {
             UserModule,            
         ];
         const entities: EntityClassOrSchema[] = [];
+        const exports: Provider[] = [AuthService];
 
-        if (options.googleAuth) {
-            providers.push(GoogleStrategy);
-            controllers.push(AuthGoogleController);
-        }
-        if (options.twitterAuth) {
-            providers.push(TwitterStrategy);
-            controllers.push(AuthTwitterController);
-        }
-        if (options.validateEmail) {
-            entities.push(VerifyEmailToken);
-            providers.push(ValidateEmailService);
-            controllers.push(AuthValidateController);
-        }
-        if (options.recoverPassword && !options.NotificationService) {
-            throw new Error("Must indicate NotificationService when recoverPassword = true");
-        }
-        if (options.recoverPassword) {
-            entities.push(ResetToken);
-            providers.push(RecoverPasswordService);
-            controllers.push(AuthRecoverController);
-            providers.push(options.NotificationService);
-        }
-        if (entities.length > 0) {
-            imports.push(TypeOrmModule.forFeature(entities));
+        if (options) {
+            if (options.googleAuth) {
+                providers.push(GoogleStrategy);
+                controllers.push(AuthGoogleController);
+            }
+            if (options.twitterAuth) {
+                providers.push(TwitterStrategy);
+                controllers.push(AuthTwitterController);
+            }
+            if (options.validateEmail) {
+                entities.push(VerifyEmailToken);
+                providers.push(ValidateEmailService);
+                exports.push(ValidateEmailService);
+                controllers.push(AuthValidateController);
+            }
+            if (options.recoverPassword && !options.NotificationService) {
+                throw new Error("Must indicate NotificationService when recoverPassword = true");
+            }
+            if (options.recoverPassword) {
+                entities.push(ResetToken);
+                providers.push(RecoverPasswordService);
+                exports.push(RecoverPasswordService);
+                controllers.push(AuthRecoverController);
+                providers.push(options.NotificationService);
+            }
+            if (entities.length > 0) {
+                imports.push(TypeOrmModule.forFeature(entities));
+            }
         }
 
         return {
@@ -72,7 +79,7 @@ export class AuthModule {
             imports,
             providers,
             controllers,
-            exports: [AuthService],
+            exports,
         };
     }
 }
