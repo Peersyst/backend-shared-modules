@@ -3,7 +3,6 @@ import { ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { AuthService } from "./auth.service";
 import { LocalAuthGuard } from "./guards/local-auth.guard";
 import { ApiException } from "@nanogiants/nestjs-swagger-api-exception-decorator";
-import { LoginRequest } from "./login.request";
 import { AuthCredentialsDto } from "./dto/auth-credentials.dto";
 import { ApiErrorDecorators } from "./exception/error-response.decorator";
 import { GoogleAuthGuard } from "./guards/google-auth.guard";
@@ -12,6 +11,11 @@ import { AuthErrorCode } from "./exception/error-codes";
 import { ThirdPartyUserDtoI } from "./dto/third-party-user.dto";
 import { TwitterAuthGuard } from "./guards/twitter-auth.guard";
 import { ConfigService } from "@nestjs/config";
+import { ValidateEmailRequest, ResetPasswordRequest, LoginRequest } from "./requests";
+import { ValidateEmailService } from "./validate-email.service";
+import { RecoverPasswordRequest } from "./requests/recover-password.request";
+import { RecoverPasswordService } from "./recover-password.service";
+import { PrivateAuthUserDtoI } from "./dto/private-user.dto";
 
 @ApiTags("authenticate")
 @Controller("auth")
@@ -91,5 +95,64 @@ export class AuthTwitterController {
         const { access_token } = await this.authService.twitterLogin(user);
         res.cookie("access_token", access_token, { expires: new Date(Date.now() + 60000) });
         res.redirect(this.configService.get("server.frontUrl"));
+    }
+}
+
+@ApiTags("authenticate")
+@Controller("auth")
+@ApiErrorDecorators()
+export class AuthValidateController {
+    constructor(
+        private readonly authService: AuthService,
+        private readonly validateEmailService: ValidateEmailService,
+    ) {}
+
+    @Post("verify-email")
+    @ApiException(() => new BusinessException(AuthErrorCode.TOKEN_NOT_FOUND))
+    @ApiException(() => new BusinessException(AuthErrorCode.TOKEN_ALREADY_VERIFIED))
+    @ApiOperation({ summary: "Verify user email" })
+    @ApiOkResponse({ type: AuthCredentialsDto })
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    async verifyEmail(@Body() validateEmailRequest: ValidateEmailRequest): Promise<AuthCredentialsDto> {
+        const tokenData = await this.validateEmailService.verifyEmailVerificationToken(validateEmailRequest.token);
+        const accessToken = await this.authService.validateUserEmail(tokenData.userId);
+        return accessToken;
+    }
+}
+
+export interface RecoverNotificationServiceI {
+    notificateRecoverPassword: (user: PrivateAuthUserDtoI, resetToken: string) => Promise<void>;
+}
+
+@ApiTags("authenticate")
+@Controller("auth")
+@ApiErrorDecorators()
+export class AuthRecoverController {
+    constructor(
+        private readonly authService: AuthService,
+        private readonly recoverPasswordService: RecoverPasswordService,
+        @Inject("NotificationService") private readonly notificationService: RecoverNotificationServiceI,
+    ) {}
+
+    @Post("recover-password")
+    @ApiException(() => new BusinessException(AuthErrorCode.USER_NOT_FOUND))
+    @ApiOkResponse()
+    @ApiOperation({ summary: "Request Password Reset" })
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types,@typescript-eslint/no-unused-vars
+    async requestResetPassword(@Body() recoverPasswordRequest: RecoverPasswordRequest): Promise<void> {
+        const user = await this.authService.getUserByEmail(recoverPasswordRequest.email);
+        const resetToken = await this.recoverPasswordService.createResetToken(user.id);
+        await this.notificationService.notificateRecoverPassword(user, resetToken);
+    }
+
+    @Post("reset-password")
+    @ApiException(() => new BusinessException(AuthErrorCode.TOKEN_NOT_FOUND))
+    @ApiException(() => new BusinessException(AuthErrorCode.TOKEN_EXPIRED))
+    @ApiOkResponse()
+    @ApiOperation({ summary: "Password Reset" })
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types,@typescript-eslint/no-unused-vars
+    async resetPassword(@Body() resetPasswordRequestDto: ResetPasswordRequest): Promise<void> {
+        const userId = await this.recoverPasswordService.verifyResetToken(resetPasswordRequestDto.token);
+        await this.authService.resetPassword(userId, resetPasswordRequestDto.password);
     }
 }
