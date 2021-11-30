@@ -34,7 +34,7 @@ export class AuthModule {
                 imports: [ConfigModule],
                 useFactory: async (configService: typeof ConfigService) => ({
                     secret: configService.get("server.secretKey"),
-                    signOptions: { expiresIn: "600s" },
+                    signOptions: { expiresIn: "7d" },
                 }),
                 inject: [ConfigService],
             }),
