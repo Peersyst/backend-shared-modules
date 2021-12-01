@@ -27,7 +27,7 @@
 # Installation
 
 ```bash
-$ npm install
+$ npm install --save @peersyst/auth-module
 ```
 
 # How to use it
@@ -46,6 +46,15 @@ import { AuthModule } from "@peersyst/auth-module";
     ],
 })
 export class AppModule {}
+```
+
+- Add configService configuration variables
+```typescript
+export default (): any => ({
+    server: {
+        secretKey: process.env.APP_JWT_KEY, ...
+    },
+});
 ```
 
 - Implement AuthUserI for User entity
@@ -101,6 +110,21 @@ AuthModule.register(UserModule, ConfigModule, ConfigService, {
 }),
 ```
 
+- Add configService configuration variables
+```typescript
+export default (): any => ({
+    server: {
+        secretKey: process.env.APP_JWT_KEY,
+        frontUrl: process.env.FRONT_URL,
+        baseUrl: process.env.BASE_URL,
+    },
+    googleAuth: {
+        clientId: process.env.GOOGLE_AUTH_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_AUTH_CLIENT_SECRET,
+    },
+});
+```
+
 - Implement AuthGoogleUserI for User entity
 ```typescript
 import { AuthUserI, AuthGoogleUserI, UserType } from "@peersyst/auth-module";
@@ -124,6 +148,21 @@ export class UserService implements AuthUserServiceI, ThirdPartyUserServiceI {..
 AuthModule.register(UserModule, ConfigModule, ConfigService, {
     twitterAuth: true,
 }),
+```
+
+- Add configService configuration variables
+```typescript
+export default (): any => ({
+    server: {
+        secretKey: process.env.APP_JWT_KEY,
+        frontUrl: process.env.FRONT_URL,
+        baseUrl: process.env.BASE_URL,
+    },
+    twitterAuth: {
+        apiKey: process.env.TWITTER_API_KEY,
+        apiKeySecret: process.env.TWITTER_API_KEY_SECRET,
+    },
+});
 ```
 
 - Implement AuthTwitterUserI for User entity
