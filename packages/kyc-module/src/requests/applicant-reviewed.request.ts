@@ -1,10 +1,10 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { KycAnswer, KycStatus } from "../dto/kyc.dto";
+import { KycAnswer, KycRejectType, KycStatus } from "../dto/kyc.dto";
 import { SumSubWebhookRequest } from "./sumsub-webhook.request";
 
 const applicantReviewed = "applicantReviewed";
 export type applicantReviewedType = "applicantReviewed";
-export class reviewResultProp {
+export class ReviewResultProp {
     @ApiProperty({
         enum: KycAnswer,
         required: true,
@@ -31,9 +31,10 @@ export class reviewResultProp {
 
     @ApiProperty({
         type: "string",
+        enum: KycRejectType,
         required: false,
     })
-    reviewRejectType?: string;
+    reviewRejectType?: KycRejectType;
 }
 
 export class ApplicantReviewedRequest extends SumSubWebhookRequest {
@@ -50,8 +51,8 @@ export class ApplicantReviewedRequest extends SumSubWebhookRequest {
     reviewStatus: KycStatus.COMPLETED;
 
     @ApiProperty({
-        type: () => reviewResultProp,
+        type: () => ReviewResultProp,
         required: true,
     })
-    reviewResult: reviewResultProp;
+    reviewResult: ReviewResultProp;
 }

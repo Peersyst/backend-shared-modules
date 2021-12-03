@@ -57,3 +57,17 @@ export interface KycI extends SimplifiedKycI {
     clientComment?: string;
     rejectLabels?: string[];
 }
+
+export class Kyc extends SimplifiedKyc implements KycI {
+    @ApiProperty()
+    id: number;
+
+    @ApiProperty()
+    applicantId: string;
+
+    @ApiProperty()
+    clientComment?: string;
+
+    @ApiProperty()
+    rejectLabels?: string[];
+}

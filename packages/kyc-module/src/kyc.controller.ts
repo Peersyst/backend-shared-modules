@@ -1,12 +1,12 @@
 import { ApiException } from "@nanogiants/nestjs-swagger-api-exception-decorator";
-import { Controller, Request, Get, Post } from "@nestjs/common";
+import { Controller, Request, Get, Post, Param } from "@nestjs/common";
 import { ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { KycTokenDto } from "./dto/kyc-token.dto";
 import { ApiErrorDecorators } from "./exception/error-response.decorator";
 import { BusinessException } from "./exception/business.exception";
 import { KycErrorCode } from "./exception/error-codes";
 import { KycService } from "./kyc.service";
-import { SimplifiedKyc } from "./dto/kyc.dto";
+import { SimplifiedKyc, Kyc } from "./dto/kyc.dto";
 
 @ApiTags("kyc")
 @Controller("kyc")
@@ -17,15 +17,15 @@ export class KycController {
         public Authenticated: () => MethodDecorator,
     ) {}
 
-    @ApiOperation({ summary: "Get authenticated user simplified kyc" })
+    @ApiOperation({ summary: "Get authenticated user kyc" })
     @KycController.prototype.Authenticated()
-    @Get("")
+    @Get("me")
     @ApiException(() => new BusinessException(KycErrorCode.KYC_NOT_FOUND))
     @ApiException(() => new BusinessException(KycErrorCode.SUMSUB_REQUEST_ERROR))
-    @ApiOkResponse({ type: SimplifiedKyc })
+    @ApiOkResponse({ type: Kyc })
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    async getSimplified(@Request() req): Promise<SimplifiedKyc> {
-        const simplifiedKyc = await this.kycService.getSimplifiedKyc(req.user.id);
+    async getMe(@Request() req): Promise<Kyc> {
+        const simplifiedKyc = await this.kycService.getKyc(req.user.id);
         return simplifiedKyc;
     }
 
@@ -60,5 +60,17 @@ export class KycController {
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     async simulateFailure(@Request() req): Promise<void> {
         await this.kycService.simulateFailure(req.user.id);
+    }
+
+    @ApiOperation({ summary: "Get user simplified kyc" })
+    @KycController.prototype.Authenticated()
+    @Get(":id")
+    @ApiException(() => new BusinessException(KycErrorCode.KYC_NOT_FOUND))
+    @ApiException(() => new BusinessException(KycErrorCode.SUMSUB_REQUEST_ERROR))
+    @ApiOkResponse({ type: SimplifiedKyc })
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    async getUserSimplified(@Param("id") id: number): Promise<SimplifiedKyc> {
+        const simplifiedKyc = await this.kycService.getSimplifiedKyc(id);
+        return simplifiedKyc;
     }
 }

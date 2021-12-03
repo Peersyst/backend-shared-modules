@@ -4,7 +4,7 @@ import { SumSubWebhookRequest } from "./sumsub-webhook.request";
 
 const applicantPersonalInfoChanged = "applicantPersonalInfoChanged";
 export type applicantPersonalInfoChangedType = "applicantPersonalInfoChanged";
-export class reviewAnswerProp {
+export class ReviewAnswerProp {
     @ApiProperty({
         enum: KycAnswer,
         required: true,
@@ -26,8 +26,8 @@ export class ApplicantPersonalInfoChangedRequest extends SumSubWebhookRequest {
     reviewStatus: KycStatus;
 
     @ApiProperty({
-        type: () => reviewAnswerProp,
+        type: () => ReviewAnswerProp,
         required: true,
     })
-    reviewResult: reviewAnswerProp;
+    reviewResult: ReviewAnswerProp;
 }

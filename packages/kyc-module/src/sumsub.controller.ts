@@ -1,21 +1,17 @@
 import { ApiException } from "@nanogiants/nestjs-swagger-api-exception-decorator";
-import { Controller, Request, Post } from "@nestjs/common";
-import { ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
-import { KycTokenDto } from "./dto/kyc-token.dto";
+import { Controller, Post, Body } from "@nestjs/common";
+import { ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { ApiErrorDecorators } from "./exception/error-response.decorator";
 import { BusinessException } from "./exception/business.exception";
 import { KycErrorCode } from "./exception/error-codes";
 import { KycService } from "./kyc.service";
-import { SimplifiedKyc } from "./dto/kyc.dto";
-// import {
-//     ApplicantCreatedDTO,
-//     ApplicantPendingDTO,
-//     ApplicantReviewedDTO,
-//     ApplicantOnHoldDTO,
-//     ApplicantPersonalInfoChangedDTO,
-//     ApplicantPrecheckedDTO,
-//     ApplicantDeletedDTO,
-// } from "./dto/sumsub.dto";
+import { ApplicantCreatedRequest } from "./requests/applicant-created.request";
+import { ApplicantPendingRequest } from "./requests/applicant-pending.request";
+import { ApplicantReviewedRequest } from "./requests/applicant-reviewed.request";
+import { ApplicantOnHoldRequest } from "./requests/applicant-on-hold.request";
+import { ApplicantPersonalInfoChangedRequest } from "./requests/applicant-personal-info-changed.request";
+import { ApplicantPrecheckedRequest } from "./requests/applicant-prechecked.request";
+import { ApplicantDeletedRequest } from "./requests/applicant-deleted.request";
 
 @ApiTags("sumsub")
 @Controller("kyc")
@@ -25,52 +21,70 @@ export class SumsubController {
         private readonly kycService: KycService,
     ) {}
 
-    @ApiOperation({ summary: "Applicant created" })
+    @ApiOperation({ summary: "Webhook for sumsub of applicant created" })
     @Post("applicant-created")
+    @ApiForbiddenResponse()
     @ApiOkResponse()
-    async applicantCreated(req: Request, res: Response): Promise<void> {
-        await this.kycService.create(req.body as ApplicantCreatedDTO);
+    @ApiException(() => new BusinessException(KycErrorCode.USER_NOT_FOUND))
+    async applicantCreated(@Body() applicantCreatedRequest: ApplicantCreatedRequest): Promise<void> {
+        await this.kycService.create(applicantCreatedRequest.externalUserId, applicantCreatedRequest.applicantId);
     };
 
-    @ApiOperation({ summary: "Applicant created" })
+    @ApiOperation({ summary: "Webhook for sumsub of applicant pending" })
     @Post("applicant-pending")
+    @ApiForbiddenResponse()
     @ApiOkResponse()
-    async applicantPending(req: Request, res: Response): Promise<void> {
-        await this.kycService.pending(req.body as ApplicantPendingDTO);
+    @ApiException(() => new BusinessException(KycErrorCode.KYC_NOT_FOUND))
+    @ApiException(() => new BusinessException(KycErrorCode.USER_NOT_FOUND))
+    async applicantPending(@Body() applicantPendingRequest: ApplicantPendingRequest): Promise<void> {
+        await this.kycService.pending(applicantPendingRequest.applicantId, applicantPendingRequest.reviewStatus);
     };
 
-    @ApiOperation({ summary: "Applicant created" })
+    @ApiOperation({ summary: "Webhook for sumsub of applicant reviewed" })
     @Post("applicant-reviewed")
+    @ApiForbiddenResponse()
     @ApiOkResponse()
-    async applicantReviewed(req: Request, res: Response): Promise<void> {
-        await this.kycService.reviewed(req.body as ApplicantReviewedDTO);
+    @ApiException(() => new BusinessException(KycErrorCode.KYC_NOT_FOUND))
+    @ApiException(() => new BusinessException(KycErrorCode.USER_NOT_FOUND))
+    async applicantReviewed(@Body() applicantReviewedRequest: ApplicantReviewedRequest): Promise<void> {
+        await this.kycService.reviewed(applicantReviewedRequest.applicantId, applicantReviewedRequest.reviewStatus, applicantReviewedRequest.reviewResult);
     }
 
-    @ApiOperation({ summary: "Applicant created" })
+    @ApiOperation({ summary: "Webhook for sumsub of applicant on hold" })
     @Post("applicant-on-hold")
+    @ApiForbiddenResponse()
     @ApiOkResponse()
-    async applicantOnHold(req: Request, res: Response): Promise<void> {
-        await this.kycService.onHold(req.body as ApplicantOnHoldDTO);
+    @ApiException(() => new BusinessException(KycErrorCode.KYC_NOT_FOUND))
+    async applicantOnHold(@Body() applicantOnHoldRequest: ApplicantOnHoldRequest): Promise<void> {
+        await this.kycService.onHold(applicantOnHoldRequest.applicantId, applicantOnHoldRequest.reviewStatus);
     }
 
-    @ApiOperation({ summary: "Applicant created" })
+    @ApiOperation({ summary: "Webhook for sumsub of applicant personal info changed" })
     @Post("applicant-personal-info-changed")
+    @ApiForbiddenResponse()
     @ApiOkResponse()
-    async applicantPersonalInfoChanged(req: Request, res: Response): Promise<void> {
-        await this.kycService.personalInfoChanged(req.body as ApplicantPersonalInfoChangedDTO);
+    @ApiException(() => new BusinessException(KycErrorCode.KYC_NOT_FOUND))
+    async applicantPersonalInfoChanged(@Body() applicantPersonalInfoChangedRequest: ApplicantPersonalInfoChangedRequest): Promise<void> {
+        await this.kycService.personalInfoChanged(
+            applicantPersonalInfoChangedRequest.applicantId,
+            applicantPersonalInfoChangedRequest.reviewStatus,
+            applicantPersonalInfoChangedRequest.reviewResult.reviewAnswer,
+        );
     }
 
-    @ApiOperation({ summary: "Applicant created" })
+    @ApiOperation({ summary: "Webhook for sumsub of applicant prechecked" })
     @Post("applicant-prechecked")
+    @ApiForbiddenResponse()
     @ApiOkResponse()
-    async applicantPrechecked(req: Request, res: Response): Promise<void> {
-        await this.kycService.prechecked(req.body as ApplicantPrecheckedDTO);
+    async applicantPrechecked(@Body() applicantPrecheckedRequest: ApplicantPrecheckedRequest): Promise<void> {
+        await this.kycService.prechecked(applicantPrecheckedRequest.applicantId, applicantPrecheckedRequest.reviewStatus);
     }
 
-    @ApiOperation({ summary: "Applicant created" })
+    @ApiOperation({ summary: "Webhook for sumsub of applicant deleted" })
     @Post("applicant-deleted")
+    @ApiForbiddenResponse()
     @ApiOkResponse()
-    async applicantDeleted(req: Request, res: Response): Promise<void> {
-        await this.kycService.deleted(req.body as ApplicantDeletedDTO);
+    async applicantDeleted(@Body() applicantDeletedRequest: ApplicantDeletedRequest): Promise<void> {
+        await this.kycService.deleted(applicantDeletedRequest.applicantId, applicantDeletedRequest.reviewStatus);
     }
 }
