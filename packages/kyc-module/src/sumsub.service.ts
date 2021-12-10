@@ -2,7 +2,7 @@ import { Inject, Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import * as crypto from "crypto";
 import { KycAnswer, KycRejectType } from "./dto/kyc.dto";
-import { BusinessException } from "./exception/business.exception";
+import { KycBusinessException } from "./exception/business.exception";
 import { KycErrorCode } from "./exception/error-codes";
 
 @Injectable()
@@ -42,7 +42,7 @@ export class SumsubService {
 
         const json = await response.json();
         if (!json || !json.token) {
-            throw new BusinessException(KycErrorCode.SUMSUB_REQUEST_ERROR);
+            throw new KycBusinessException(KycErrorCode.SUMSUB_REQUEST_ERROR);
         }
 
         return json.token;
@@ -69,7 +69,7 @@ export class SumsubService {
 
         const response = await fetch(url, options);
         if (!response.ok) {
-            throw new BusinessException(KycErrorCode.SUMSUB_REQUEST_ERROR);
+            throw new KycBusinessException(KycErrorCode.SUMSUB_REQUEST_ERROR);
         }
     }
 
@@ -100,7 +100,7 @@ export class SumsubService {
 
         const response = await fetch(url, options);
         if (!response.ok) {
-            throw new BusinessException(KycErrorCode.SUMSUB_REQUEST_ERROR);
+            throw new KycBusinessException(KycErrorCode.SUMSUB_REQUEST_ERROR);
         }
     }
 }

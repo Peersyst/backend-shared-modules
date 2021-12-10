@@ -3,7 +3,7 @@ import { Controller, Request, Get, Post, Param } from "@nestjs/common";
 import { ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { KycTokenDto } from "./dto/kyc-token.dto";
 import { ApiErrorDecorators } from "./exception/error-response.decorator";
-import { BusinessException } from "./exception/business.exception";
+import { KycBusinessException } from "./exception/business.exception";
 import { KycErrorCode } from "./exception/error-codes";
 import { KycService } from "./kyc.service";
 import { SimplifiedKyc, Kyc } from "./dto/kyc.dto";
@@ -20,8 +20,8 @@ export class KycController {
     @ApiOperation({ summary: "Get authenticated user kyc" })
     @KycController.prototype.Authenticated()
     @Get("me")
-    @ApiException(() => new BusinessException(KycErrorCode.KYC_NOT_FOUND))
-    @ApiException(() => new BusinessException(KycErrorCode.SUMSUB_REQUEST_ERROR))
+    @ApiException(() => new KycBusinessException(KycErrorCode.KYC_NOT_FOUND))
+    @ApiException(() => new KycBusinessException(KycErrorCode.SUMSUB_REQUEST_ERROR))
     @ApiOkResponse({ type: Kyc })
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     async getMe(@Request() req): Promise<Kyc> {
@@ -32,8 +32,8 @@ export class KycController {
     @ApiOperation({ summary: "Get authenticated user kyc token" })
     @KycController.prototype.Authenticated()
     @Get("token")
-    @ApiException(() => new BusinessException(KycErrorCode.KYC_NOT_FOUND))
-    @ApiException(() => new BusinessException(KycErrorCode.SUMSUB_REQUEST_ERROR))
+    @ApiException(() => new KycBusinessException(KycErrorCode.KYC_NOT_FOUND))
+    @ApiException(() => new KycBusinessException(KycErrorCode.SUMSUB_REQUEST_ERROR))
     @ApiOkResponse({ type: KycTokenDto })
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     async getToken(@Request() req): Promise<KycTokenDto> {
@@ -43,8 +43,8 @@ export class KycController {
     @ApiOperation({ summary: "Simulate kyc success" })
     @KycController.prototype.Authenticated()
     @Post("success")
-    @ApiException(() => new BusinessException(KycErrorCode.KYC_NOT_FOUND))
-    @ApiException(() => new BusinessException(KycErrorCode.SUMSUB_REQUEST_ERROR))
+    @ApiException(() => new KycBusinessException(KycErrorCode.KYC_NOT_FOUND))
+    @ApiException(() => new KycBusinessException(KycErrorCode.SUMSUB_REQUEST_ERROR))
     @ApiOkResponse()
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     async simulateSuccess(@Request() req): Promise<void> {
@@ -54,8 +54,8 @@ export class KycController {
     @ApiOperation({ summary: "Simulate kyc failure" })
     @KycController.prototype.Authenticated()
     @Post("failure")
-    @ApiException(() => new BusinessException(KycErrorCode.KYC_NOT_FOUND))
-    @ApiException(() => new BusinessException(KycErrorCode.SUMSUB_REQUEST_ERROR))
+    @ApiException(() => new KycBusinessException(KycErrorCode.KYC_NOT_FOUND))
+    @ApiException(() => new KycBusinessException(KycErrorCode.SUMSUB_REQUEST_ERROR))
     @ApiOkResponse()
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     async simulateFailure(@Request() req): Promise<void> {
@@ -65,8 +65,8 @@ export class KycController {
     @ApiOperation({ summary: "Get user simplified kyc" })
     @KycController.prototype.Authenticated()
     @Get(":id")
-    @ApiException(() => new BusinessException(KycErrorCode.KYC_NOT_FOUND))
-    @ApiException(() => new BusinessException(KycErrorCode.SUMSUB_REQUEST_ERROR))
+    @ApiException(() => new KycBusinessException(KycErrorCode.KYC_NOT_FOUND))
+    @ApiException(() => new KycBusinessException(KycErrorCode.SUMSUB_REQUEST_ERROR))
     @ApiOkResponse({ type: SimplifiedKyc })
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     async getUserSimplified(@Param("id") id: number): Promise<SimplifiedKyc> {

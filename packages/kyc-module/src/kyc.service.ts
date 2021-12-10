@@ -1,5 +1,5 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { BusinessException } from "./exception/business.exception";
+import { KycBusinessException } from "./exception/business.exception";
 import { KycErrorCode } from "./exception/error-codes";
 import { KycAnswer, KycStatus, SimplifiedKycI, KycI, KycRejectType } from "./dto/kyc.dto";
 import { KycTokenDtoI } from "./dto/kyc-token.dto";
@@ -67,7 +67,7 @@ export class KycService {
     async simulateSuccess(userId: number): Promise<void> {
         const kyc = await this.kycRepository.findByUserId(userId);
         if (!kyc) {
-            throw new BusinessException(KycErrorCode.KYC_NOT_FOUND);
+            throw new KycBusinessException(KycErrorCode.KYC_NOT_FOUND);
         }
         await this.sumsubService.simulateGreenReview(kyc.applicantId);
     }
@@ -76,7 +76,7 @@ export class KycService {
     async simulateFailure(userId: number): Promise<void> {
         const kyc = await this.kycRepository.findByUserId(userId);
         if (!kyc) {
-            throw new BusinessException(KycErrorCode.KYC_NOT_FOUND);
+            throw new KycBusinessException(KycErrorCode.KYC_NOT_FOUND);
         }
         await this.sumsubService.simulateRedReview(kyc.applicantId);
     }
@@ -87,7 +87,7 @@ export class KycService {
     async create(externalUserId: string, applicantId: string): Promise<void> {
         const user = await this.userService.findByExternalId(externalUserId);
         if (!user) {
-            throw new BusinessException(KycErrorCode.USER_NOT_FOUND);
+            throw new KycBusinessException(KycErrorCode.USER_NOT_FOUND);
         }
 
         const kyc = await this.kycRepository.create(user.id, applicantId);
@@ -97,11 +97,11 @@ export class KycService {
     async pending(applicantId: string, reviewStatus: KycStatus) {
         const kyc = await this.kycRepository.findByApplicantId(applicantId);
         if (!kyc) {
-            throw new BusinessException(KycErrorCode.KYC_NOT_FOUND);
+            throw new KycBusinessException(KycErrorCode.KYC_NOT_FOUND);
         }
         const user = await this.userService.findById(kyc.userId);
         if (!user) {
-            throw new BusinessException(KycErrorCode.USER_NOT_FOUND);
+            throw new KycBusinessException(KycErrorCode.USER_NOT_FOUND);
         }
 
         await this.kycRepository.update(kyc.id, { status: reviewStatus });
@@ -111,11 +111,11 @@ export class KycService {
     async reviewed (applicantId: string, reviewStatus: KycStatus, reviewResult: ReviewResultProp) {
         const kyc = await this.kycRepository.findByApplicantId(applicantId);
         if (!kyc) {
-            throw new BusinessException(KycErrorCode.KYC_NOT_FOUND);
+            throw new KycBusinessException(KycErrorCode.KYC_NOT_FOUND);
         }
         const user = await this.userService.findById(kyc.userId);
         if (!user) {
-            throw new BusinessException(KycErrorCode.USER_NOT_FOUND);
+            throw new KycBusinessException(KycErrorCode.USER_NOT_FOUND);
         }
 
         if (reviewResult.reviewAnswer === KycAnswer.GREEN) {
@@ -139,7 +139,7 @@ export class KycService {
     async onHold(applicantId: string, reviewStatus: KycStatus) {
         const kyc = await this.kycRepository.findByApplicantId(applicantId);
         if (!kyc) {
-            throw new BusinessException(KycErrorCode.KYC_NOT_FOUND);
+            throw new KycBusinessException(KycErrorCode.KYC_NOT_FOUND);
         }
         await this.kycRepository.update(kyc.id, { status: reviewStatus });
     }
@@ -147,7 +147,7 @@ export class KycService {
     async personalInfoChanged(applicantId: string, reviewStatus: KycStatus, reviewAnswer: KycAnswer) {
         const kyc = await this.kycRepository.findByApplicantId(applicantId);
         if (!kyc) {
-            throw new BusinessException(KycErrorCode.KYC_NOT_FOUND);
+            throw new KycBusinessException(KycErrorCode.KYC_NOT_FOUND);
         }
         await this.kycRepository.update(kyc.id, { status: reviewStatus, reviewAnswer });
     }
@@ -155,7 +155,7 @@ export class KycService {
     async prechecked(applicantId: string, reviewStatus: KycStatus) {
         const kyc = await this.kycRepository.findByApplicantId(applicantId);
         if (!kyc) {
-            throw new BusinessException(KycErrorCode.KYC_NOT_FOUND);
+            throw new KycBusinessException(KycErrorCode.KYC_NOT_FOUND);
         }
         await this.kycRepository.update(kyc.id, { status: reviewStatus });
     }
@@ -163,7 +163,7 @@ export class KycService {
     async deleted(applicantId: string, reviewStatus: KycStatus) {
         const kyc = await this.kycRepository.findByApplicantId(applicantId);
         if (!kyc) {
-            throw new BusinessException(KycErrorCode.KYC_NOT_FOUND);
+            throw new KycBusinessException(KycErrorCode.KYC_NOT_FOUND);
         }
         await this.kycRepository.update(kyc.id, { status: reviewStatus, reviewAnswer: KycAnswer.GREEN });
     }

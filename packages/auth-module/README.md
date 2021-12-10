@@ -57,6 +57,23 @@ export default (): any => ({
 });
 ```
 
+- Add AuthErrorCode and AuthErrorBody to app ErrorCodes
+```typescript
+import { HttpStatus } from "@nestjs/common";
+import { AuthErrorCode, AuthErrorBody } from "@peersyst/auth-module";
+
+// Define app error codes
+enum AppErrorCode {}
+
+export const ErrorCode = { ...AppErrorCode, ...AuthErrorCode };
+export type ErrorCodeType = AppErrorCode | AuthErrorCode;
+
+export const ErrorBody: { [code in ErrorCodeType]: { statusCode: HttpStatus; message: string } } = {
+    // Define app error code bodies
+    ...AuthErrorBody,
+};
+```
+
 - Implement AuthUserI for User entity
 ```typescript
 import { AuthUserI, UserType } from "@peersyst/auth-module";
@@ -219,6 +236,11 @@ export class UserService implements AuthUserServiceI, ValidateEmailUserServiceI 
 }
 ```
 
+- Create entity in your entities folder with name VerifyEmailToken
+```typescript
+export { VerifyEmailToken } from "@peersyst/auth-module";
+```
+
 ## Add Recover Password
 
 - Set recoverPassword to true in register module and indicate NotificationService. It should exactly have this name.
@@ -243,6 +265,11 @@ import { AuthUserServiceI, RecoverPasswordUserServiceI } from "@peersyst/auth-mo
 
 @Injectable()
 export class UserService implements AuthUserServiceI, RecoverPasswordUserServiceI {...}
+```
+
+- Create entity in your entities folder with name ResetToken
+```typescript
+export { ResetToken } from "@peersyst/auth-module";
 ```
 
 ## Add 2 Factor Authenticated (work in progress)

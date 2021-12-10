@@ -2,9 +2,11 @@ import { DynamicModule, Module, Provider, Type, ForwardReference } from "@nestjs
 import { SequelizeModule } from "@nestjs/sequelize";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { DefaultNotificationService } from "./default-notification.service";
+import { KycController } from "./kyc.controller";
 import { KycService } from "./kyc.service";
 import { KycSequelizeRepository } from "./sequelize/kyc-sequelize.repository";
 import { KycModel } from "./sequelize/KycModel";
+import { SumsubController } from "./sumsub.controller";
 import { KycTypeormRepository } from "./typeorm/kyc-typeorm.repository";
 import { KycEntity } from "./typeorm/KycEntity";
 
@@ -23,7 +25,7 @@ export interface KycModuleOptions {
 export class KycModule {
     static register(UserModule: Type, ConfigModule: Type, options: KycModuleOptions): DynamicModule {
         const providers: Provider[] = [KycService];
-        const controllers: Type<any>[] = [];
+        const controllers: Type<any>[] = [SumsubController, KycController];
         const imports: Array<Type<any> | DynamicModule | Promise<DynamicModule> | ForwardReference> = [
             ConfigModule,
             UserModule,            

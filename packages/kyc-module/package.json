@@ -19,9 +19,9 @@
     "@nestjs/typeorm": "^8.0.2",
     "class-transformer": "~0.4.0",
     "class-validator": "~0.13.2",
-    "express": "~4.17.1",
-    "reflect-metadata": "~0.1.13",
-    "rxjs": "~6.6.3",
+    "express-openapi-validator": "^4.12.12",
+    "reflect-metadata": "0.1.13",
+    "rxjs": "^6.0.0",
     "sequelize": "^6.3.5",
     "sequelize-typescript": "2.1.0",
     "typeorm": "^0.2.41"

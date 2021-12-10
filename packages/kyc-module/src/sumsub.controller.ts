@@ -2,7 +2,7 @@ import { ApiException } from "@nanogiants/nestjs-swagger-api-exception-decorator
 import { Controller, Post, Body } from "@nestjs/common";
 import { ApiForbiddenResponse, ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { ApiErrorDecorators } from "./exception/error-response.decorator";
-import { BusinessException } from "./exception/business.exception";
+import { KycBusinessException } from "./exception/business.exception";
 import { KycErrorCode } from "./exception/error-codes";
 import { KycService } from "./kyc.service";
 import { ApplicantCreatedRequest } from "./requests/applicant-created.request";
@@ -24,8 +24,8 @@ export class SumsubController {
     @ApiOperation({ summary: "Webhook for sumsub of applicant created" })
     @Post("applicant-created")
     @ApiForbiddenResponse()
+    @ApiException(() => new KycBusinessException(KycErrorCode.USER_NOT_FOUND))
     @ApiOkResponse()
-    @ApiException(() => new BusinessException(KycErrorCode.USER_NOT_FOUND))
     async applicantCreated(@Body() applicantCreatedRequest: ApplicantCreatedRequest): Promise<void> {
         await this.kycService.create(applicantCreatedRequest.externalUserId, applicantCreatedRequest.applicantId);
     };
@@ -33,9 +33,9 @@ export class SumsubController {
     @ApiOperation({ summary: "Webhook for sumsub of applicant pending" })
     @Post("applicant-pending")
     @ApiForbiddenResponse()
+    @ApiException(() => new KycBusinessException(KycErrorCode.KYC_NOT_FOUND))
+    @ApiException(() => new KycBusinessException(KycErrorCode.USER_NOT_FOUND))
     @ApiOkResponse()
-    @ApiException(() => new BusinessException(KycErrorCode.KYC_NOT_FOUND))
-    @ApiException(() => new BusinessException(KycErrorCode.USER_NOT_FOUND))
     async applicantPending(@Body() applicantPendingRequest: ApplicantPendingRequest): Promise<void> {
         await this.kycService.pending(applicantPendingRequest.applicantId, applicantPendingRequest.reviewStatus);
     };
@@ -43,9 +43,9 @@ export class SumsubController {
     @ApiOperation({ summary: "Webhook for sumsub of applicant reviewed" })
     @Post("applicant-reviewed")
     @ApiForbiddenResponse()
+    @ApiException(() => new KycBusinessException(KycErrorCode.KYC_NOT_FOUND))
+    @ApiException(() => new KycBusinessException(KycErrorCode.USER_NOT_FOUND))
     @ApiOkResponse()
-    @ApiException(() => new BusinessException(KycErrorCode.KYC_NOT_FOUND))
-    @ApiException(() => new BusinessException(KycErrorCode.USER_NOT_FOUND))
     async applicantReviewed(@Body() applicantReviewedRequest: ApplicantReviewedRequest): Promise<void> {
         await this.kycService.reviewed(applicantReviewedRequest.applicantId, applicantReviewedRequest.reviewStatus, applicantReviewedRequest.reviewResult);
     }
@@ -53,8 +53,8 @@ export class SumsubController {
     @ApiOperation({ summary: "Webhook for sumsub of applicant on hold" })
     @Post("applicant-on-hold")
     @ApiForbiddenResponse()
+    @ApiException(() => new KycBusinessException(KycErrorCode.KYC_NOT_FOUND))
     @ApiOkResponse()
-    @ApiException(() => new BusinessException(KycErrorCode.KYC_NOT_FOUND))
     async applicantOnHold(@Body() applicantOnHoldRequest: ApplicantOnHoldRequest): Promise<void> {
         await this.kycService.onHold(applicantOnHoldRequest.applicantId, applicantOnHoldRequest.reviewStatus);
     }
@@ -62,8 +62,8 @@ export class SumsubController {
     @ApiOperation({ summary: "Webhook for sumsub of applicant personal info changed" })
     @Post("applicant-personal-info-changed")
     @ApiForbiddenResponse()
+    @ApiException(() => new KycBusinessException(KycErrorCode.KYC_NOT_FOUND))
     @ApiOkResponse()
-    @ApiException(() => new BusinessException(KycErrorCode.KYC_NOT_FOUND))
     async applicantPersonalInfoChanged(@Body() applicantPersonalInfoChangedRequest: ApplicantPersonalInfoChangedRequest): Promise<void> {
         await this.kycService.personalInfoChanged(
             applicantPersonalInfoChangedRequest.applicantId,
