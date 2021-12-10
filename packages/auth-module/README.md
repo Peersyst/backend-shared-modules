@@ -27,7 +27,7 @@
 # Installation
 
 ```bash
-$ npm install
+$ npm install --save @peersyst/auth-module
 ```
 
 # How to use it
@@ -46,6 +46,32 @@ import { AuthModule } from "@peersyst/auth-module";
     ],
 })
 export class AppModule {}
+```
+
+- Add configService configuration variables
+```typescript
+export default (): any => ({
+    server: {
+        secretKey: process.env.APP_JWT_KEY, ...
+    },
+});
+```
+
+- Add AuthErrorCode and AuthErrorBody to app ErrorCodes
+```typescript
+import { HttpStatus } from "@nestjs/common";
+import { AuthErrorCode, AuthErrorBody } from "@peersyst/auth-module";
+
+// Define app error codes
+enum AppErrorCode {}
+
+export const ErrorCode = { ...AppErrorCode, ...AuthErrorCode };
+export type ErrorCodeType = AppErrorCode | AuthErrorCode;
+
+export const ErrorBody: { [code in ErrorCodeType]: { statusCode: HttpStatus; message: string } } = {
+    // Define app error code bodies
+    ...AuthErrorBody,
+};
 ```
 
 - Implement AuthUserI for User entity
@@ -101,6 +127,21 @@ AuthModule.register(UserModule, ConfigModule, ConfigService, {
 }),
 ```
 
+- Add configService configuration variables
+```typescript
+export default (): any => ({
+    server: {
+        secretKey: process.env.APP_JWT_KEY,
+        frontUrl: process.env.FRONT_URL,
+        baseUrl: process.env.BASE_URL,
+    },
+    googleAuth: {
+        clientId: process.env.GOOGLE_AUTH_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_AUTH_CLIENT_SECRET,
+    },
+});
+```
+
 - Implement AuthGoogleUserI for User entity
 ```typescript
 import { AuthUserI, AuthGoogleUserI, UserType } from "@peersyst/auth-module";
@@ -124,6 +165,21 @@ export class UserService implements AuthUserServiceI, ThirdPartyUserServiceI {..
 AuthModule.register(UserModule, ConfigModule, ConfigService, {
     twitterAuth: true,
 }),
+```
+
+- Add configService configuration variables
+```typescript
+export default (): any => ({
+    server: {
+        secretKey: process.env.APP_JWT_KEY,
+        frontUrl: process.env.FRONT_URL,
+        baseUrl: process.env.BASE_URL,
+    },
+    twitterAuth: {
+        apiKey: process.env.TWITTER_API_KEY,
+        apiKeySecret: process.env.TWITTER_API_KEY_SECRET,
+    },
+});
 ```
 
 - Implement AuthTwitterUserI for User entity
@@ -180,6 +236,11 @@ export class UserService implements AuthUserServiceI, ValidateEmailUserServiceI 
 }
 ```
 
+- Create entity in your entities folder with name VerifyEmailToken
+```typescript
+export { VerifyEmailToken } from "@peersyst/auth-module";
+```
+
 ## Add Recover Password
 
 - Set recoverPassword to true in register module and indicate NotificationService. It should exactly have this name.
@@ -204,6 +265,11 @@ import { AuthUserServiceI, RecoverPasswordUserServiceI } from "@peersyst/auth-mo
 
 @Injectable()
 export class UserService implements AuthUserServiceI, RecoverPasswordUserServiceI {...}
+```
+
+- Create entity in your entities folder with name ResetToken
+```typescript
+export { ResetToken } from "@peersyst/auth-module";
 ```
 
 ## Add 2 Factor Authenticated (work in progress)
