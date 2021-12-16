@@ -1,4 +1,4 @@
-import {DynamicModule, Global, Module, ModuleMetadata, Provider, Type} from '@nestjs/common';
+import {DynamicModule, Global, Module, ModuleMetadata, Provider, Type} from "@nestjs/common";
 import {CryptoService} from "./crypto.service";
 import {CRYPTO_MODULE_OPTIONS} from "./crypto.constants";
 
@@ -10,7 +10,7 @@ export interface CryptoOptionsFactory {
     createCryptoOptions(): Promise<CryptoModuleOptions> | CryptoModuleOptions;
 }
 
-export interface CryptoModuleAsyncOptions extends Pick<ModuleMetadata, 'imports'> {
+export interface CryptoModuleAsyncOptions extends Pick<ModuleMetadata, "imports"> {
     useExisting?: Type<CryptoOptionsFactory>;
     useClass?: Type<CryptoOptionsFactory>;
     useFactory?: (...args: any[]) => Promise<CryptoModuleOptions> | CryptoModuleOptions;

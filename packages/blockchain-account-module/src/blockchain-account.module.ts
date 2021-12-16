@@ -1,5 +1,5 @@
-import {DynamicModule, Module} from '@nestjs/common';
-import {SequelizeModule} from '@nestjs/sequelize';
+import {DynamicModule, Module} from "@nestjs/common";
+import {SequelizeModule} from "@nestjs/sequelize";
 import {BlockchainAccountModel} from "./blockchain-account.model";
 import {BlockchainAccountService} from "./blockchain-account.service";
 import {CryptoModule} from "@peersyst/crypto-backend-module";

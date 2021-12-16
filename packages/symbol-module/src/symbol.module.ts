@@ -1,4 +1,4 @@
-import {DynamicModule, Global, Module, ModuleMetadata, Provider, Type} from '@nestjs/common';
+import {DynamicModule, Global, Module, ModuleMetadata, Provider, Type} from "@nestjs/common";
 import {SYMBOL_MODULE_OPTIONS} from "./symbol.constants";
 import {NetworkType} from "symbol-sdk";
 import {SymbolFactoryService} from "./symbol-factory.service";
@@ -16,7 +16,7 @@ export interface SymbolModuleOptionsFactory {
     createSymbolModuleOptions(): Promise<SymbolModuleOptions> | SymbolModuleOptions;
 }
 
-export interface SymbolModuleAsyncOptions extends Pick<ModuleMetadata, 'imports'> {
+export interface SymbolModuleAsyncOptions extends Pick<ModuleMetadata, "imports"> {
     useExisting?: Type<SymbolModuleOptionsFactory>;
     useClass?: Type<SymbolModuleOptionsFactory>;
     useFactory?: (...args: any[]) => Promise<SymbolModuleOptions> | SymbolModuleOptions;

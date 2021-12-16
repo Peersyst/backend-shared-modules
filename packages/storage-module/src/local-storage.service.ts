@@ -1,8 +1,8 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import * as stream from 'stream';
-import * as path from 'path';
-import * as fs from 'fs';
+import * as stream from "stream";
+import * as path from "path";
+import * as fs from "fs";
 import { StorageBusinessException } from "./exception/business.exception";
 import { StorageErrorCode } from "./exception/error-codes";
 import { FileInformation, StorageServiceInterface } from "./storage.module";
@@ -57,10 +57,10 @@ export class LocalStorageService implements StorageServiceInterface {
       const filePath = path.join(this.rootPath, fileRelPath);
 
       return fs.createWriteStream(filePath)
-        .on('close', () => {
+        .on("close", () => {
           onSuccess();
         })
-        .on('error', (err: Error) => {
+        .on("error", (err: Error) => {
           onError(err);
         });
     }

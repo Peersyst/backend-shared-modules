@@ -1,7 +1,7 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import * as AWS from "aws-sdk";
-import * as stream from 'stream';
+import * as stream from "stream";
 import { StorageBusinessException } from "./exception/business.exception";
 import { StorageErrorCode } from "./exception/error-codes";
 import { FileInformation, StorageServiceInterface } from "./storage.module";

@@ -35,7 +35,7 @@ $ npm install --save @peersyst/kyc-module
 
 - Import and register KycModule in AppModule and apply Signature middleware for SumsubController
 ```typescript
-import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
+import { Module, NestModule, MiddlewareConsumer } from "@nestjs/common";
 import { KycModule, SignatureMiddleware, SumsubController, OrmType } from "@peersyst/kyc-module";
 
 @Module({

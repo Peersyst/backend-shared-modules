@@ -1,4 +1,4 @@
-import * as stream from 'stream';
+import * as stream from "stream";
 import { DynamicModule, Module, Provider, Type, ForwardReference } from "@nestjs/common";
 import { S3StorageService } from "./s3-storage.service";
 import { LocalStorageService } from "./local-storage.service";

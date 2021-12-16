@@ -15,7 +15,7 @@ interface KycModelAttributes {
     updatedAt?: Date;
 }
 
-@Table({ tableName: 'kyc' })
+@Table({ tableName: "kyc" })
 export class KycModel extends Model<KycModelAttributes, KycModelAttributes> implements KycModelAttributes {
 
     @Column({ primaryKey: true, autoIncrement: true, type: DataType.INTEGER })

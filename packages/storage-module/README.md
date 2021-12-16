@@ -35,7 +35,7 @@ $ npm install --save @peersyst/storage-module
 
 - Import and register StorageModule in AppModule
 ```typescript
-import { Module } from '@nestjs/common';
+import { Module } from "@nestjs/common";
 import { StorageModule, StorageType } from "@peersyst/storage-module";
 
 @Module({
@@ -70,7 +70,7 @@ export const ErrorBody: { [code in ErrorCodeType]: { statusCode: HttpStatus; mes
 
 - Import StorageModule in the modules you want to use it
 ```typescript
-import { Module } from '@nestjs/common';
+import { Module } from "@nestjs/common";
 import { StorageModule, StorageType } from "@peersyst/storage-module";
 
 @Module({
@@ -87,7 +87,7 @@ export class ResourceModule {}
 
 - Inject StorageService in the in the classes you want to use it
 ```typescript
-import { InjectRepository, Inject } from '@nestjs/common';
+import { InjectRepository, Inject } from "@nestjs/common";
 import { StorageServiceInterface } from "@peersyst/storage-module";
 
 export class ResourceService {

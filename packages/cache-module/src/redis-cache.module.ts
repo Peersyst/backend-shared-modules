@@ -1,6 +1,6 @@
-import {CacheModule, DynamicModule, Global, Module, ModuleMetadata, Provider, Type} from '@nestjs/common';
-import { RedisCacheService } from './redis-cache.service';
-import * as redisStore from 'cache-manager-redis-store';
+import {CacheModule, DynamicModule, Global, Module, ModuleMetadata, Provider, Type} from "@nestjs/common";
+import { RedisCacheService } from "./redis-cache.service";
+import * as redisStore from "cache-manager-redis-store";
 
 export interface RedisCacheModuleOptions {
     redisHost: string;
@@ -12,7 +12,7 @@ export interface RedisCacheOptionsFactory {
     createCacheOptions(): Promise<RedisCacheModuleOptions> | RedisCacheModuleOptions;
 }
 
-export interface RedisCacheModuleAsyncOptions extends Pick<ModuleMetadata, 'imports'> {
+export interface RedisCacheModuleAsyncOptions extends Pick<ModuleMetadata, "imports"> {
     useExisting?: Type<RedisCacheOptionsFactory>;
     useClass?: Type<RedisCacheOptionsFactory>;
     useFactory?: (...args: any[]) => Promise<RedisCacheModuleOptions> | RedisCacheModuleOptions;
