@@ -7,11 +7,6 @@ import { XummBusinessException } from "./exception/business.exception";
 import { XummErrorCode } from "./exception/error-codes";
 import { verifySignature } from "verify-xrpl-signature";
 
-export interface XummUserServiceI {
-    findById: (userId: number) => Promise<any>;
-    assignXumm: (userId: number, xumm: XummI) => Promise<any>;
-}
-
 export interface XummRepositoryInterface {
     create: (userToken: string, address: string, payloadId?: string) => Promise<XummI>;
     findByAddress: (address: string) => Promise<XummI>;
@@ -25,7 +20,6 @@ export class XummService {
 
     constructor(
         @Inject(ConfigService) private configService: ConfigService,
-        @Inject("UserService") private readonly userService: XummUserServiceI,
         @Inject("XummRepository") private readonly xummRepository: XummRepositoryInterface,
     ) {
         this.appKey = this.configService.get("xumm.appKey");
