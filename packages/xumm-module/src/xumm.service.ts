@@ -58,6 +58,11 @@ export class XummService {
         return subscription.created;
     }
 
+    async validateSignIn(address: string, payloadId: string): Promise<boolean> {
+        const xumm = await this.xummRepository.findByAddress(address);
+        return xumm.payloadId === payloadId;
+    }
+
     async transactionRequest(sender: string, receiver: string, amount: string): Promise<XummPostPayloadResponse> {
         const xummEntity = await this.xummRepository.findByAddress(sender);
         if (!xummEntity) {
