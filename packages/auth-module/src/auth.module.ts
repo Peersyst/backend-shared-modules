@@ -39,7 +39,7 @@ export class AuthModule {
                 inject: [ConfigService],
             }),
             ConfigModule,
-            UserModule,            
+            UserModule,
         ];
         const entities: EntityClassOrSchema[] = [];
         const exports: Provider[] = [AuthService];
