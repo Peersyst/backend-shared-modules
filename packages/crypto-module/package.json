@@ -1,6 +1,6 @@
 {
   "name": "@peersyst/crypto-backend-module",
-  "version": "0.11.6",
+  "version": "0.11.7",
   "description": "Crypto backend module",
   "author": "Adrià Carrera <acarrera@peersyst.com>",
   "main": "index.js",
