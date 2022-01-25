@@ -15,6 +15,12 @@ export class XummTypeormRepository implements XummRepositoryInterface {
         return this.transformEntityToDto(xummModel);
     }
 
+    async findByPayloadId(payloadId: string): Promise<XummI> {
+        const xummModel = await this.xummRepository.findOne({ where: { payloadId } });
+
+        return xummModel ? this.transformEntityToDto(xummModel): null;
+    }
+
     async findByAddress(address: string): Promise<XummI> {
         const xummModel = await this.xummRepository.findOne({ where: { address } });
 

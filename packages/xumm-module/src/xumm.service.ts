@@ -9,6 +9,7 @@ import { verifySignature } from "verify-xrpl-signature";
 
 export interface XummRepositoryInterface {
     create: (userToken: string, address: string, payloadId?: string) => Promise<XummI>;
+    findByPayloadId: (payloadId: string) => Promise<XummI>;
     findByAddress: (address: string) => Promise<XummI>;
     deletePrevious: (address: string) => Promise<void>;
 }
@@ -28,7 +29,7 @@ export class XummService {
         this.xummSdk = new XummSdk(this.appKey, this.appSecret);
     }
 
-    async signIn(address: string): Promise<XummPostPayloadResponse> {
+    async signIn(): Promise<XummPostPayloadResponse> {
         const subscription = await this.xummSdk.payload.createAndSubscribe(
             {
                 txjson: {
@@ -44,8 +45,6 @@ export class XummService {
 
                     if (signedPayload.meta.signed !== true) {
                         event.resolve("is not signed");
-                    } else if (signedPayload.response.account !== address) {
-                        event.resolve("wrong address");
                     } else if (verifyResult.signatureValid !== true || verifyResult.signedBy !== address) {
                         event.resolve("wrong signature");
                     } else {
@@ -60,10 +59,10 @@ export class XummService {
         return subscription.created;
     }
 
-    async verifySignIn(address: string, payloadId: string): Promise<boolean> {
-        const xumm = await this.xummRepository.findByAddress(address);
-        if (!xumm) return false;
-        return xumm.payloadId === payloadId;
+    async verifySignIn(payloadId: string): Promise<string | null> {
+        const xumm = await this.xummRepository.findByPayloadId(payloadId);
+        if (!xumm) return null;
+        return xumm.address;
     }
 
     async transactionRequest(sender: string, receiver: string, amount: string): Promise<XummPostPayloadResponse> {
