@@ -21,6 +21,10 @@ export class XummTypeormRepository implements XummRepositoryInterface {
         return xummModel ? this.transformEntityToDto(xummModel): null;
     }
 
+    async deletePrevious(address: string): Promise<void> {
+        await this.xummRepository.delete({ address });
+    }
+
     private transformEntityToDto(model: XummEntity): XummI {
         return {
             address: model.address,

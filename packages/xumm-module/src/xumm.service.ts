@@ -48,6 +48,7 @@ export class XummService {
                     } else if (verifyResult.signatureValid !== true || verifyResult.signedBy !== address) {
                         event.resolve("wrong signature");
                     } else {
+                        await this.xummRepository
                         await this.xummRepository.create(userToken, address, subscription.created.uuid);
                         event.resolve("is signed");
                     }
