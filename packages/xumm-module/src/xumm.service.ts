@@ -10,6 +10,7 @@ import { verifySignature } from "verify-xrpl-signature";
 export interface XummRepositoryInterface {
     create: (userToken: string, address: string, payloadId?: string) => Promise<XummI>;
     findByAddress: (address: string) => Promise<XummI>;
+    deletePrevious: (address: string) => Promise<void>;
 }
 
 @Injectable()
@@ -48,7 +49,7 @@ export class XummService {
                     } else if (verifyResult.signatureValid !== true || verifyResult.signedBy !== address) {
                         event.resolve("wrong signature");
                     } else {
-                        await this.xummRepository
+                        await this.xummRepository.deletePrevious(address);
                         await this.xummRepository.create(userToken, address, subscription.created.uuid);
                         event.resolve("is signed");
                     }
