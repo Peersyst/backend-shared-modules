@@ -60,6 +60,7 @@ export class XummService {
 
     async validateSignIn(address: string, payloadId: string): Promise<boolean> {
         const xumm = await this.xummRepository.findByAddress(address);
+        if (!xumm) return false;
         return xumm.payloadId === payloadId;
     }
 
