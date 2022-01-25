@@ -1,7 +1,7 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { XummSdk } from "xumm-sdk";
-import { XummPostPayloadResponse } from "xumm-sdk/dist/src/types";
+import { XummJsonTransaction, XummPostPayloadResponse } from "xumm-sdk/dist/src/types";
 import { XummI } from "./dto/xumm.dto";
 import { XummBusinessException } from "./exception/business.exception";
 import { XummErrorCode } from "./exception/error-codes";
@@ -65,7 +65,7 @@ export class XummService {
         return xumm.address;
     }
 
-    async transactionRequest(sender: string, receiver: string, amount: string): Promise<XummPostPayloadResponse> {
+    async paymentRequest(sender: string, receiver: string, amount: string): Promise<XummPostPayloadResponse> {
         const xummEntity = await this.xummRepository.findByAddress(sender);
         if (!xummEntity) {
             throw new XummBusinessException(XummErrorCode.USER_NOT_SIGNED_IN);
@@ -77,6 +77,19 @@ export class XummService {
                     Destination : receiver,
                     Amount: amount,
                 },
+                user_token: xummEntity.userToken,
+            },
+        );
+    }
+
+    async transactionRequest(sender: string, transaction: XummJsonTransaction): Promise<XummPostPayloadResponse> {
+        const xummEntity = await this.xummRepository.findByAddress(sender);
+        if (!xummEntity) {
+            throw new XummBusinessException(XummErrorCode.USER_NOT_SIGNED_IN);
+        }
+        return await this.xummSdk.payload.create(
+            {
+                txjson: transaction,
                 user_token: xummEntity.userToken,
             },
         );
