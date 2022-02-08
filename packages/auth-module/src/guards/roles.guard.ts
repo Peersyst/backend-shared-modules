@@ -19,7 +19,7 @@ export class RolesGuard implements CanActivate {
             role = [role];
         }
 
-        const hasRole = role.reduce((ant, act) => user.type === act || ant, false);
+        const hasRole = role.some((r) => user.type === r);
         return hasRole;
     }
 }
