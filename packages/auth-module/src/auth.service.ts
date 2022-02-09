@@ -49,6 +49,9 @@ export class AuthService {
         } catch (error) {
             throw new BusinessException(AuthErrorCode.INVALID_CREDENTIALS);
         }
+        if (user.blocked) {
+            throw new BusinessException(AuthErrorCode.BLOCKED_USER);
+        }
 
         if (!user) {
             throw new BusinessException(AuthErrorCode.INVALID_CREDENTIALS);

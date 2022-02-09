@@ -14,6 +14,7 @@ export interface AuthUserI<T = UserType> {
     email: string;
     type: WithUserType<T> | string;
     password: string;
+    blocked?: boolean;
 }
 
 export interface Auth2FAUserI {

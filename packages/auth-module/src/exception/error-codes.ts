@@ -7,6 +7,7 @@ export enum AuthErrorCode {
     TOKEN_NOT_FOUND = "TOKEN_NOT_FOUND",
     TOKEN_ALREADY_VERIFIED = "TOKEN_ALREADY_VERIFIED",
     TOKEN_EXPIRED = "TOKEN_EXPIRED",
+    BLOCKED_USER = "BLOCKED_USER",
 }
 
 export const AuthErrorBody: { [code in AuthErrorCode]: { statusCode: HttpStatus; message: string } } = {
@@ -33,5 +34,9 @@ export const AuthErrorBody: { [code in AuthErrorCode]: { statusCode: HttpStatus;
     [AuthErrorCode.TOKEN_EXPIRED]: {
         statusCode: HttpStatus.CONFLICT,
         message: AuthErrorCode.TOKEN_EXPIRED,
+    },
+    [AuthErrorCode.BLOCKED_USER]: {
+        statusCode: HttpStatus.CONFLICT,
+        message: AuthErrorCode.BLOCKED_USER,
     },
 };
