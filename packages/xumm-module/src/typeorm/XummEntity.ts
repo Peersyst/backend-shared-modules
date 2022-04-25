@@ -14,9 +14,9 @@ export class XummEntity {
     @Column("varchar", { length: 255, name: "payload", nullable: true })
     payloadId?: string;
 
-    @CreateDateColumn({ name: "created_at", type: "datetime" })
+    @CreateDateColumn({ name: "created_at", type: "timestamp" })
     createdAt: Date;
 
-    @UpdateDateColumn({ name: "updated_at", type: "datetime" })
+    @UpdateDateColumn({ name: "updated_at", type: "timestamp" })
     updatedAt: Date;
 }
