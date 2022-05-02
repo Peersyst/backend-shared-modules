@@ -31,11 +31,14 @@ export class S3StorageService implements StorageServiceInterface {
         return file.Body as Buffer;
     }
 
-    getFileAsStream(filePath: string): stream.Readable {
-      return this.s3.getObject({
-        Bucket: this.bucketName,
-        Key: filePath,
-      }).createReadStream();
+    async getFileAsStream(filePath: string): Promise<stream.Readable> {
+      const params = { Bucket: this.bucketName, Key: filePath };
+      const file = await this.s3.headObject(params).promise();
+      if (!file) {
+          throw new StorageBusinessException(StorageErrorCode.FILE_NOT_FOUND);
+      }
+
+      return this.s3.getObject(params).createReadStream();
     }
 
     async storeFileFromBuffer(fileBuffer: Buffer, fileInformation: FileInformation): Promise<void> {

@@ -16,20 +16,20 @@ export class LocalStorageService implements StorageServiceInterface {
     }
 
     async getFileAsBuffer(fileRelPath: string): Promise<Buffer> {
-      try {
-        const filePath = path.join(this.rootPath, fileRelPath);
-        const buffer = fs.readFileSync(filePath);
-        return Promise.resolve(buffer);
-      } catch (error) {
-        if (error.code === "ENOENT") {
-          throw new StorageBusinessException(StorageErrorCode.FILE_NOT_FOUND);
-        }
-        throw error;
+      const filePath = path.join(this.rootPath, fileRelPath);
+      if (!fs.existsSync(filePath)) {
+        throw new StorageBusinessException(StorageErrorCode.FILE_NOT_FOUND);
       }
+
+      const buffer = fs.readFileSync(filePath);
+      return buffer;
     }
 
-    getFileAsStream(fileRelPath: string): stream.Readable {
+    async getFileAsStream(fileRelPath: string): Promise<stream.Readable> {
       const filePath = path.join(this.rootPath, fileRelPath);
+      if (!fs.existsSync(filePath)) {
+        throw new StorageBusinessException(StorageErrorCode.FILE_NOT_FOUND);
+      }
       return fs.createReadStream(filePath);
     }
 

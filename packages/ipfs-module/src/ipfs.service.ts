@@ -1,14 +1,11 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
-import IPFS from "ipfs";
+import * as IPFS from "ipfs";
 
 @Injectable()
 export class IpfsService {
     private ipfsNode: any;
 
-    constructor(
-        @Inject(ConfigService) private configService: ConfigService,
-    ) {
+    constructor() {
         IPFS.create().then(async (node) => {
             this.ipfsNode = node;
         });

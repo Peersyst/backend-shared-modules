@@ -21,7 +21,7 @@ export interface FileInformation {
 
 export interface StorageServiceInterface {
     getFileAsBuffer(filePath: string): Promise<Buffer>;
-    getFileAsStream(filePath: string): stream.Readable;
+    getFileAsStream(filePath: string): Promise<stream.Readable>;
     storeFileFromBuffer(fileBuffer: Buffer, fileInformation: FileInformation): Promise<void>;
     deleteFile(filePath: string): Promise<void>;
     getFileSize(filePath: string): Promise<number>;

@@ -2,7 +2,7 @@ import { DynamicModule, Module, Provider, Type, ForwardReference } from "@nestjs
 import { IpfsService } from "./ipfs.service";
 
 @Module({})
-export class XummModule {
+export class IpfsModule {
     static register(ConfigModule: Type): DynamicModule {
         const providers: Provider[] = [IpfsService];
         const imports: Array<Type<any> | DynamicModule | Promise<DynamicModule> | ForwardReference> = [
@@ -11,7 +11,7 @@ export class XummModule {
         const exports: Provider[] = [IpfsService];
 
         return {
-            module: XummModule,
+            module: IpfsModule,
             imports,
             providers,
             exports,
