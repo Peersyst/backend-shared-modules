@@ -52,6 +52,9 @@ export class AuthService {
         if (user.blocked) {
             throw new BusinessException(AuthErrorCode.BLOCKED_USER);
         }
+        if (user.emailVerified === false) {
+            throw new BusinessException(AuthErrorCode.EMAIL_NOT_VERIFIED);
+        }
 
         if (!user) {
             throw new BusinessException(AuthErrorCode.INVALID_CREDENTIALS);
