@@ -1,6 +1,6 @@
 {
   "name": "@peersyst/auth-module",
-  "version": "0.11.31",
+  "version": "0.11.32",
   "description": "Auth module",
   "author": "Joan Grau <jgrau@peersyst.com>",
   "main": "index.js",

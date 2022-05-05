@@ -2,7 +2,7 @@ import { Inject, Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { XummSdk } from "xumm-sdk";
 import { PayloadAndSubscription, XummJsonTransaction, XummPostPayloadResponse } from "xumm-sdk/dist/src/types";
-import { XummI } from "./dto/xumm.dto";
+import { XummI, XummStatus } from "./dto/xumm.dto";
 import { XummBusinessException } from "./exception/business.exception";
 import { XummErrorCode } from "./exception/error-codes";
 import { verifySignature } from "verify-xrpl-signature";
@@ -108,5 +108,18 @@ export class XummService {
             },
             callback
         );
+    }
+
+    async getStatus(uuid: string): Promise<XummStatus> {
+        const payload = await this.xummSdk.payload.get(uuid);
+        if (!payload?.meta?.signed) {
+            return XummStatus.NOT_SIGNED;
+        }
+        const verifyResult = verifySignature(payload.response.hex);
+        if (verifyResult.signatureValid !== true) {
+            return XummStatus.BAD_SIGNATURE;
+        } else {
+            return XummStatus.SIGNED;
+        }
     }
 }
