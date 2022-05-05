@@ -113,6 +113,9 @@ export class XummService {
     async getStatus(uuid: string): Promise<XummStatus> {
         const payload = await this.xummSdk.payload.get(uuid);
         if (!payload?.meta?.signed) {
+            if (payload && payload.payload.expires_in_seconds <= 0) {
+                return XummStatus.EXPIRED;
+            }
             return XummStatus.NOT_SIGNED;
         }
         const verifyResult = verifySignature(payload.response.hex);

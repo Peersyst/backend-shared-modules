@@ -1,6 +1,6 @@
 {
   "name": "@peersyst/blockchain-account-backend-module",
-  "version": "0.11.33",
+  "version": "0.11.34",
   "description": "Blockchain Account backend module",
   "author": "Adrià Carrera <acarrera@peersyst.com>",
   "main": "index.js",
