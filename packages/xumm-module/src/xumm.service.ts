@@ -96,7 +96,7 @@ export class XummService {
         );
     }
 
-    async transactionRequestAndSubscribe(sender: string, transaction: XummJsonTransaction, callback: onPayloadEvent): Promise<PayloadAndSubscription> {
+    async transactionRequestAndSubscribe(sender: string, transaction: XummJsonTransaction, callback?: onPayloadEvent): Promise<PayloadAndSubscription> {
         const xummEntity = await this.xummRepository.findByAddress(sender);
         if (!xummEntity) {
             throw new XummBusinessException(XummErrorCode.USER_NOT_SIGNED_IN);

@@ -1,4 +1,4 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import * as IPFS from "ipfs";
 
 @Injectable()
@@ -12,14 +12,16 @@ export class IpfsService {
     }
 
     async uploadFile(fileBuffer: Buffer): Promise<string> {
-        const { cid } = await this.ipfsNode.add(fileBuffer);
-        await this.ipfsNode.pin.add(cid.toString());
-        console.log(`Added file ${cid}`);
-        return cid.toString();
+        const file = await this.ipfsNode.add(fileBuffer);
+        console.log(`Added file ${file.cid}`);
+        return file.cid.toString();
     }
 
     async getFile(cid: string): Promise<Buffer> {
-        const response: Uint8Array = await this.ipfsNode.get(cid);
-        return Buffer.from(response);
+        const chunks = [];
+        for await (const chunk of this.ipfsNode.cat(cid)) {
+            chunks.push(chunk);
+        }
+        return Buffer.concat(chunks);
     }
 }
