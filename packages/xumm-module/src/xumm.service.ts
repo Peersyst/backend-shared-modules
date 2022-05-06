@@ -125,7 +125,7 @@ export class XummService {
                 return XummStatus.SIGNED;
             }
         } else {
-            return XummStatus.NOT_SIGNED;
+            return XummStatus.DECLINED;
         }
     }
 }
