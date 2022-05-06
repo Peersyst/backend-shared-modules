@@ -112,7 +112,7 @@ export class XummService {
 
     async getStatus(uuid: string): Promise<XummStatus> {
         const payload = await this.xummSdk.payload.get(uuid);
-        if (!payload) throw new XummBusinessException(XummErrorCode.PAYLOAD_NOT_FOUND);
+        if (!payload) return XummStatus.NOT_SIGNED;
         const { signed, cancelled, expired } = payload.meta;
         if (expired) return XummStatus.EXPIRED;
         else if (cancelled) return XummStatus.CANCELLED;
