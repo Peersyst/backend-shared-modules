@@ -1,6 +1,6 @@
 {
   "name": "@peersyst/unleash-module",
-  "version": "0.11.20",
+  "version": "0.12.0",
   "description": "Peersyst unleash module",
   "author": "Joan Grau <jgrau@peersyst.com>",
   "main": "index.js",
