@@ -13,6 +13,9 @@ export class UnleashService implements OnModuleInit {
             appName: this.configService.get("unleash.appName"),
             url: this.configService.get("unleash.url"),
             environment: this.configService.get("unleash.environment"),
+            customHeaders: {
+                Authorization: this.configService.get("unleash.apiToken"),
+            },
         });
     }
 

@@ -57,8 +57,25 @@ export default (): any => ({
         appName: process.env.UNLEASH_APP_NAME,
         url: process.env.UNLEASH_URL,
         environment: process.env.UNLEASH_ENVIRONMENT,
+        apiToken: process.env.UNLEASH_API_TOKEN,
     },
 });
+```
+
+- Add UnleashErrorCode and UnleashErrorBody to app ErrorCodes
+```typescript
+import { HttpStatus } from "@nestjs/common";
+import { UnleashErrorCode, UnleashErrorBody } from "@peersyst/unleash-module";
+// Define app error codes
+enum AppErrorCode {}
+
+export const ErrorCode = { ...AppErrorCode, ...UnleashErrorCode };
+export type ErrorCodeType = AppErrorCode | UnleashErrorCode;
+
+export const ErrorBody: { [code in ErrorCodeType]: { statusCode: HttpStatus; message: string } } = {
+    // Define app error code bodies
+    ...UnleashErrorBody,
+};
 ```
 
 ## Decorate functions you want to toggle
@@ -78,14 +95,14 @@ export class CatController {
     @Inject("CatService") private readonly catService: CatService,
   )
 
-  @Get("")
   @UnleashToggle("all-cats")
+  @Get("")
   async getAllCats(): Promise<PaginatedCatDto> {
     return this.catService.getAllCats();
   }
 
-  @Get(":id")
   @UnleashToggle("get-cat")
+  @Get(":id")
   async getCat(@Param("id") id: number): Promise<CatDto> {
     return this.catService.getCat(id);
   }
