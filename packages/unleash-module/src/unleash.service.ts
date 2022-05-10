@@ -22,4 +22,8 @@ export class UnleashService implements OnModuleInit {
     getUnleash(): Unleash {
         return this.unleash;
     }
+
+    isEnabled(name: string): boolean {
+        return this.unleash.isEnabled(name);
+    }
 }

@@ -10,6 +10,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
+    "@nanogiants/nestjs-swagger-api-exception-decorator": "^1.6.1",
     "@nestjs/common": "~7.6.15",
     "@nestjs/config": "~0.6.3",
     "@nestjs/core": "~7.6.15",
