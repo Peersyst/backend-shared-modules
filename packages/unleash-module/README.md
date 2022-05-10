@@ -62,20 +62,21 @@ export default (): any => ({
 });
 ```
 
-- Add UnleashErrorCode and UnleashErrorBody to app ErrorCodes
+- Add UnleashModule in module where will be used
 ```typescript
-import { HttpStatus } from "@nestjs/common";
-import { UnleashErrorCode, UnleashErrorBody } from "@peersyst/unleash-module";
-// Define app error codes this is not longer necessary!
-enum AppErrorCode {}
+import { Module } from "@nestjs/common";
+import { ConfigModule } from "@nestjs/config";
+import { UnleashModule } from "@peersyst/unleash-module";
 
-export const ErrorCode = { ...AppErrorCode, ...UnleashErrorCode };
-export type ErrorCodeType = AppErrorCode | UnleashErrorCode;
-
-export const ErrorBody: { [code in ErrorCodeType]: { statusCode: HttpStatus; message: string } } = {
-    // Define app error code bodies
-    ...UnleashErrorBody,
-};
+@Module({
+    imports: [
+        ConfigModule.forRoot(...),
+        UnleashModule.register(ConfigModule),
+        ...
+    ],
+    ...
+})
+export class CatModule {}
 ```
 
 ## Decorate functions you want to toggle
