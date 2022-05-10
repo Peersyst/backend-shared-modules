@@ -90,12 +90,12 @@ import { CatDto, PaginatedCatDto } from "./cat.dto.ts"
 
 @ApiTags("cats")
 @Controller("cat")
+@UnleashToggle("cat-controller")
 export class CatController {
   constructor(
     @Inject("CatService") private readonly catService: CatService,
   )
 
-  @UnleashToggle("all-cats")
   @Get("")
   async getAllCats(): Promise<PaginatedCatDto> {
     return this.catService.getAllCats();
