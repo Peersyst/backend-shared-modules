@@ -1,6 +1,7 @@
-import { CanActivate, Injectable, Inject, ExecutionContext } from "@nestjs/common";
+import { CanActivate, Injectable, Inject, ExecutionContext, HttpStatus } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { Observable } from "rxjs";
+import { Response } from "express";
 import { UnleashBusinessException } from "./exception/business.exception";
 import { UnleashErrorCode } from "./exception/error-codes";
 import { UnleashService } from "./unleash.service";
@@ -15,6 +16,12 @@ export class UnleashGuard implements CanActivate {
             return true;
         }
 
-        throw new UnleashBusinessException(UnleashErrorCode.METHOD_NOT_AVAILABLE);
+        // throw new UnleashBusinessException(UnleashErrorCode.METHOD_NOT_AVAILABLE);
+        const ctx = context.switchToHttp();
+        const response = ctx.getResponse<Response>();
+        response.status(HttpStatus.METHOD_NOT_ALLOWED).json({
+            statusCode: HttpStatus.METHOD_NOT_ALLOWED,
+            message: "METHOD_NOT_ALLOWED",
+        });
     }
 }

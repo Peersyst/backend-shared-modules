@@ -8,6 +8,6 @@ export function UnleashToggle(name: string): MethodDecorator & ClassDecorator {
     return applyDecorators(
         SetMetadata("name", name),
         UseGuards(UnleashGuard),
-        ApiException(() => new UnleashBusinessException(UnleashErrorCode.METHOD_NOT_AVAILABLE)),
+        // ApiException(() => new UnleashBusinessException(UnleashErrorCode.METHOD_NOT_AVAILABLE)),
     );
 }
