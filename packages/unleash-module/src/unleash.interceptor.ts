@@ -1,8 +1,7 @@
-import { NestInterceptor, Injectable, Inject, ExecutionContext, HttpStatus, CallHandler } from "@nestjs/common";
+import { NestInterceptor, Injectable, ExecutionContext, CallHandler } from "@nestjs/common";
 import { Observable } from "rxjs";
-import { UnleashBusinessException } from "./exception/business.exception";
-import { UnleashErrorCode } from "./exception/error-codes";
 import { Response } from "express";
+import { UnleashErrorCode, UnleashErrorBody } from "./exception/error-codes";
 
 @Injectable()
 export class UnleashInterceptor implements NestInterceptor {
@@ -11,9 +10,9 @@ export class UnleashInterceptor implements NestInterceptor {
         if (req.toggled === false) {
             const ctx = context.switchToHttp();
             const response = ctx.getResponse<Response>();
-            response.status(HttpStatus.METHOD_NOT_ALLOWED).json({
-                statusCode: HttpStatus.METHOD_NOT_ALLOWED,
-                message: "METHOD_NOT_ALLOWED",
+            response.status(UnleashErrorBody[UnleashErrorCode.METHOD_NOT_ALLOWED].statusCode).json({
+                statusCode: UnleashErrorBody[UnleashErrorCode.METHOD_NOT_ALLOWED].statusCode,
+                message: UnleashErrorBody[UnleashErrorCode.METHOD_NOT_ALLOWED].message,
             });
 
             return null;

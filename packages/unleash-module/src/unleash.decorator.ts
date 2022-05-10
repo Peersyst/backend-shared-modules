@@ -10,6 +10,6 @@ export function UnleashToggle(name: string): MethodDecorator & ClassDecorator {
         SetMetadata("name", name),
         UseGuards(UnleashGuard),
         UseInterceptors(UnleashInterceptor),
-        ApiException(() => new UnleashBusinessException(UnleashErrorCode.METHOD_NOT_AVAILABLE)),
+        ApiException(() => new UnleashBusinessException(UnleashErrorCode.METHOD_NOT_ALLOWED)),
     );
 }

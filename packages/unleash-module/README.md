@@ -66,7 +66,7 @@ export default (): any => ({
 ```typescript
 import { HttpStatus } from "@nestjs/common";
 import { UnleashErrorCode, UnleashErrorBody } from "@peersyst/unleash-module";
-// Define app error codes
+// Define app error codes this is not longer necessary!
 enum AppErrorCode {}
 
 export const ErrorCode = { ...AppErrorCode, ...UnleashErrorCode };
