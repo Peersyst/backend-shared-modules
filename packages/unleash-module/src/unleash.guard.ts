@@ -19,7 +19,7 @@ export class UnleashGuard implements CanActivate {
         } else if (methodName) {
             req.toggled = methodToggled;
         } else if (className) {
-            req.toggled = className;
+            req.toggled = classToggled;
         } else {
             req.toggled = false;
         }
