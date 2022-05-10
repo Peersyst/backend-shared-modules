@@ -8,9 +8,21 @@ export class UnleashGuard implements CanActivate {
     constructor(private readonly reflector: Reflector, @Inject(UnleashService) private unleashService: UnleashService) {}
 
     canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
-        const name = this.reflector.get<string>("name", context.getHandler());
         const req = context.switchToHttp().getRequest();
-        req.toggled = name && this.unleashService.isEnabled(name);
+        const className = this.reflector.get<string>("name", context.getClass());
+        const methodName = this.reflector.get<string>("name", context.getHandler());
+        const classToggled = className && this.unleashService.isEnabled(className);
+        const methodToggled = methodName && this.unleashService.isEnabled(methodName);
+
+        if (methodName && className) {
+            req.toggled = methodToggled && classToggled;
+        } else if (methodName) {
+            req.toggled = methodToggled;
+        } else if (className) {
+            req.toggled = className;
+        } else {
+            req.toggled = false;
+        }
 
         return true;
     }
