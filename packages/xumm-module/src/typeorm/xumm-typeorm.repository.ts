@@ -7,9 +7,9 @@ import { XummEntity } from "./XummEntity";
 export class XummTypeormRepository implements XummRepositoryInterface {
     constructor(@InjectRepository(XummEntity) private readonly xummRepository: Repository<XummEntity>) {}
 
-    async create(userToken: string, address: string, payloadId?: string): Promise<XummI> {
+    async create(userToken: string, address: string, nodeType: string, payloadId?: string): Promise<XummI> {
         const xummModel = await this.xummRepository.save({
-            userToken, address, payloadId,
+            userToken, address, payloadId, nodeType
         });
 
         return this.transformEntityToDto(xummModel);
@@ -36,6 +36,7 @@ export class XummTypeormRepository implements XummRepositoryInterface {
             address: model.address,
             userToken: model.userToken,
             payloadId: model.payloadId,
+            nodeType: model.nodeType
         }
     }
 }

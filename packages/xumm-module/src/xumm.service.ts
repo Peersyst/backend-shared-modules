@@ -7,9 +7,10 @@ import { XummBusinessException } from "./exception/business.exception";
 import { XummErrorCode } from "./exception/error-codes";
 import { verifySignature } from "verify-xrpl-signature";
 import { onPayloadEvent } from "xumm-sdk/dist/src/types/Payload/onPayloadEvent";
+import { VerifySignInDto } from "./dto/verifySignIn.dto";
 
 export interface XummRepositoryInterface {
-    create: (userToken: string, address: string, payloadId?: string) => Promise<XummI>;
+    create: (userToken: string, address: string, nodeType: string, payloadId?: string) => Promise<XummI>;
     findByPayloadId: (payloadId: string) => Promise<XummI>;
     findByAddress: (address: string) => Promise<XummI>;
     deletePrevious: (address: string) => Promise<void>;
@@ -50,7 +51,7 @@ export class XummService {
                         event.resolve("wrong signature");
                     } else {
                         await this.xummRepository.deletePrevious(address);
-                        await this.xummRepository.create(userToken, address, subscription.created.uuid);
+                        await this.xummRepository.create(userToken, address,  subscription.payload.response.dispatched_nodetype, subscription.created.uuid);
                         event.resolve("is signed");
                     }
                 }
@@ -60,10 +61,10 @@ export class XummService {
         return subscription.created;
     }
 
-    async verifySignIn(payloadId: string): Promise<string | null> {
+    async verifySignIn(payloadId: string): Promise<VerifySignInDto | null> {
         const xumm = await this.xummRepository.findByPayloadId(payloadId);
         if (!xumm) return null;
-        return xumm.address;
+        return { address: xumm.address, nodeType: xumm.nodeType };
     }
 
     async paymentRequest(sender: string, receiver: string, amount: string): Promise<XummPostPayloadResponse> {
