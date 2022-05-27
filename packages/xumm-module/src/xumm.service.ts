@@ -40,7 +40,9 @@ export class XummService {
             }, async (event) => {
                 // console.log(`Payload ${event.uuid} data:`, event.data);
                 if (event.data.signed !== undefined) {
+                    console.log(event.data.signed);
                     const signedPayload = await this.xummSdk.payload.get(subscription.created.uuid);
+                    console.log(signedPayload);
                     const userToken = signedPayload?.application.issued_user_token;
                     const address = signedPayload?.response.account;
                     const verifyResult = verifySignature(signedPayload.response.hex);
@@ -51,7 +53,8 @@ export class XummService {
                         event.resolve("wrong signature");
                     } else {
                         await this.xummRepository.deletePrevious(address);
-                        await this.xummRepository.create(userToken, address, subscription.payload.response.dispatched_nodetype, subscription.created.uuid);
+                        console.log(signedPayload.response.dispatched_nodetype)
+                        await this.xummRepository.create(userToken, address, signedPayload.response.dispatched_nodetype, subscription.created.uuid);
                         event.resolve("is signed");
                     }
                 }
