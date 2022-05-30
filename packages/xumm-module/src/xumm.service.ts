@@ -51,7 +51,7 @@ export class XummService {
                         event.resolve("wrong signature");
                     } else {
                         await this.xummRepository.deletePrevious(address);
-                        await this.xummRepository.create(userToken, address, subscription.payload.response.dispatched_nodetype, subscription.created.uuid);
+                        await this.xummRepository.create(userToken, address,  subscription.payload.response.dispatched_nodetype, subscription.created.uuid);
                         event.resolve("is signed");
                     }
                 }
