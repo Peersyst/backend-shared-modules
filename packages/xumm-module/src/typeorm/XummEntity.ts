@@ -14,10 +14,6 @@ export class XummEntity {
     @Column("varchar", { length: 255, name: "payload", nullable: true })
     payloadId?: string;
 
-    //Mainnet or Testnet (Not typed by the xumm sdk)
-    @Column("varchar", { length: 7, name: "node_type" })
-    nodeType?: string;
-
     @CreateDateColumn({ name: "created_at", type: "timestamp" })
     createdAt: Date;
 

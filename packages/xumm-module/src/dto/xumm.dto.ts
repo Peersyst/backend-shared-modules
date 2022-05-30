@@ -2,7 +2,6 @@ export interface XummI {
     userToken: string;
     address: string;
     payloadId?: string;
-    nodeType: string;
 }
 
 export enum XummStatus {
