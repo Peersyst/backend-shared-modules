@@ -5,8 +5,10 @@ export interface XummI {
 }
 
 export enum XummStatus {
-    NOT_SIGNED = "not-signed",
+    DECLINED = "declined",
     SIGNED = "signed",
+    PENDING = "pending",
     BAD_SIGNATURE = "bad-signature",
+    CANCELLED = "cancelled",
     EXPIRED = "expired",
 }
