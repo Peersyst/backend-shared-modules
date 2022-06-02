@@ -17,6 +17,7 @@
     "@nestjs/sequelize": "0.2.0",
     "@nestjs/swagger": "~4.8.0",
     "@nestjs/typeorm": "^8.0.2",
+    "@pinata/sdk": "^1.1.25",
     "class-transformer": "~0.4.0",
     "class-validator": "~0.13.2",
     "express-openapi-validator": "^4.12.12",
