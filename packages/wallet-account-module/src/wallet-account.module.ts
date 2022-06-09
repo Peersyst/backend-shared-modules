@@ -14,7 +14,7 @@ export interface WalletModuleOptions {
 
 export interface WalletServiceInterface {
     createWallet(userId: number): Promise<any>;
-    sing(userId: number, transaction: any): Promise<any>;
+    sign(userId: number, transaction: any): Promise<any>;
 }
 
 @Module({})

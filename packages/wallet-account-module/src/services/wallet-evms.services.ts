@@ -14,7 +14,7 @@ export class WalletEvmsService implements WalletServiceInterface {
         @InjectRepository(WalletAccount) private readonly walletAccountRepository: Repository<WalletAccount>,
     ) {}
 
-    async sing(userId: number, transaction: ethers.providers.TransactionRequest): Promise<string> {
+    async sign(userId: number, transaction: ethers.providers.TransactionRequest): Promise<string> {
         const walletEntity = await this.walletAccountRepository.findOne({ where: { userId } });
         const privateKey = this.cryptoService.decrypt(Encrypted.deserialize(walletEntity.encryptedPrivateKey));
         const provider = new ethers.providers.JsonRpcProvider(this.configService.get("wallet.node"));
