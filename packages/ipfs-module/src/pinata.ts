@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { FormData } from 'formdata-node';
-import stream from 'stream';
 
 const baseUrl = 'https://api.pinata.cloud';
 
@@ -21,10 +20,6 @@ export function pinFileToIPFS(pinataApiKey, pinataSecretApiKey, readStream, opti
         data.append('file', readStream);
 
         const endpoint = `${baseUrl}/pinning/pinFileToIPFS`;
-
-        if (!(readStream instanceof stream.Readable || readStream instanceof FormData)) {
-            reject(new Error('readStream is not a readable stream or form data'));
-        }
 
         if (options) {
             if (options.pinataMetadata) {
