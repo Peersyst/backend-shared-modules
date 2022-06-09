@@ -43,7 +43,7 @@ export function pinFileToIPFS(pinataApiKey, pinataSecretApiKey, readStream, opti
                 maxContentLength: 'Infinity' as any, //this is needed to prevent axios from erroring out with large files
                 maxBodyLength: 'Infinity' as any,
                 headers: {
-                    'Content-type': `multipart/form-data; boundary= ${data._boundary}`,
+                    'Content-type': `multipart/form-data; boundary= ${(data as any)._boundary}`,
                     'pinata_api_key': pinataApiKey,
                     'pinata_secret_api_key': pinataSecretApiKey
                 }
