@@ -1,5 +1,6 @@
 import { Inject, Injectable } from "@nestjs/common";
 import * as IPFS from "ipfs";
+import * as fs from "fs";
 import { pinFileToIPFS } from "./pinata";
 import { IPFS_MODULE_OPTIONS } from "./ipfs.constants";
 import { IpfsModuleOptions } from "./ipfs.module";
@@ -20,7 +21,11 @@ export class IpfsService {
     async uploadFile(fileBuffer: Buffer): Promise<string> {
         await this.createPromise;
         if (this.options.pinataApiKey) {
-            const result = await pinFileToIPFS(this.options.pinataApiKey, this.options.pinataSecret, fileBuffer);
+            const name = Date.now().toString();
+            fs.writeFileSync("./" + name, fileBuffer);
+            const stream = fs.createReadStream("./" + name);
+            const result = await pinFileToIPFS(this.options.pinataApiKey, this.options.pinataSecret, stream);
+            fs.rmSync("./" + name);
             return result.IpfsHash;
         } else {
             const file = await this.ipfsNode.add(fileBuffer);
