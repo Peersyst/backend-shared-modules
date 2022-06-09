@@ -1,7 +1,6 @@
 import axios from 'axios';
-import { FormData } from 'formdata-node';
-
-const baseUrl = 'https://api.pinata.cloud';
+// import { FormData } from 'formdata-node';
+var FormData = require('form-data');
 
 
 /**
@@ -12,42 +11,30 @@ const baseUrl = 'https://api.pinata.cloud';
  * @param {*} options
  * @returns {Promise<unknown>}
  */
-export function pinFileToIPFS(pinataApiKey, pinataSecretApiKey, readStream, options?): Promise<any> {
+export async function pinFileToIPFS(pinataApiKey, pinataSecretApiKey, readStream, options?): Promise<any> {
+    const data = new FormData();
 
-    return new Promise((resolve, reject) => {
+    data.append('file', readStream);
 
-        const data = new FormData();
-
-        data.append('file', readStream);
-
-        const endpoint = `${baseUrl}/pinning/pinFileToIPFS`;
-
-        if (options) {
-            if (options.pinataMetadata) {
-                data.append('pinataMetadata', JSON.stringify(options.pinataMetadata));
-            }
-            if (options.pinataOptions) {
-                data.append('pinataOptions', JSON.stringify(options.pinataOptions));
-            }
+    if (options) {
+        if (options.pinataMetadata) {
+            data.append('pinataMetadata', JSON.stringify(options.pinataMetadata));
         }
+        if (options.pinataOptions) {
+            data.append('pinataOptions', JSON.stringify(options.pinataOptions));
+        }
+    }
 
-        axios.post(
-            endpoint,
-            data,
-            {
-                withCredentials: true,
-                headers: {
-                    'Content-type': `multipart/form-data`,
-                    'pinata_api_key': pinataApiKey,
-                    'pinata_secret_api_key': pinataSecretApiKey
-                }
-            }).then(function (result) {
-            if (result.status !== 200) {
-                reject(new Error(`unknown server response while pinning File to IPFS: ${result}`));
-            }
-            resolve(result.data);
-        }).catch(function (error) {
-            reject(error);
-        });
-    });
+    var config = {
+        method: "post" as any,
+        url: 'https://api.pinata.cloud/pinning/pinFileToIPFS',
+        headers: { 
+            'pinata_api_key': pinataApiKey,
+            'pinata_secret_api_key': pinataSecretApiKey,
+            ...data.getHeaders()
+        },
+        data : data
+    };
+    const res = await axios(config as any);
+    return res.data;
 }
