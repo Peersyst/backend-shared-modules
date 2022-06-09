@@ -1,6 +1,5 @@
 import axios from 'axios';
-// import { FormData } from 'formdata-node';
-var FormData = require('form-data');
+import { FormData } from 'formdata-node';
 
 
 /**
