@@ -1,5 +1,5 @@
 import axios from 'axios';
-import NodeFormData from 'form-data';
+import { FormData } from 'formdata-node';
 import stream from 'stream';
 
 const baseUrl = 'https://api.pinata.cloud';
@@ -16,13 +16,13 @@ export function pinFileToIPFS(pinataApiKey, pinataSecretApiKey, readStream, opti
 
     return new Promise((resolve, reject) => {
 
-        const data = new NodeFormData();
+        const data = new FormData();
 
         data.append('file', readStream);
 
         const endpoint = `${baseUrl}/pinning/pinFileToIPFS`;
 
-        if (!(readStream instanceof stream.Readable || readStream instanceof NodeFormData)) {
+        if (!(readStream instanceof stream.Readable || readStream instanceof FormData)) {
             reject(new Error('readStream is not a readable stream or form data'));
         }
 
@@ -37,7 +37,7 @@ export function pinFileToIPFS(pinataApiKey, pinataSecretApiKey, readStream, opti
 
         axios.post(
             endpoint,
-            readStream instanceof NodeFormData ? readStream : data,
+            readStream instanceof FormData ? readStream : data,
             {
                 withCredentials: true,
                 maxContentLength: 'Infinity' as any, //this is needed to prevent axios from erroring out with large files
