@@ -23,7 +23,7 @@
     "express-openapi-validator": "^4.12.12",
     "reflect-metadata": "0.1.13",
     "rxjs": "^6.0.0",
-    "sequelize": "^6.3.5",
+    "sequelize": "6.1.1",
     "sequelize-typescript": "2.1.0",
     "typeorm": "^0.2.41"
   },
