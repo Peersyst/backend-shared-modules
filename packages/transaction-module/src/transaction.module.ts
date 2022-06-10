@@ -6,6 +6,7 @@ import { BlockchainNetwork } from "./blockchain-network.enum";
 
 export interface TransactionModuleOptions {
     network: BlockchainNetwork;
+    config: any; // TODO: union type of all possible config types?
 }
 
 export interface TransactionOptionsFactory {

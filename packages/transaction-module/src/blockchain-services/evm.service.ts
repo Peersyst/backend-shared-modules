@@ -2,6 +2,10 @@ import { TransactionStatus } from "../entities/Transaction";
 import { IBlockchainService } from "./blockchain-service";
 
 export class EvmService implements IBlockchainService {
+
+    constructor(rpcUrl: string) {
+        // TODO:
+    }
     
     async getBalance(address: string): Promise<number> {
         // TODO:

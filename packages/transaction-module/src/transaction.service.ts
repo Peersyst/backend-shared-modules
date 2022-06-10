@@ -24,10 +24,9 @@ export class TransactionService {
         @InjectQueue("transaction-queue") private queue: Queue,
 
     ) {
-        // TODO: pass parameters to service constructors from options (RPC node ...)
         switch (options.network) {
             case BlockchainNetwork.EVM:
-                this.blockchainService = new EvmService();
+                this.blockchainService = new EvmService(options.config.rpcUrl);
             case BlockchainNetwork.RIPPLE:
                 this.blockchainService = new RippleService();
         }
