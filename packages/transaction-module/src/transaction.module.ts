@@ -1,6 +1,7 @@
 import { DynamicModule, Module, Provider, Type, ForwardReference, Global, ModuleMetadata } from "@nestjs/common";
 import { TransactionService } from "./transaction.service";
 import {TRANSACTION_MODULE_OPTIONS} from "./transaction.constants";
+import { BullModule } from "@nestjs/bull";
 import { BlockchainNetwork } from "./blockchain-network.enum";
 
 export interface TransactionModuleOptions {
@@ -27,6 +28,11 @@ export function createProvider(options: TransactionModuleOptions): any[] {
 export class TransactionModule {
     static register(options: TransactionModuleOptions): DynamicModule {
         return {
+            imports: [
+                BullModule.registerQueue({
+                    name: "transaction-queue",
+                }),
+            ],
             module: TransactionModule,
             global: true,
             providers: createProvider(options)
@@ -37,7 +43,12 @@ export class TransactionModule {
         return {
             module: TransactionModule,
             global: true,
-            imports: options.imports || [],
+            imports: [
+                BullModule.registerQueue({
+                    name: "transaction-queue",
+                }),
+                ...(options.imports || []),
+            ],
             providers: [
                 ...this.createAsyncProviders(options),
                 TransactionService,
