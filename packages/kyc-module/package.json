@@ -1,6 +1,6 @@
 {
   "name": "@peersyst/kyc-module",
-  "version": "0.12.15",
+  "version": "0.12.32",
   "description": "Know Your Customer module",
   "author": "Joan Grau <jgrau@peersyst.com>",
   "main": "index.js",
