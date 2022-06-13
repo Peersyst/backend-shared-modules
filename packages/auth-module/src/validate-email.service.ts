@@ -21,7 +21,7 @@ export class ValidateEmailService {
     }
 
     async verifyEmailVerificationToken(token: string): Promise<VerifyEmailTokenDTO> {
-        const tokenEntity = await this.verifyEmailTokenRepository.findOne({ token });
+        const tokenEntity = await this.verifyEmailTokenRepository.findOne({ where: { token } });
         if (!tokenEntity) {
             throw new BusinessException(AuthErrorCode.TOKEN_NOT_FOUND);
         } else if (tokenEntity.verified) {
