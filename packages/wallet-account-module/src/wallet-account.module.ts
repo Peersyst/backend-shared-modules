@@ -3,6 +3,7 @@ import { WalletEvmsService } from "./services/wallet-evms.services";
 import { CryptoModule } from "@peersyst/crypto-backend-module";
 import { WalletAccount } from "./entities/WalletAccount";
 import { TypeOrmModule } from "@nestjs/typeorm";
+import { WalletDto } from "./dto/wallet.dto";
 
 export enum NetworksType {
     EVMS = "evms",
@@ -15,6 +16,7 @@ export interface WalletModuleOptions {
 export interface WalletServiceInterface {
     createWallet(userId: number): Promise<any>;
     sign(userId: number, transaction: any): Promise<any>;
+    getWallet(userId: number): Promise<WalletDto>;
 }
 
 @Module({})

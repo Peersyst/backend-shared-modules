@@ -6,6 +6,9 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { WalletAccount } from "../entities/WalletAccount";
 import { ConfigService } from "@nestjs/config";
+import { BusinessException } from "../exception/business.exception";
+import { WalletErrorCode } from "../exception/error-codes";
+import { WalletDto } from "../dto/wallet.dto";
 
 export class WalletEvmsService implements WalletServiceInterface {
     constructor(
@@ -19,8 +22,8 @@ export class WalletEvmsService implements WalletServiceInterface {
         const privateKey = this.cryptoService.decrypt(Encrypted.deserialize(walletEntity.encryptedPrivateKey));
         const provider = new ethers.providers.JsonRpcProvider(this.configService.get("wallet.node"));
         const wallet = new ethers.Wallet(String(privateKey), provider);
-        let sing = await wallet.signTransaction(transaction);
-        return sing;
+        let sign = await wallet.signTransaction(transaction);
+        return sign;
     }
 
     async createWallet(userId: number): Promise<string> {
@@ -35,8 +38,16 @@ export class WalletEvmsService implements WalletServiceInterface {
             });
             address = wallet.address;
         } else {
-            address = walletEntity.address;
+            throw new BusinessException(WalletErrorCode.USER_HAVE_WALLET);
         }
         return address;
+    }
+
+    async getWallet(userId: number): Promise<WalletDto> {
+        const walletEntity = await this.walletAccountRepository.findOne({ where: { userId } });
+        if (!walletEntity) {
+            throw new BusinessException(WalletErrorCode.USER_DONT_HAVE_WALLET);
+        }
+        return { address: walletEntity.address };
     }
 }
