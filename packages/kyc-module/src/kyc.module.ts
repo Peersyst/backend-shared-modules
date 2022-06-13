@@ -25,7 +25,7 @@ export interface KycModuleOptions {
 @Module({})
 export class KycModule {
     static register(UserModule: Type, ConfigModule: Type, options: KycModuleOptions): DynamicModule {
-        const providers: Provider[] = [KycService];
+        const providers: Provider[] = [KycService, SumsubService];
         const controllers: Type<any>[] = [SumsubController, KycController];
         const imports: Array<Type<any> | DynamicModule | Promise<DynamicModule> | ForwardReference> = [
             ConfigModule,
