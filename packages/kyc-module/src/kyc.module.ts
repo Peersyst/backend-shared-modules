@@ -7,6 +7,7 @@ import { KycService } from "./kyc.service";
 import { KycSequelizeRepository } from "./sequelize/kyc-sequelize.repository";
 import { KycModel } from "./sequelize/KycModel";
 import { SumsubController } from "./sumsub.controller";
+import { SumsubService } from "./sumsub.service";
 import { KycTypeormRepository } from "./typeorm/kyc-typeorm.repository";
 import { KycEntity } from "./typeorm/KycEntity";
 
@@ -30,7 +31,7 @@ export class KycModule {
             ConfigModule,
             UserModule,            
         ];
-        const exports: Provider[] = [KycService];
+        const exports: Provider[] = [KycService, SumsubService];
 
         if (options.notifications && !options.NotificationService) {
             throw new Error("Must indicate NotificationService when notifications = true");

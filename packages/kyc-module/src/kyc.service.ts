@@ -31,7 +31,7 @@ export class KycService {
     constructor(
         @Inject("UserService") private readonly userService: KycUserServiceI,
         @Inject("KycRepository") private readonly kycRepository: KycRepositoryInterface,
-        @Inject("NotificationInterface") private readonly notificationService: KycNotificationInterface,
+        @Inject("NotificationService") private readonly notificationService: KycNotificationInterface,
         private readonly sumsubService: SumsubService,
     ) {}
 
