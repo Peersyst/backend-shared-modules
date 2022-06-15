@@ -1,13 +1,6 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
-export enum TransactionStatus {
-    PENDING = "pending", // Not sent
-    CONFIRMED = "confirmed", // Sent and confirmed
-    UNCONFIRMED = "unconfirmed", // Sent and unconfirmed
-    FAILED = "failed",
-}
-
-@Entity("transaction", { schema: "db_database" })
+@Entity("transaction")
 export class Transaction {
     @PrimaryGeneratedColumn({ type: "int", name: "id" })
     id: number;
@@ -28,7 +21,7 @@ export class Transaction {
     hash: string;
 
     @Column("enum", { name: "status", enum: ["confirmed", "unconfirmed", "failed", "pending"] })
-    status: TransactionStatus;
+    status: string;
 
     @Column("varchar", { name: "type", length: 100 })
     type: string;

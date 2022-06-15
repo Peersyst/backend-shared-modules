@@ -1,6 +1,6 @@
-import { TransactionStatus } from "../entities/Transaction";
 import { IBlockchainService } from "./blockchain-service";
 import { ethers } from "ethers";
+import { TransactionStatus } from "../transaction.dto";
 
 export class EvmService implements IBlockchainService {
     public readonly provider: ethers.providers.JsonRpcProvider;

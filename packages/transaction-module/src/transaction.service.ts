@@ -1,4 +1,4 @@
-import { Inject } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { TransactionConditionType } from "./queue/transaction.queue";
 import { TRANSACTION_MODULE_OPTIONS } from "./transaction.constants";
 import { TransactionModuleOptions } from "./transaction.module";
@@ -9,11 +9,14 @@ import { BlockchainNetwork } from "./blockchain-network.enum";
 import { EvmService } from "./blockchain-services/evm.service";
 import { RippleService } from "./blockchain-services/ripple.service";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Transaction, TransactionStatus } from "./entities/Transaction";
+import { Transaction } from "./entities/Transaction";
 import { Repository } from "typeorm";
 import { InjectQueue } from "@nestjs/bull";
 import { Queue } from "bull";
-import { TransactionDto } from "./transaction.dto";
+import { ConfigService } from "@nestjs/config";
+import { TransactionDto, TransactionStatus } from "./transaction.dto";
+
+@Injectable()
 
 export class TransactionService {
     private blockchainService: IBlockchainService;
@@ -22,11 +25,12 @@ export class TransactionService {
         @Inject(TRANSACTION_MODULE_OPTIONS) options: TransactionModuleOptions,
         @InjectRepository(Transaction) private readonly transactionRepository: Repository<Transaction>,
         @InjectQueue("transaction-queue") private queue: Queue,
+        @Inject(ConfigService) configService: ConfigService,
 
     ) {
         switch (options.network) {
             case BlockchainNetwork.EVM:
-                this.blockchainService = new EvmService(options.config.rpcUrl);
+                this.blockchainService = new EvmService(configService.get("blockchain.rpcUrl"));
             case BlockchainNetwork.RIPPLE:
                 this.blockchainService = new RippleService();
         }

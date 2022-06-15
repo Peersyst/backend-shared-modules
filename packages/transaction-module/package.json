@@ -8,7 +8,7 @@
   "scripts": {
     "build": "rimraf dist && tsc",
     "prepublishOnly": "npm run build",
-    "clean": "rm -f src/**/*.js* && rm -f src/*.js* && rm -f src/**/*.d.ts && rm -f src/*.d.ts"
+    "clean": "rm -f src/**/*.js* && rm -f src/*.js* && rm -f src/**/*.d.ts && rm -f src/*.d.ts && rm tsconfig.tsbuildinfo"
   },
   "devDependencies": {
     "@nestjs/common": "8.0.6",
@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "@nestjs/bull": "^0.5.5",
+    "@nestjs/config": "^2.1.0",
     "@nestjs/swagger": "^5.2.1",
     "@nestjs/typeorm": "^8.1.2",
     "bull": "^4.8.3",

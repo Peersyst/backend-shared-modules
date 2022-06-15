@@ -2,7 +2,7 @@ import { forwardRef, Inject, Logger } from "@nestjs/common";
 import { Process, Processor } from "@nestjs/bull";
 import { Job } from "bull";
 import { TransactionService } from "../transaction.service";
-import { TransactionStatus } from "../entities/Transaction";
+import { TransactionStatus } from "../transaction.dto";
 
 export enum TransactionConditionType {
     BALANCE_BIGGER_THAN = "balance_bigger_than",

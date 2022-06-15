@@ -1,4 +1,4 @@
-import { TransactionStatus } from "../entities/Transaction";
+import { TransactionStatus } from "../transaction.dto";
 import { IBlockchainService } from "./blockchain-service";
 
 export class RippleService implements IBlockchainService {

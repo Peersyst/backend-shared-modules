@@ -1,4 +1,4 @@
-import { TransactionStatus } from "../entities/Transaction";
+import { TransactionStatus } from "../transaction.dto";
 
 export interface IBlockchainService {
     getBalance(address: string): Promise<number>;
