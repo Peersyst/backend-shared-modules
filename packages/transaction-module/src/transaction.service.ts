@@ -31,8 +31,10 @@ export class TransactionService {
         switch (options.network) {
             case BlockchainNetwork.EVM:
                 this.blockchainService = new EvmService(configService.get("blockchain.rpcUrl"));
+                break;
             case BlockchainNetwork.RIPPLE:
                 this.blockchainService = new RippleService();
+                break;
         }
     }
 
