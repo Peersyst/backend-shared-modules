@@ -12,7 +12,7 @@ export class TransactionDto {
     public type: string; // TODO: make generic
     public from: string;
     public to: string;
-    public amount: string;
+    public amount: number;
     public payload: string; // Signed transaction
     public hash: string;
     public status: TransactionStatus;

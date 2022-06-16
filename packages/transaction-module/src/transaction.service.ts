@@ -17,7 +17,6 @@ import { ConfigService } from "@nestjs/config";
 import { TransactionDto, TransactionStatus } from "./transaction.dto";
 
 @Injectable()
-
 export class TransactionService {
     private blockchainService: IBlockchainService;
 
@@ -50,6 +49,26 @@ export class TransactionService {
     async balanceBiggerThan(balance: number, address: string): Promise<boolean> {
         const currentBalance = await this.blockchainService.getBalance(address);
         return currentBalance >= balance;
+    }
+
+    async sendTransaction(
+        from: string,
+        to: string,
+        hash: string,
+        amount: number,
+        payload: string,
+        precondition?: { type: TransactionConditionType; params: { [key: string]: any } },
+    ): Promise<void> {
+        const transaction = await this.transactionRepository.save({
+            hash,
+            from,
+            to,
+            amount,
+            payload,
+            status: TransactionStatus.PENDING,
+            type: "type",
+        });
+        await this.queue.add("process-transaction", { precondition, transactionId: transaction.id }, { delay: 2000 });
     }
 
     async sendTransactionToProcessQueue(

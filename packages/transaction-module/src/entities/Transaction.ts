@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity("transaction")
 export class Transaction {
@@ -14,20 +14,20 @@ export class Transaction {
     @Column("varchar", { name: "payload", nullable: false, length: 10000 })
     payload: string;
 
-    @Column("varchar", { name: "amount", length: 255 })
-    amount: string;
+    @Column("int", { name: "amount" })
+    amount: number;
 
     @Column("varchar", { name: "hash", nullable: false, length: 255 })
     hash: string;
 
-    @Column("enum", { name: "status", enum: ["confirmed", "unconfirmed", "failed", "pending"] })
+    @Column("varchar", { name: "status", nullable: false, length: 255 })
     status: string;
 
     @Column("varchar", { name: "type", length: 100 })
     type: string;
 
     @Column("text", { name: "errorMessage", nullable: true })
-    errorMessage?: string | null;
+    errorMessage?: string;
 
     @CreateDateColumn({ name: "created_at", type: "datetime" })
     createdAt: Date;

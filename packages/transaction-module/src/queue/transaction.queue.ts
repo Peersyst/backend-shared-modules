@@ -24,9 +24,7 @@ export interface ConfirmTransaction {
 export class TransactionConsumer {
     private readonly logger = new Logger(TransactionConsumer.name);
 
-    constructor(
-        @Inject(forwardRef(() => TransactionService)) private readonly transactionService: TransactionService,
-    ) {}
+    constructor(@Inject(forwardRef(() => TransactionService)) private readonly transactionService: TransactionService) {}
 
     @Process("process-transaction")
     async processTransaction(job: Job<ProcessTransaction>): Promise<void> {
@@ -35,11 +33,7 @@ export class TransactionConsumer {
             if (job.data.precondition) {
                 const precondition = await this.transactionService.checkCondition(job.data.precondition.type, job.data.precondition.params);
                 if (!precondition) {
-                    await this.transactionService.sendTransactionToProcessQueue(
-                        job.data.transactionId,
-                        2000,
-                        job.data.precondition,
-                    );
+                    await this.transactionService.sendTransactionToProcessQueue(job.data.transactionId, 2000, job.data.precondition);
                     return;
                 }
             }
@@ -55,7 +49,7 @@ export class TransactionConsumer {
     async confirmTransaction(job: Job<ConfirmTransaction>): Promise<void> {
         this.logger.log(`Checking transaction status ${job.data.transactionId}`);
         try {
-            const status = await this.transactionService.checkTransactionStatus(job.data.transactionHash);
+            const status = await this.transactionService.checkTransactionStatus(job.data.transactionId);
             if (status === TransactionStatus.CONFIRMED) {
                 await this.transactionService.confirmTransaction(job.data.transactionId);
                 this.logger.log(`Transaction ${job.data.transactionId} confirmed`);

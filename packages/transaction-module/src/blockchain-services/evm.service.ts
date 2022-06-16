@@ -8,7 +8,7 @@ export class EvmService implements IBlockchainService {
     constructor(rpcUrl: string) {
         this.provider = new ethers.providers.JsonRpcProvider(rpcUrl);
     }
-    
+
     async getBalance(address: string): Promise<number> {
         const balance = await this.provider.getBalance(address);
         return Number(ethers.utils.formatEther(balance));
@@ -20,6 +20,7 @@ export class EvmService implements IBlockchainService {
 
     async checkStatus(transactionHash: string): Promise<TransactionStatus> {
         const transactionReceipt = await this.provider.getTransactionReceipt(transactionHash);
+        if (!transactionReceipt) return TransactionStatus.UNCONFIRMED;
         if (transactionReceipt.status === 0) return TransactionStatus.FAILED;
         if (transactionReceipt.confirmations >= 1) return TransactionStatus.CONFIRMED;
         else return TransactionStatus.UNCONFIRMED;
