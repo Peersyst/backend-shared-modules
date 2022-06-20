@@ -1,6 +1,6 @@
 {
     "name": "@peersyst/wallet-account-module",
-    "version": "0.0.1",
+    "version": "0.12.40",
     "description": "Wallet Account backend module",
     "author": "Silvap <silvap@peersyst.com>",
     "main": "index.js",
@@ -10,12 +10,12 @@
         "prepublishOnly": "npm run build"
     },
     "devDependencies": {
-        "@peersyst/crypto-backend-module": "^0.12.15",
+        "@peersyst/crypto-backend-module": "^0.12.40",
         "@types/express": "4.17.11",
         "@types/node": "^16.7.6",
+        "ethers": "^5.6.8",
         "rimraf": "^3.0.2",
-        "typescript": "^4.4.2",
-        "ethers": "^5.6.8"
+        "typescript": "^4.4.2"
     },
     "peerDependencies": {
         "@nestjs/common": "^6.0.0 || ^7.0.0 || ^8.0.0",
