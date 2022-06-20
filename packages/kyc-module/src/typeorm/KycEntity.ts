@@ -27,7 +27,7 @@ export class KycEntity {
     @Column({ type: "enum", enum: KycRejectType, name: "review_reject_type", nullable: true })
     reviewRejectType?: KycRejectType;
 
-    @Column("varchar", { length: 255, name: "reject_labels" })
+    @Column("varchar", { length: 255, name: "reject_labels", nullable: true })
     rejectLabels?: string;
 
     @CreateDateColumn({ name: "created_at", type: "datetime" })
