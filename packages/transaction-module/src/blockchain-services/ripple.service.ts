@@ -16,4 +16,9 @@ export class RippleService implements IBlockchainService {
         // TODO:
         return TransactionStatus.PENDING;
     }
+
+    async getReceipt(transactionHash: string): Promise<string | undefined> {
+        // TODO:
+        return undefined;
+    }
 }

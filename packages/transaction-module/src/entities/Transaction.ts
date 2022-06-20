@@ -26,6 +26,12 @@ export class Transaction {
     @Column("varchar", { name: "type", length: 100 })
     type: string;
 
+    @Column("text", { name: "receipt", nullable: true })
+    receipt?: string;
+
+    @Column("text", { name: "metadata", nullable: true })
+    metadata?: string;
+
     @Column("text", { name: "errorMessage", nullable: true })
     errorMessage?: string;
 

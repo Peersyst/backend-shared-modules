@@ -85,8 +85,10 @@ export class TransactionService {
         await this.queue.add("confirm-transaction", { transactionId }, { delay });
     }
 
-    async confirmTransaction(id: number): Promise<void> {
-        await this.transactionRepository.update(id, { status: TransactionStatus.CONFIRMED });
+    async confirmTransaction(transactionId: number): Promise<void> {
+        const transaction = await this.transactionRepository.findOne({ where: { id: transactionId } });
+        const receipt = await this.blockchainService.getReceipt(transaction.hash);
+        await this.transactionRepository.update(transactionId, { status: TransactionStatus.CONFIRMED, receipt });
     }
 
     async rejectTransaction(id: number, error: string): Promise<void> {

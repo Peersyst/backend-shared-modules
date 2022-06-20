@@ -18,6 +18,12 @@ export class EvmService implements IBlockchainService {
         await this.provider.sendTransaction(payload);
     }
 
+    async getReceipt(transactionHash: string): Promise<string | undefined> {
+        const transactionReceipt = await this.provider.getTransactionReceipt(transactionHash);
+        if (!transactionReceipt) return undefined;
+        else return JSON.stringify(transactionReceipt);
+    }
+
     async checkStatus(transactionHash: string): Promise<TransactionStatus> {
         const transactionReceipt = await this.provider.getTransactionReceipt(transactionHash);
         if (!transactionReceipt) return TransactionStatus.UNCONFIRMED;
