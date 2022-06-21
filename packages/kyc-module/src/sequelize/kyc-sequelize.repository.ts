@@ -1,5 +1,5 @@
 import { InjectModel } from "@nestjs/sequelize";
-import { KycAnswer, KycI, KycRejectType, KycStatus } from "../dto/kyc.dto";
+import { KycAnswer, KycI, KycRejectType, KycStatus, SimplifiedKycI } from "../dto/kyc.dto";
 import { KycRepositoryInterface } from "../kyc.service";
 import { KycModel } from "./KycModel";
 
@@ -20,6 +20,14 @@ export class KycSequelizeRepository implements KycRepositoryInterface {
         });
 
         return kycModel ? this.transformModelToDto(kycModel): null;
+    }
+
+    async findByUserIdSimplified(userId: number): Promise<SimplifiedKycI> {
+        const kycModel = await this.kycRepository.findOne({
+            where: { userId }
+        });
+
+        return kycModel ? this.transformModelToSimplifiedDto(kycModel): null;
     }
 
     async findByApplicantId(applicantId: string): Promise<KycI> {
@@ -43,15 +51,21 @@ export class KycSequelizeRepository implements KycRepositoryInterface {
 
     private transformModelToDto(model: KycModel): KycI {
         return {
+            ...this.transformModelToSimplifiedDto(model),
             id: model.id,
-            userId: model.userId,
             applicantId: model.applicantId,
+            clientComment: model.clientComment,
+            rejectLabels: model.rejectLabels ? JSON.parse(model.rejectLabels) : undefined,
+        }
+    }
+
+    private transformModelToSimplifiedDto(model: KycModel): SimplifiedKycI {
+        return {
+            userId: model.userId,
             status: model.status as KycStatus,
             reviewAnswer: model.reviewAnswer as KycAnswer,
             moderationComment: model.moderationComment,
-            clientComment: model.clientComment,
             reviewRejectType: model.reviewRejectType as KycRejectType,
-            rejectLabels: model.rejectLabels ? JSON.parse(model.rejectLabels) : undefined,
             passed: model.status === KycStatus.COMPLETED && model.reviewAnswer === KycAnswer.GREEN,
             updatedAt: model.updatedAt,        
         }

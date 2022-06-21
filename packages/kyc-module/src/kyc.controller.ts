@@ -1,7 +1,7 @@
 import { ApiException } from "@nanogiants/nestjs-swagger-api-exception-decorator";
 import { Controller, Request, Get, Post, Param } from "@nestjs/common";
 import { ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
-import { Authenticated } from "@peersyst/auth-module";
+import { Authenticated, UserType } from "@peersyst/auth-module";
 import { KycTokenDto } from "./dto/kyc-token.dto";
 import { ApiErrorDecorators } from "./exception/error-response.decorator";
 import { KycBusinessException } from "./exception/business.exception";
@@ -38,30 +38,8 @@ export class KycController {
         return this.kycService.getToken(req.user.id);
     }
 
-    @ApiOperation({ summary: "Simulate kyc success" })
-    @Authenticated()
-    @Post("success")
-    @ApiException(() => new KycBusinessException(KycErrorCode.KYC_NOT_FOUND))
-    @ApiException(() => new KycBusinessException(KycErrorCode.SUMSUB_REQUEST_ERROR))
-    @ApiOkResponse()
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    async simulateSuccess(@Request() req): Promise<void> {
-        await this.kycService.simulateSuccess(req.user.id);
-    }
-
-    @ApiOperation({ summary: "Simulate kyc failure" })
-    @Authenticated()
-    @Post("failure")
-    @ApiException(() => new KycBusinessException(KycErrorCode.KYC_NOT_FOUND))
-    @ApiException(() => new KycBusinessException(KycErrorCode.SUMSUB_REQUEST_ERROR))
-    @ApiOkResponse()
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    async simulateFailure(@Request() req): Promise<void> {
-        await this.kycService.simulateFailure(req.user.id);
-    }
-
     @ApiOperation({ summary: "Get user simplified kyc" })
-    @Authenticated()
+    @Authenticated(UserType.ADMIN)
     @Get(":id")
     @ApiException(() => new KycBusinessException(KycErrorCode.KYC_NOT_FOUND))
     @ApiException(() => new KycBusinessException(KycErrorCode.SUMSUB_REQUEST_ERROR))

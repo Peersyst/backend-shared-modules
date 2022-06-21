@@ -45,6 +45,7 @@ import { KycModule, SignatureMiddleware, SumsubController, OrmType } from "@peer
         UserModule,
         KycModule.register(UserModule, ConfigModule, {
           ormType: OrmType.TYPEORM,
+          addTestEndpoints: false,
         }),
     ],
 })

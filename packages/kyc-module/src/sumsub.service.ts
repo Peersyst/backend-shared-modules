@@ -48,7 +48,6 @@ export class SumsubService {
         return json.token;
     }
 
-    // TODO: remove. For testing purposes only
     async simulateGreenReview(applicantId: string): Promise<void> {
         const uri = `/resources/applicants/${applicantId}/status/testCompleted`;
         const ts = Math.floor(Date.now() / 1000);
@@ -73,7 +72,6 @@ export class SumsubService {
         }
     }
 
-    // TODO: remove. For testing purposes only
     async simulateRedReview(applicantId: string): Promise<void> {
         const uri = `/resources/applicants/${applicantId}/status/testCompleted`;
         const ts = Math.floor(Date.now() / 1000);
