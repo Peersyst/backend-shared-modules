@@ -58,7 +58,7 @@ export class TransactionService {
         amount: number,
         payload: string,
         precondition?: { type: TransactionConditionType; params: { [key: string]: any } },
-    ): Promise<void> {
+    ): Promise<TransactionDto> {
         const transaction = await this.transactionRepository.save({
             hash,
             from,
@@ -69,6 +69,7 @@ export class TransactionService {
             type: "type",
         });
         await this.queue.add("process-transaction", { precondition, transactionId: transaction.id }, { delay: 2000 });
+        return TransactionDto.fromEntity(transaction);
     }
 
     async sendTransactionToProcessQueue(
