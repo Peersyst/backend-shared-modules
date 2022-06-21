@@ -1,6 +1,6 @@
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { KycAnswer, KycI, KycRejectType, KycStatus } from "../dto/kyc.dto";
+import { KycAnswer, KycI, KycRejectType, KycStatus, SimplifiedKycI } from "../dto/kyc.dto";
 import { KycRepositoryInterface } from "../kyc.service";
 import { KycEntity } from "./KycEntity";
 
@@ -19,6 +19,12 @@ export class KycTypeormRepository implements KycRepositoryInterface {
         const kycModel = await this.kycRepository.findOne({ where: { userId }});
 
         return kycModel ? this.transformEntityToDto(kycModel): null;
+    }
+
+    async findByUserIdSimplified(userId: number): Promise<SimplifiedKycI> {
+        const kycModel = await this.kycRepository.findOne({ where: { userId }});
+
+        return kycModel ? this.transformEntityToSimplifiedDto(kycModel): null;
     }
 
     async findByApplicantId(applicantId: string): Promise<KycI> {
@@ -40,15 +46,21 @@ export class KycTypeormRepository implements KycRepositoryInterface {
 
     private transformEntityToDto(model: KycEntity): KycI {
         return {
+            ...this.transformEntityToSimplifiedDto(model),
             id: model.id,
-            userId: model.userId,
             applicantId: model.applicantId,
+            clientComment: model.clientComment,
+            rejectLabels: model.rejectLabels ? JSON.parse(model.rejectLabels) : undefined,
+        }
+    }
+
+    private transformEntityToSimplifiedDto(model: KycEntity): SimplifiedKycI {
+        return {
+            userId: model.userId,
             status: model.status as KycStatus,
             reviewAnswer: model.reviewAnswer as KycAnswer,
             moderationComment: model.moderationComment,
-            clientComment: model.clientComment,
             reviewRejectType: model.reviewRejectType as KycRejectType,
-            rejectLabels: model.rejectLabels ? JSON.parse(model.rejectLabels) : undefined,
             passed: model.status === KycStatus.COMPLETED && model.reviewAnswer === KycAnswer.GREEN,
             updatedAt: model.updatedAt,        
         }

@@ -2,6 +2,7 @@ import { DynamicModule, Module, Provider, Type, ForwardReference } from "@nestjs
 import { SequelizeModule } from "@nestjs/sequelize";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { DefaultNotificationService } from "./default-notification.service";
+import { KycTestController } from "./kyc-test.controller";
 import { KycController } from "./kyc.controller";
 import { KycService } from "./kyc.service";
 import { KycSequelizeRepository } from "./sequelize/kyc-sequelize.repository";
@@ -18,6 +19,7 @@ export enum OrmType {
 }
 export interface KycModuleOptions {
     ormType: OrmType;
+    addTestEndpoints: boolean;
     notifications?: boolean;
     NotificationService?: Type;
 }
@@ -48,6 +50,10 @@ export class KycModule {
         } else if (options.ormType === OrmType.TYPEORM) {
             providers.push({ provide: "KycRepository", useClass: KycTypeormRepository });
             imports.push(TypeOrmModule.forFeature([KycEntity]));
+        }
+
+        if (options.addTestEndpoints) {
+            controllers.push(KycTestController);
         }
 
         return {

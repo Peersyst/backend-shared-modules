@@ -22,6 +22,7 @@ export interface KycNotificationInterface {
 export interface KycRepositoryInterface {
     create: (userId: number, applicantId: string) => Promise<KycI>;
     findByUserId: (userId: number) => Promise<KycI>;
+    findByUserIdSimplified: (userId: number) => Promise<SimplifiedKycI>;
     findByApplicantId: (applicantId: string) => Promise<KycI>;
     update: (id: number, updateData: Partial<KycI>) => Promise<void>;
 }
@@ -36,25 +37,11 @@ export class KycService {
     ) {}
 
     async getKyc(userId: number): Promise<KycI> {
-        return {
-            id: 1,
-            applicantId: "hola",
-            userId,
-            status: KycStatus.COMPLETED,
-            reviewAnswer: KycAnswer.GREEN,
-            passed: true,
-            updatedAt: new Date(),
-        };
+        return this.kycRepository.findByUserId(userId);
     }
 
     async getSimplifiedKyc(userId: number): Promise<SimplifiedKycI> {
-        return {
-            userId,
-            status: KycStatus.COMPLETED,
-            reviewAnswer: KycAnswer.GREEN,
-            passed: true,
-            updatedAt: new Date(),
-        };
+        return this.kycRepository.findByUserIdSimplified(userId);
     }
 
     async getToken(userId: number): Promise<KycTokenDtoI> {
@@ -63,7 +50,6 @@ export class KycService {
         return { accessToken };
     }
 
-    // TODO: remove. For testing purposes only
     async simulateSuccess(userId: number): Promise<void> {
         const kyc = await this.kycRepository.findByUserId(userId);
         if (!kyc) {
@@ -72,7 +58,6 @@ export class KycService {
         await this.sumsubService.simulateGreenReview(kyc.applicantId);
     }
 
-    // TODO: remove. For testing purposes only
     async simulateFailure(userId: number): Promise<void> {
         const kyc = await this.kycRepository.findByUserId(userId);
         if (!kyc) {

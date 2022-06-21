@@ -12,10 +12,12 @@ import { ApplicantOnHoldRequest } from "./requests/applicant-on-hold.request";
 import { ApplicantPersonalInfoChangedRequest } from "./requests/applicant-personal-info-changed.request";
 import { ApplicantPrecheckedRequest } from "./requests/applicant-prechecked.request";
 import { ApplicantDeletedRequest } from "./requests/applicant-deleted.request";
+import { DigestedFromSumsub } from "./sumsub.decorator";
 
 @ApiTags("sumsub")
 @Controller("kyc")
 @ApiErrorDecorators()
+@DigestedFromSumsub()
 export class SumsubController {
     constructor(
         private readonly kycService: KycService,
