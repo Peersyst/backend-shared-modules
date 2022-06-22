@@ -56,6 +56,27 @@ export class AppModule implements NestModule {
 }
 ```
 
+- Enable rawBody on main.ts
+```typescript
+...
+import * as bodyParser from "body-parser";
+import { ServerResponse } from "http";
+
+async function bootstrap() {
+    const app = await NestFactory.create(AppModule, { bodyParser: false });
+
+    const rawBodyBuffer = (req: any, res: ServerResponse, buffer: Buffer, encoding: BufferEncoding) => {
+        if (buffer && buffer.length) {
+            req.rawBody = buffer.toString(encoding || "utf8");
+        }
+    };
+
+    app.use(bodyParser.urlencoded({ verify: rawBodyBuffer, extended: true }));
+    app.use(bodyParser.json({ verify: rawBodyBuffer }));
+    ...
+}
+```
+
 - Add configService configuration variables
 ```typescript
 export default (): any => ({

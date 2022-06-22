@@ -7,7 +7,7 @@ export class DigestGuard implements CanActivate {
     constructor(@Inject(ConfigService) private configService: ConfigService) {}
 
     canActivate(context: ExecutionContext): boolean {
-        const { rawBody, headers } = context.switchToHttp().getRequest();
+        const { headers, rawBody } = context.switchToHttp().getRequest();
         const secretKey = this.configService.get("sumsub.secretKey");
 
         const calculatedDigest = crypto
