@@ -16,6 +16,8 @@ export class TransactionDto {
     public payload: string; // Signed transaction
     public hash: string;
     public status: TransactionStatus;
+    public receipt?: string;
+    public metadata?: string;
     public createdAt: number;
     public errorMessage?: string;
 
@@ -27,6 +29,8 @@ export class TransactionDto {
             to: transaction.to,
             amount: transaction.amount,
             payload: transaction.payload,
+            receipt: transaction.receipt,
+            metadata: transaction.metadata,
             hash: transaction.hash || undefined,
             status: transaction.status as TransactionStatus,
             createdAt: transaction.createdAt.getTime(),
