@@ -4,6 +4,7 @@ import { CryptoModule } from "@peersyst/crypto-backend-module";
 import { WalletAccount } from "./entities/WalletAccount";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { WalletDto } from "./dto/wallet.dto";
+import { Logger } from "ethers/lib/utils";
 
 export enum NetworksType {
     EVMS = "evms",

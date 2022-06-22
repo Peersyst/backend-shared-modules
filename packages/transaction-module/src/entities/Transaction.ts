@@ -11,7 +11,7 @@ export class Transaction {
     @Column("varchar", { name: "to_address", nullable: false, length: 100 })
     to: string;
 
-    @Column("varchar", { name: "payload", nullable: false, length: 10000 })
+    @Column("text", { name: "payload", nullable: false })
     payload: string;
 
     @Column("int", { name: "amount" })
