@@ -58,7 +58,16 @@ export class TransactionConsumer {
                 await this.transactionService.rejectTransaction(job.data.transactionId, "Transaction failed after sending");
                 return;
             } else {
-                await this.transactionService.sendTransactionToConfirmQueue(job.data.transactionId, 2000);
+                const transaction = await this.transactionService.findById(job.data.transactionId);
+                if (Date.now() - transaction.createdAt > 60000 * 60 * 2) {
+                    // Transaction Older than 2h -> Reject by timeout
+                    await this.transactionService.rejectTransaction(job.data.transactionId, "Confirm queue time limit reached");
+                } else if (Date.now() - transaction.createdAt > 60000 * 10) {
+                    // Transaction Older than 10 min -> Only check every 30 seconds
+                    await this.transactionService.sendTransactionToConfirmQueue(job.data.transactionId, 30000);
+                } else {
+                    await this.transactionService.sendTransactionToConfirmQueue(job.data.transactionId, 5000);
+                }
                 return;
             }
         } catch (e) {
