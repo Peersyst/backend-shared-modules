@@ -1,6 +1,6 @@
 {
   "name": "@peersyst/transaction-module",
-  "version": "0.12.47",
+  "version": "0.12.48",
   "description": "Transaction module",
   "author": "Sergi Canal <scanal@peersyst.com>",
   "main": "index.js",
