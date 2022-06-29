@@ -8,6 +8,7 @@ import { AuthErrorCode } from "./exception/error-codes";
 
 export interface AuthUserServiceI {
     userEmailPasswordMatch: (email: string, password: string) => Promise<PrivateAuthUserDtoI | null>;
+    findById: (userId: number) => Promise<PrivateAuthUserDtoI>;
     findOrCreate?: (thirdPartyUser: ThirdPartyUserDtoI, authType: AuthType) => Promise<PrivateAuthUserDtoI>;
     updateUserValidated?: (userId: number) => Promise<PrivateAuthUserDtoI>;
     findByEmail?: (email: string) => Promise<PrivateAuthUserDtoI | null>;
@@ -15,6 +16,7 @@ export interface AuthUserServiceI {
 }
 export interface ThirdPartyUserServiceI {
     userEmailPasswordMatch: (email: string, password: string) => Promise<PrivateAuthUserDtoI | null>;
+    findById: (userId: number) => Promise<PrivateAuthUserDtoI>;
     findOrCreate: (thirdPartyUser: ThirdPartyUserDtoI, authType: AuthType) => Promise<PrivateAuthUserDtoI>;
     updateUserValidated?: (userId: number) => Promise<PrivateAuthUserDtoI>;
     findByEmail?: (email: string) => Promise<PrivateAuthUserDtoI | null>;
@@ -22,6 +24,7 @@ export interface ThirdPartyUserServiceI {
 }
 export interface ValidateEmailUserServiceI {
     userEmailPasswordMatch: (email: string, password: string) => Promise<PrivateAuthUserDtoI>;
+    findById: (userId: number) => Promise<PrivateAuthUserDtoI>;
     findOrCreate?: (thirdPartyUser: ThirdPartyUserDtoI, authType: AuthType) => Promise<PrivateAuthUserDtoI>;
     updateUserValidated: (userId: number) => Promise<PrivateAuthUserDtoI>;
     findByEmail?: (email: string) => Promise<PrivateAuthUserDtoI | null>;
@@ -29,6 +32,7 @@ export interface ValidateEmailUserServiceI {
 }
 export interface RecoverPasswordUserServiceI {
     userEmailPasswordMatch: (email: string, password: string) => Promise<PrivateAuthUserDtoI>;
+    findById: (userId: number) => Promise<PrivateAuthUserDtoI>;
     findOrCreate?: (thirdPartyUser: ThirdPartyUserDtoI, authType: AuthType) => Promise<PrivateAuthUserDtoI>;
     updateUserValidated?: (userId: number) => Promise<PrivateAuthUserDtoI>;
     findByEmail: (email: string) => Promise<PrivateAuthUserDtoI | null>;
@@ -61,6 +65,23 @@ export class AuthService {
         }
 
         return user;
+    }
+
+    async userDeletedOrBlocked(userId: number): Promise<{ deleted: boolean, blocked: boolean}> {
+        const resp = { deleted: false, blocked: false };
+
+        try {
+            const user = await this.userService.findById(userId);
+            if (!user) {
+                resp.deleted = true;
+            } else {
+                resp.blocked = !!user.blocked;
+            }
+        } catch (err) {
+            resp.deleted = true;
+        }
+
+        return resp;
     }
 
     async login(user: PrivateAuthUserDtoI): Promise<AuthCredentialsDtoI> {

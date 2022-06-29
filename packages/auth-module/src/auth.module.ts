@@ -13,6 +13,7 @@ import { EntityClassOrSchema } from "@nestjs/typeorm/dist/interfaces/entity-clas
 import { ResetToken } from "./entities/ResetToken";
 import { ValidateEmailService } from "./validate-email.service";
 import { RecoverPasswordService } from "./recover-password.service";
+import { BlockDeletedGuard } from "./guards/block-deleted.guard";
 
 export interface AuthModuleOptions {
     googleAuth?: boolean;
@@ -26,7 +27,7 @@ export interface AuthModuleOptions {
 @Module({})
 export class AuthModule {
     static register(UserModule: Type, ConfigModule: Type, ConfigService: any, options?: AuthModuleOptions): DynamicModule {
-        const providers: Provider[] = [LocalStrategy, JwtStrategy, AuthService];
+        const providers: Provider[] = [LocalStrategy, JwtStrategy, AuthService, BlockDeletedGuard];
         const controllers: Type<any>[] = [AuthController];
         const imports: Array<Type<any> | DynamicModule | Promise<DynamicModule> | ForwardReference> = [
             PassportModule,
