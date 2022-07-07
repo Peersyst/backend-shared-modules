@@ -1,10 +1,10 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import * as crypto from "crypto";
-import fetch from "node-fetch";
 import { KycAnswer, KycRejectType } from "./dto/kyc.dto";
 import { KycBusinessException } from "./exception/business.exception";
 import { KycErrorCode } from "./exception/error-codes";
+const fetch = require("node-fetch");
 
 @Injectable()
 export class SumsubService {
