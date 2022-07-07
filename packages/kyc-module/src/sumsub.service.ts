@@ -41,7 +41,7 @@ export class SumsubService {
         };
         const response = await fetch(url, options);
 
-        const json = await response.json();
+        const json: any = await response.json();
         if (!json || !json.token) {
             throw new KycBusinessException(KycErrorCode.SUMSUB_REQUEST_ERROR);
         }
