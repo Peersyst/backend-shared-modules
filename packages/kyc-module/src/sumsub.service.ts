@@ -25,7 +25,7 @@ export class SumsubService {
 
     // Generates new account address and private key
     async generateAccessToken(externalUserId: string): Promise<string> {
-        const uri = `/resources/accessTokens?userId=${externalUserId}`;
+        const uri = `/resources/accessTokens?userId=${externalUserId}&levelName=basic-kyc-level`;
         const ts = Math.floor(Date.now() / 1000);
         const signature = this.generateSignature(ts, "POST", uri);
         const url = `${this.configService.get("sumsub.baseUrl")}${uri}`;
