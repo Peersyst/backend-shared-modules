@@ -1,0 +1,32 @@
+{
+  "name": "@peersyst/config-module",
+  "version": "0.12.54",
+  "description": "Config module",
+  "author": "Adrià Carrera <acarrera@peersyst.com>",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "build": "rimraf dist && tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@nestjs/common": "7.6.15",
+    "@nestjs/config": "~0.6.3",
+    "@nestjs/core": "~7.6.15",
+    "@aws-sdk/client-secrets-manager": "^3.121.0",
+    "class-transformer": "~0.4.0",
+    "reflect-metadata": "0.1.13",
+    "rxjs": "^6.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^16.7.6",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.4.2"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^6.0.0 || ^7.0.0 || ^8.0.0"
+  },
+  "publishConfig": {
+    "access": "restricted"
+  }
+}
