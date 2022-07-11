@@ -1,5 +1,5 @@
 {
-  "name": "@peersyst/payment-gateway-module",
+  "name": "@peersyst/payment-module",
   "version": "0.12.48",
   "description": "Payment gateway module",
   "author": "Adrià Carrera <acarrera@peersyst.com>",
