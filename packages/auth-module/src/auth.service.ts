@@ -12,7 +12,7 @@ export interface AuthUserServiceI {
     findOrCreate?: (thirdPartyUser: ThirdPartyUserDtoI, authType: AuthType) => Promise<PrivateAuthUserDtoI>;
     updateUserValidated?: (userId: number) => Promise<PrivateAuthUserDtoI>;
     findByEmail?: (email: string) => Promise<PrivateAuthUserDtoI | null>;
-    resetPassword?: (userId: number, password: string) => Promise<void>;
+    resetPassword?: (userId: number, password: string) => Promise<AuthCredentialsDtoI>;
 }
 export interface ThirdPartyUserServiceI {
     userEmailPasswordMatch: (email: string, password: string) => Promise<PrivateAuthUserDtoI | null>;
@@ -20,7 +20,7 @@ export interface ThirdPartyUserServiceI {
     findOrCreate: (thirdPartyUser: ThirdPartyUserDtoI, authType: AuthType) => Promise<PrivateAuthUserDtoI>;
     updateUserValidated?: (userId: number) => Promise<PrivateAuthUserDtoI>;
     findByEmail?: (email: string) => Promise<PrivateAuthUserDtoI | null>;
-    resetPassword?: (userId: number, password: string) => Promise<void>;
+    resetPassword?: (userId: number, password: string) => Promise<AuthCredentialsDtoI>;
 }
 export interface ValidateEmailUserServiceI {
     userEmailPasswordMatch: (email: string, password: string) => Promise<PrivateAuthUserDtoI>;
@@ -28,7 +28,7 @@ export interface ValidateEmailUserServiceI {
     findOrCreate?: (thirdPartyUser: ThirdPartyUserDtoI, authType: AuthType) => Promise<PrivateAuthUserDtoI>;
     updateUserValidated: (userId: number) => Promise<PrivateAuthUserDtoI>;
     findByEmail?: (email: string) => Promise<PrivateAuthUserDtoI | null>;
-    resetPassword?: (userId: number, password: string) => Promise<void>;
+    resetPassword?: (userId: number, password: string) => Promise<AuthCredentialsDtoI>;
 }
 export interface RecoverPasswordUserServiceI {
     userEmailPasswordMatch: (email: string, password: string) => Promise<PrivateAuthUserDtoI>;
@@ -36,7 +36,7 @@ export interface RecoverPasswordUserServiceI {
     findOrCreate?: (thirdPartyUser: ThirdPartyUserDtoI, authType: AuthType) => Promise<PrivateAuthUserDtoI>;
     updateUserValidated?: (userId: number) => Promise<PrivateAuthUserDtoI>;
     findByEmail: (email: string) => Promise<PrivateAuthUserDtoI | null>;
-    resetPassword: (userId: number, password: string) => Promise<void>;
+    resetPassword: (userId: number, password: string) => Promise<AuthCredentialsDtoI>;
 }
 
 @Injectable()
@@ -104,8 +104,10 @@ export class AuthService {
         return user;
     }
 
-    async resetPassword(userId: number, password: string): Promise<void> {
+    async resetPassword(userId: number, password: string): Promise<AuthCredentialsDtoI> {
         await this.userService.resetPassword(userId, password);
+        const user = await this.userService.findById(userId);
+        return this.login(user);
     }
 
     async googleLogin(googleUser: ThirdPartyUserDtoI): Promise<AuthCredentialsDtoI> {
