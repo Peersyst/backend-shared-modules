@@ -11,8 +11,8 @@
     "clean": "rm -f src/**/*.js* && rm -f src/*.js* && rm -f src/**/*.d.ts && rm -f src/*.d.ts && rm tsconfig.tsbuildinfo"
   },
   "devDependencies": {
-    "@nestjs/common": "8.0.6",
-    "@nestjs/core": "8.0.6",
+    "@nestjs/common": "^8.0.6",
+    "@nestjs/core": "^8.0.6",
     "@nestjs/typeorm": "^7.1.5",
     "@types/node": "^16.7.6",
     "reflect-metadata": "0.1.13",

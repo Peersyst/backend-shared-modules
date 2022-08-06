@@ -14,7 +14,7 @@ pipeline {
             }
             steps {
                 withCredentials([string(credentialsId: 'npm-publish-token', variable: 'NPM_TOKEN')]) {
-                    sh 'npm install'
+                    sh 'yarn install'
                 }
             }
         }
@@ -34,7 +34,7 @@ pipeline {
             }
             steps {
                 withCredentials([string(credentialsId: 'npm-publish-token', variable: 'NPM_TOKEN')]) {
-                    sh 'npm run build'
+                    sh 'yarn build'
                 }
             }
         }

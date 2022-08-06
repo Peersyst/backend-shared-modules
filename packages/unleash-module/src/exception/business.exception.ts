@@ -1,5 +1,5 @@
-import { HttpException } from "@nestjs/common";
 import { UnleashErrorBody, UnleashErrorCode } from "./error-codes";
+import { HttpException } from "@nestjs/common";
 
 export class UnleashBusinessException extends HttpException {
     constructor(code: UnleashErrorCode) {
