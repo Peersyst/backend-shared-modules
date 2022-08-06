@@ -9,9 +9,6 @@ pipeline {
     }
     stages {
         stage('Install') {
-            when {
-                branch 'main'
-            }
             steps {
                 withCredentials([string(credentialsId: 'npm-publish-token', variable: 'NPM_TOKEN')]) {
                     sh 'yarn --frozen-lockfile'
@@ -19,9 +16,6 @@ pipeline {
             }
         }
         stage('Build') {
-            when {
-                branch 'main'
-            }
             steps {
                 withCredentials([string(credentialsId: 'npm-publish-token', variable: 'NPM_TOKEN')]) {
                     sh 'yarn build'
