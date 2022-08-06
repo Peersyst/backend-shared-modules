@@ -14,17 +14,7 @@ pipeline {
             }
             steps {
                 withCredentials([string(credentialsId: 'npm-publish-token', variable: 'NPM_TOKEN')]) {
-                    sh 'yarn install'
-                }
-            }
-        }
-        stage('Lerna bootstrap') {
-            when {
-                branch 'main'
-            }
-            steps {
-                withCredentials([string(credentialsId: 'npm-publish-token', variable: 'NPM_TOKEN')]) {
-                    sh 'npx lerna bootstrap'
+                    sh 'yarn --frozen-lockfile'
                 }
             }
         }
