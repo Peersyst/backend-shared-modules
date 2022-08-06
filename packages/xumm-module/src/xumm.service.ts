@@ -2,9 +2,9 @@ import { Inject, Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { XummSdk } from "xumm-sdk";
 import { PayloadAndSubscription, XummJsonTransaction, XummPostPayloadResponse } from "xumm-sdk/dist/src/types";
-import { XummI, XummStatus } from "./dto/xumm.dto";
+import { XummI, XummStatus } from "./dto";
 import { XummBusinessException } from "./exception/business.exception";
-import { XummErrorCode } from "./exception/error-codes";
+import { XummErrorCode } from "./exception";
 import { verifySignature } from "verify-xrpl-signature";
 import { onPayloadEvent } from "xumm-sdk/dist/src/types/Payload/onPayloadEvent";
 
@@ -34,9 +34,10 @@ export class XummService {
         const subscription = await this.xummSdk.payload.createAndSubscribe(
             {
                 txjson: {
-                  TransactionType : 'SignIn',
+                    TransactionType: "SignIn",
                 },
-            }, async (event) => {
+            },
+            async (event) => {
                 // console.log(`Payload ${event.uuid} data:`, event.data);
                 if (event.data.signed !== undefined) {
                     const signedPayload = await this.xummSdk.payload.get(subscription.created.uuid);
@@ -54,9 +55,9 @@ export class XummService {
                         event.resolve("is signed");
                     }
                 }
-            }
-        )
-    
+            },
+        );
+
         return subscription.created;
     }
 
@@ -71,16 +72,14 @@ export class XummService {
         if (!xummEntity) {
             throw new XummBusinessException(XummErrorCode.USER_NOT_SIGNED_IN);
         }
-        return await this.xummSdk.payload.create(
-            {
-                txjson: {
-                    TransactionType : 'Payment',
-                    Destination : receiver,
-                    Amount: amount,
-                },
-                user_token: xummEntity.userToken,
+        return await this.xummSdk.payload.create({
+            txjson: {
+                TransactionType: "Payment",
+                Destination: receiver,
+                Amount: amount,
             },
-        );
+            user_token: xummEntity.userToken,
+        });
     }
 
     async transactionRequest(sender: string, transaction: XummJsonTransaction): Promise<XummPostPayloadResponse> {
@@ -88,15 +87,17 @@ export class XummService {
         if (!xummEntity) {
             throw new XummBusinessException(XummErrorCode.USER_NOT_SIGNED_IN);
         }
-        return await this.xummSdk.payload.create(
-            {
-                txjson: transaction,
-                user_token: xummEntity.userToken,
-            },
-        );
+        return await this.xummSdk.payload.create({
+            txjson: transaction,
+            user_token: xummEntity.userToken,
+        });
     }
 
-    async transactionRequestAndSubscribe(sender: string, transaction: XummJsonTransaction, callback?: onPayloadEvent): Promise<PayloadAndSubscription> {
+    async transactionRequestAndSubscribe(
+        sender: string,
+        transaction: XummJsonTransaction,
+        callback?: onPayloadEvent,
+    ): Promise<PayloadAndSubscription> {
         const xummEntity = await this.xummRepository.findByAddress(sender);
         if (!xummEntity) {
             throw new XummBusinessException(XummErrorCode.USER_NOT_SIGNED_IN);
@@ -106,7 +107,7 @@ export class XummService {
                 txjson: transaction,
                 user_token: xummEntity.userToken,
             },
-            callback
+            callback,
         );
     }
 
