@@ -9,7 +9,9 @@ export class XummTypeormRepository implements XummRepositoryInterface {
 
     async create(userToken: string, address: string, payloadId?: string): Promise<XummI> {
         const xummModel = await this.xummRepository.save({
-            userToken, address, payloadId,
+            userToken,
+            address,
+            payloadId,
         });
 
         return this.transformEntityToDto(xummModel);
@@ -18,13 +20,13 @@ export class XummTypeormRepository implements XummRepositoryInterface {
     async findByPayloadId(payloadId: string): Promise<XummI> {
         const xummModel = await this.xummRepository.findOne({ where: { payloadId } });
 
-        return xummModel ? this.transformEntityToDto(xummModel): null;
+        return xummModel ? this.transformEntityToDto(xummModel) : null;
     }
 
     async findByAddress(address: string): Promise<XummI> {
         const xummModel = await this.xummRepository.findOne({ where: { address } });
 
-        return xummModel ? this.transformEntityToDto(xummModel): null;
+        return xummModel ? this.transformEntityToDto(xummModel) : null;
     }
 
     async deletePrevious(address: string): Promise<void> {
@@ -36,6 +38,6 @@ export class XummTypeormRepository implements XummRepositoryInterface {
             address: model.address,
             userToken: model.userToken,
             payloadId: model.payloadId,
-        }
+        };
     }
 }

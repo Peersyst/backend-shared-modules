@@ -5,7 +5,7 @@ export enum XummErrorCode {
     TOKEN_EXPIRED = "TOKEN_EXPIRED",
     PAYLOAD_NOT_FOUND = "PAYLOAD_NOT_FOUND",
     SIGN_IN_NOT_VERIFIED = "SIGN_IN_NOT_VERIFIED",
-    INVALID_CREDENTIALS = "INVALID_CREDENTIALS"
+    INVALID_CREDENTIALS = "INVALID_CREDENTIALS",
 }
 
 export const XummErrorBody: { [code in XummErrorCode]: { statusCode: HttpStatus; message: string } } = {

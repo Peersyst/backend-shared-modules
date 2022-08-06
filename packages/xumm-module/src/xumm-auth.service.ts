@@ -1,10 +1,13 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { XummService } from "./xumm.service";
 import { JwtService } from "@nestjs/jwt";
-import { XummSignInResponseDto, XummVerifiedSignInResponseDto } from "./dto/xumm-sign-in.response.dto";
-import { XummJwtPayloadDTO } from "./dto/xumm-jwt-payload.dto";
+import { XummSignInResponseDto, XummVerifiedSignInResponseDto, XummJwtPayloadDTO } from "./dto";
 import { XummBusinessException } from "./exception/business.exception";
-import { XummErrorCode } from "./exception/error-codes";
+import { XummErrorCode } from "./exception";
+
+export interface XummAuthServiceI {
+    new (jwtService: JwtService, xummService: XummService, ...extra: any[]): XummAuthService;
+}
 
 @Injectable()
 export class XummAuthService {
@@ -28,7 +31,7 @@ export class XummAuthService {
         const res = {
             address,
             access_token: this.jwtService.sign(payload),
-        }
+        };
         await this.onSignIn(res);
         return {
             address,
@@ -36,5 +39,6 @@ export class XummAuthService {
         };
     }
 
+    //eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
     protected async onSignIn(res: XummVerifiedSignInResponseDto): Promise<void> {}
 }

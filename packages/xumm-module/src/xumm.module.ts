@@ -1,47 +1,84 @@
-import { DynamicModule, Module, Provider, Type, ForwardReference } from "@nestjs/common";
+import { DynamicModule, Module, Provider, Type, ForwardReference, ModuleMetadata } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { XummService } from "./xumm.service";
-import { XummTypeormRepository } from "./typeorm/xumm-typeorm.repository";
-import { XummEntity } from "./typeorm/XummEntity";
-import { XummAuthService } from "./xumm-auth.service";
-import { XummAuthStrategy } from "./strategies/xumm-auth.strategy";
+import { XummEntity, XummTypeormRepository } from "./typeorm";
+import { XummAuthService, XummAuthServiceI } from "./xumm-auth.service";
+import { XummAuthStrategy } from "./strategies";
 import { JwtModule } from "@nestjs/jwt";
 import { XummAuthController, XummController } from "./xumm.controller";
 import { PassportModule } from "@nestjs/passport";
 import { XummJwtStrategy } from "./strategies/xumm-jwt.strategy";
 
-export interface XummModuleOptions {
-    status?: boolean;
-    auth?: boolean;
+export const XUMM_MODULE_OPTIONS = "XUMM_MODULE_OPTIONS";
+
+export interface XummAuthModuleOptions {
+    secret: string;
 }
+
+export type XummModuleOptions<AuthEnabled extends boolean> = AuthEnabled extends true
+    ? { jwt: XummAuthModuleOptions }
+    : // eslint-disable-next-line @typescript-eslint/ban-types
+      {};
+
+export interface XummOptionsFactory<AuthEnabled extends boolean> {
+    createXummOptions(): Promise<XummModuleOptions<AuthEnabled>> | XummModuleOptions<AuthEnabled>;
+}
+
+export interface XummAuthModuleAsyncOptions {
+    useXummAuthProvider?: XummAuthServiceI;
+}
+
+export interface XummModuleExtras<AuthEnabled extends boolean = true> {
+    enableStatus?: boolean;
+    enableAuth?: AuthEnabled;
+}
+
+export type XummModuleAsyncOptions<AuthEnabled extends boolean = true> = Pick<ModuleMetadata, "imports"> &
+    XummModuleExtras<AuthEnabled> & {
+        useExisting?: Type<XummOptionsFactory<AuthEnabled>>;
+        useClass?: Type<XummOptionsFactory<AuthEnabled>>;
+        useFactory?: (...args: any[]) => Promise<XummModuleOptions<AuthEnabled>> | XummModuleOptions<AuthEnabled>;
+        inject?: any[];
+    } & (AuthEnabled extends true
+        ? XummAuthModuleAsyncOptions
+        : // eslint-disable-next-line @typescript-eslint/ban-types
+          {});
 
 @Module({})
 export class XummModule {
-    static register(ConfigModule: Type, ConfigService: any, { status = true, auth = true }: XummModuleOptions = {}, ExtendedXummAuthService: typeof XummAuthService = XummAuthService): DynamicModule {
-        let providers: Provider[] = [XummService, { provide: "XummRepository", useClass: XummTypeormRepository }];
+    static forRootAsync<AuthEnabled extends boolean = true>(options: XummModuleAsyncOptions<AuthEnabled>): DynamicModule {
+        const { enableAuth = true, enableStatus = true, useFactory } = options;
+        let providers: Provider[] = [
+            ...this.createAsyncProviders<AuthEnabled>(options),
+            XummService,
+            { provide: "XummRepository", useClass: XummTypeormRepository },
+        ];
         const controllers: Type[] = [];
         let imports: Array<Type | DynamicModule | Promise<DynamicModule> | ForwardReference> = [
-            ConfigModule,
+            ...(options.imports || []),
             TypeOrmModule.forFeature([XummEntity]),
         ];
         const exports: Provider[] = [XummService];
 
-        if (status) {
+        if (enableStatus) {
             controllers.push(XummController);
         }
-        if (auth) {
+        if (enableAuth) {
+            const ExtendedXummAuthService = (options as XummModuleAsyncOptions<true>).useXummAuthProvider;
             providers = [...providers, ExtendedXummAuthService, XummJwtStrategy, XummAuthStrategy];
             controllers.push(XummAuthController);
             imports = [
                 ...imports,
                 PassportModule,
                 JwtModule.registerAsync({
-                    imports: [ConfigModule],
-                    useFactory: async (configService: typeof ConfigService) => ({
-                        secret: configService.get("server.secretKey"),
-                        signOptions: { expiresIn: "604800s" },
-                    }),
-                    inject: [ConfigService],
+                    inject: options.inject,
+                    useFactory: async (...providers) => {
+                        const jwtOptions = await useFactory(...providers);
+                        return {
+                            ...jwtOptions,
+                            signOptions: { expiresIn: "604800s" },
+                        };
+                    },
                 }),
             ];
             exports.push(ExtendedXummAuthService);
@@ -49,12 +86,39 @@ export class XummModule {
 
         return {
             module: XummModule,
+            global: true,
             imports,
             providers,
             controllers,
             exports,
         };
     }
+
+    private static createAsyncProviders<AuthEnabled extends boolean>(options: XummModuleAsyncOptions<AuthEnabled>): Provider[] {
+        if (options.useExisting || options.useFactory) {
+            return [this.createAsyncOptionsProvider<AuthEnabled>(options)];
+        }
+        return [
+            this.createAsyncOptionsProvider<AuthEnabled>(options),
+            {
+                provide: options.useClass,
+                useClass: options.useClass,
+            },
+        ];
+    }
+
+    private static createAsyncOptionsProvider<AuthEnabled extends boolean>(options: XummModuleAsyncOptions<AuthEnabled>): Provider {
+        if (options.useFactory) {
+            return {
+                provide: XUMM_MODULE_OPTIONS,
+                useFactory: options.useFactory,
+                inject: options.inject || [],
+            };
+        }
+        return {
+            provide: XUMM_MODULE_OPTIONS,
+            useFactory: async (optionsFactory: XummOptionsFactory<AuthEnabled>) => await optionsFactory.createXummOptions(),
+            inject: [options.useExisting || options.useClass],
+        };
+    }
 }
-
-

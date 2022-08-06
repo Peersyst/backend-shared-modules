@@ -2,9 +2,9 @@ import { Injectable } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import { ExtractJwt, Strategy } from "passport-jwt";
 import { ConfigService } from "@nestjs/config";
-import { XummJwtPayloadDTO } from "../dto/xumm-jwt-payload.dto";
+import { XummJwtPayloadDTO } from "../dto";
 import { XummBusinessException } from "../exception/business.exception";
-import { XummErrorCode } from "../exception/error-codes";
+import { XummErrorCode } from "../exception";
 
 @Injectable()
 export class XummAuthStrategy extends PassportStrategy(Strategy, "xumm") {
