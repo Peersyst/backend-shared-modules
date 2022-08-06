@@ -2,7 +2,7 @@ import { DynamicModule, Module, Provider, Type, ForwardReference, ModuleMetadata
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { XummService } from "./xumm.service";
 import { XummEntity, XummTypeormRepository } from "./typeorm";
-import { XummAuthService, XummAuthServiceI } from "./xumm-auth.service";
+import { XummAuthServiceI } from "./xumm-auth.service";
 import { XummAuthStrategy } from "./strategies";
 import { JwtModule } from "@nestjs/jwt";
 import { XummAuthController, XummController } from "./xumm.controller";
@@ -73,9 +73,9 @@ export class XummModule {
                 JwtModule.registerAsync({
                     inject: options.inject,
                     useFactory: async (...providers) => {
-                        const jwtOptions = await useFactory(...providers);
+                        const jwtOptions = await useFactory(...providers) as XummModuleOptions<true>;
                         return {
-                            ...jwtOptions,
+                            ...jwtOptions.jwt,
                             signOptions: { expiresIn: "604800s" },
                         };
                     },
