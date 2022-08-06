@@ -1,6 +1,6 @@
 {
   "name": "@peersyst/cache-backend-module",
-  "version": "0.12.40",
+  "version": "0.12.55",
   "description": "",
   "main": "index.js",
   "scripts": {
