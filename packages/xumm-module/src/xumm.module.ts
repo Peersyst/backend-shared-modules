@@ -73,9 +73,9 @@ export class XummModule {
                 JwtModule.registerAsync({
                     inject: options.inject,
                     useFactory: async (...providers) => {
-                        const jwtOptions = await useFactory(...providers);
+                        const options = await useFactory(...providers) as XummModuleOptions<true>;
                         return {
-                            ...jwtOptions,
+                            ...options.jwt,
                             signOptions: { expiresIn: "604800s" },
                         };
                     },
