@@ -1,6 +1,6 @@
 {
   "name": "@peersyst/kyc-module",
-  "version": "0.12.54",
+  "version": "0.12.55",
   "description": "Know Your Customer module",
   "author": "Joan Grau <jgrau@peersyst.com>",
   "main": "index.js",
@@ -17,7 +17,7 @@
     "@nestjs/sequelize": "0.2.0",
     "@nestjs/swagger": "~4.8.0",
     "@nestjs/typeorm": "^8.0.2",
-    "@peersyst/auth-module": "^0.12.50",
+    "@peersyst/auth-module": "^0.12.55",
     "class-transformer": "~0.4.0",
     "class-validator": "~0.13.2",
     "express-openapi-validator": "^4.12.12",
