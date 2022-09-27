@@ -11,8 +11,8 @@
     "clean": "rm -f src/**/*.js* && rm -f src/*.js* && rm -f src/**/*.d.ts && rm -f src/*.d.ts && rm tsconfig.tsbuildinfo"
   },
   "devDependencies": {
-    "@nestjs/common": "8.0.6",
-    "@nestjs/core": "8.0.6",
+    "@nestjs/common": "^7.0.0 || ^8.0.0",
+    "@nestjs/core": "^7.0.0 || ^8.0.0",
     "@nestjs/typeorm": "^7.1.5",
     "@types/node": "^16.7.6",
     "reflect-metadata": "0.1.13",
@@ -21,7 +21,7 @@
     "typescript": "^4.4.2"
   },
   "peerDependencies": {
-    "@nestjs/common": "^6.0.0 || ^7.0.0 || ^8.0.0",
+    "@nestjs/common": "^7.0.0 || ^8.0.0",
     "@nestjs/typeorm": "^7.1.5",
     "typeorm": "^0.3.6"
   },
@@ -33,7 +33,7 @@
     "@nestjs/bull": "^0.5.5",
     "@nestjs/config": "^2.1.0",
     "@nestjs/swagger": "^5.2.1",
-    "@peersyst/auth-module": "^0.12.55",
+    "@peersyst/auth-module": "^0.12.50",
     "axios": "^0.27.2",
     "bull": "^4.8.3",
     "stripe": "^8.202.0"
