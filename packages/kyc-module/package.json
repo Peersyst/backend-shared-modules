@@ -1,6 +1,6 @@
 {
   "name": "@peersyst/kyc-module",
-  "version": "0.12.59",
+  "version": "0.12.57",
   "description": "Know Your Customer module",
   "author": "Joan Grau <jgrau@peersyst.com>",
   "main": "index.js",
@@ -11,13 +11,13 @@
   },
   "dependencies": {
     "@nanogiants/nestjs-swagger-api-exception-decorator": "^1.4.3",
-    "@nestjs/common": "^7.0.0 || ^8.0.0",
+    "@nestjs/common": "7.6.15",
     "@nestjs/config": "~0.6.3",
-    "@nestjs/core": "^7.0.0 || ^8.0.0",
+    "@nestjs/core": "~7.6.15",
     "@nestjs/sequelize": "0.2.0",
     "@nestjs/swagger": "~4.8.0",
     "@nestjs/typeorm": "^8.0.2",
-    "@peersyst/auth-module": "^0.12.55",
+    "@peersyst/auth-module": "^0.12.50",
     "class-transformer": "~0.4.0",
     "class-validator": "~0.13.2",
     "express-openapi-validator": "^4.12.12",
@@ -36,7 +36,7 @@
     "typescript": "^4.4.2"
   },
   "peerDependencies": {
-    "@nestjs/common": "^7.0.0 || ^8.0.0"
+    "@nestjs/common": "7.6.15"
   },
   "publishConfig": {
     "access": "restricted"
