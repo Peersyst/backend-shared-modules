@@ -1,7 +1,7 @@
 import { ApiException } from "@nanogiants/nestjs-swagger-api-exception-decorator";
 import { Controller, Request, Get, Post, Param } from "@nestjs/common";
 import { ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
-// import { Authenticated, UserType } from "@peersyst/auth-module";
+import { Authenticated, UserType } from "@peersyst/auth-module";
 import { KycTokenDto } from "./dto/kyc-token.dto";
 import { ApiErrorDecorators } from "./exception/error-response.decorator";
 import { KycBusinessException } from "./exception/business.exception";
@@ -16,7 +16,7 @@ export class KycController {
     constructor(private readonly kycService: KycService) {}
 
     @ApiOperation({ summary: "Get authenticated user kyc" })
-    // @Authenticated()
+    @Authenticated()
     @Get("me")
     @ApiException(() => new KycBusinessException(KycErrorCode.KYC_NOT_FOUND))
     @ApiException(() => new KycBusinessException(KycErrorCode.SUMSUB_REQUEST_ERROR))
@@ -28,7 +28,7 @@ export class KycController {
     }
 
     @ApiOperation({ summary: "Get authenticated user kyc token" })
-    // @Authenticated()
+    @Authenticated()
     @Get("token")
     @ApiException(() => new KycBusinessException(KycErrorCode.KYC_NOT_FOUND))
     @ApiException(() => new KycBusinessException(KycErrorCode.SUMSUB_REQUEST_ERROR))
@@ -39,7 +39,7 @@ export class KycController {
     }
 
     @ApiOperation({ summary: "Get user simplified kyc" })
-    // @Authenticated(UserType.ADMIN)
+    @Authenticated(UserType.ADMIN)
     @Get(":id")
     @ApiException(() => new KycBusinessException(KycErrorCode.KYC_NOT_FOUND))
     @ApiException(() => new KycBusinessException(KycErrorCode.SUMSUB_REQUEST_ERROR))
