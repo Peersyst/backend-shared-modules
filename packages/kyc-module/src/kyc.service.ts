@@ -75,7 +75,10 @@ export class KycService {
             throw new KycBusinessException(KycErrorCode.USER_NOT_FOUND);
         }
 
-        const kyc = await this.kycRepository.create(user.id, applicantId);
+        let kyc = await this.kycRepository.findByUserId(user.id);
+        if (!kyc) {
+            kyc = await this.kycRepository.create(user.id, applicantId);
+        }
         await this.userService.assignKyc(user.id, kyc);
     }
 
