@@ -16,7 +16,7 @@ interface KycModelAttributes {
 }
 
 @Table({ tableName: "kyc" })
-export class KycModel extends Model<KycModelAttributes, KycModelAttributes> implements KycModelAttributes {
+export class KycModel extends Model implements KycModelAttributes {
 
     @Column({ primaryKey: true, autoIncrement: true, type: DataType.INTEGER })
     @Index({ name: "pk_kyc", using: "BTREE", order: "ASC", unique: true })
