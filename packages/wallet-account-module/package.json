@@ -1,6 +1,6 @@
 {
     "name": "@peersyst/wallet-account-module",
-    "version": "0.12.46",
+    "version": "0.12.61",
     "description": "Wallet Account backend module",
     "author": "Silvap <silvap@peersyst.com>",
     "main": "index.js",
