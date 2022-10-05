@@ -21,7 +21,7 @@ export interface AuthModuleOptions {
     validateEmail?: boolean;
     recoverPassword?: boolean;
     twoFA?: boolean;
-    NotificationService?: Type;
+    NotificationModule?: Type;
 }
 
 @Module({})
@@ -60,15 +60,15 @@ export class AuthModule {
                 exports.push(ValidateEmailService);
                 controllers.push(AuthValidateController);
             }
-            if (options.recoverPassword && !options.NotificationService) {
-                throw new Error("Must indicate NotificationService when recoverPassword = true");
+            if (options.recoverPassword && !options.NotificationModule) {
+                throw new Error("Must indicate NotificationModule when recoverPassword = true");
             }
             if (options.recoverPassword) {
                 entities.push(ResetToken);
                 providers.push(RecoverPasswordService);
                 exports.push(RecoverPasswordService);
                 controllers.push(AuthRecoverController);
-                providers.push({ provide: "NotificationService", useClass: options.NotificationService });
+                imports.push(options.NotificationModule);
             }
             if (entities.length > 0) {
                 imports.push(TypeOrmModule.forFeature(entities));

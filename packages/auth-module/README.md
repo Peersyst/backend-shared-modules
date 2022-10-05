@@ -48,6 +48,19 @@ import { AuthModule } from "@peersyst/auth-module";
 export class AppModule {}
 ```
 
+- UserModule should export a provider named UserService
+```typescript
+@Module({
+    imports: [
+        TypeOrmModule.forFeature([User]),
+    ],
+    providers: [MyUserService, { provide: "UserService", useClass: MyUserService }],
+    controllers: [UserController],
+    exports: [MyUserService, { provide: "UserService", useClass: MyUserService }, TypeOrmModule],
+})
+export class UserModule {}
+```
+
 - Add configService configuration variables
 ```typescript
 export default (): any => ({
@@ -243,12 +256,21 @@ export { VerifyEmailToken } from "@peersyst/auth-module";
 
 ## Add Recover Password
 
-- Set recoverPassword to true in register module and indicate NotificationService. It should exactly have this name.
+- Set recoverPassword to true in register module and indicate NotificationModule.
 ```typescript
 AuthModule.register(UserModule, ConfigModule, ConfigService, {
     recoverPassword: true,
-    NotificationService,
+    NotificationModule,
 }),
+```
+
+NotificationModule should export a provider named NotificationService (v8 onwards):
+```typescript
+@Module({
+    providers: [NotificationService, { provide: "NotificationService", useClass: NotificationService }],
+    exports: [NotificationService, { provide: "NotificationService", useClass: NotificationService }],
+})
+export class NotificationModule {}
 ```
 
 - Implement RecoverNotificationServiceI for NotificationService

@@ -21,12 +21,12 @@ export interface KycModuleOptions {
     ormType: OrmType;
     addTestEndpoints: boolean;
     notifications?: boolean;
-    NotificationService?: Type;
+    NotificationModule?: Type;
 }
 
 @Module({})
 export class KycModule {
-    static register(UserModule: Type, ConfigModule: Type, options: KycModuleOptions, UserService?: Type): DynamicModule {
+    static register(UserModule: Type, ConfigModule: Type, options: KycModuleOptions): DynamicModule {
         const providers: Provider[] = [KycService, SumsubService];
         const controllers: Type<any>[] = [SumsubController, KycController];
         const imports: Array<Type<any> | DynamicModule | Promise<DynamicModule> | ForwardReference> = [
@@ -35,17 +35,13 @@ export class KycModule {
         ];
         const exports: Provider[] = [KycService, SumsubService];
 
-        if (options.notifications && !options.NotificationService) {
-            throw new Error("Must indicate NotificationService when notifications = true");
+        if (options.notifications && !options.NotificationModule) {
+            throw new Error("Must indicate NotificationModule when notifications = true");
         }
         if (options.notifications) {
-            providers.push({ provide: "NotificationService", useClass: options.NotificationService });
+            imports.push(options.NotificationModule);
         } else {
             providers.push({ provide: "NotificationService", useClass: DefaultNotificationService });
-        }
-
-        if (UserService) {
-            providers.push({ provide: "UserService", useClass: UserService });
         }
 
         if (options.ormType === OrmType.SEQUELIZE) {

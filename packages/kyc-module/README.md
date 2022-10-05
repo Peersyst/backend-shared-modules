@@ -56,6 +56,27 @@ export class AppModule implements NestModule {
 }
 ```
 
+- Implement KycUserServiceI for your UserService
+```typescript
+import { KycUserServiceI } from "@peersyst/kyc-module";
+
+@Injectable()
+export class MyUserService implements KycUserServiceI {...}
+```
+
+- UserModule should export a provider named UserService
+```typescript
+@Module({
+    imports: [
+        TypeOrmModule.forFeature([User]),
+    ],
+    providers: [MyUserService, { provide: "UserService", useClass: MyUserService }],
+    controllers: [UserController],
+    exports: [MyUserService, { provide: "UserService", useClass: MyUserService }, TypeOrmModule],
+})
+export class UserModule {}
+```
+
 - Enable rawBody on main.ts
 ```typescript
 ...
@@ -117,13 +138,22 @@ export { KycEntity } from "@peersyst/kyc-module";
 
 ## Add Notifications
 
-- Set notifications to true in register module and add NotificationService
+- Set notifications to true in register module and add NotificationModule
 ```typescript
 KycModule.register(UserModule, ConfigModule, {
     ...
     notifications: true,
-    NotificationService: MyNotificationService,
+    NotificationModule: MyNotificationModule,
 }),
+```
+
+NotificationModule should export a provider named NotificationService (v8 onwards):
+```typescript
+@Module({
+    providers: [MyNotificationService, { provide: "NotificationService", useClass: MyNotificationService }],
+    exports: [MyNotificationService, { provide: "NotificationService", useClass: MyNotificationService }],
+})
+export class NotificationModule {}
 ```
 
 - Implement KycNotificationInterface for your NotificationService
