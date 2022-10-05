@@ -26,7 +26,7 @@ export interface KycModuleOptions {
 
 @Module({})
 export class KycModule {
-    static register(UserModule: Type, ConfigModule: Type, options: KycModuleOptions): DynamicModule {
+    static register(UserModule: Type, ConfigModule: Type, options: KycModuleOptions, UserService?: Type): DynamicModule {
         const providers: Provider[] = [KycService, SumsubService];
         const controllers: Type<any>[] = [SumsubController, KycController];
         const imports: Array<Type<any> | DynamicModule | Promise<DynamicModule> | ForwardReference> = [
@@ -42,6 +42,10 @@ export class KycModule {
             providers.push({ provide: "NotificationService", useClass: options.NotificationService });
         } else {
             providers.push({ provide: "NotificationService", useClass: DefaultNotificationService });
+        }
+
+        if (UserService) {
+            providers.push({ provide: "UserService", useClass: UserService });
         }
 
         if (options.ormType === OrmType.SEQUELIZE) {
