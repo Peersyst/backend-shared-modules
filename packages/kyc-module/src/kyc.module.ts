@@ -54,6 +54,7 @@ export class KycModule {
         } else if (options.ormType === OrmType.TYPEORM) {
             providers.push({ provide: "KycRepository", useClass: KycTypeormRepository });
             imports.push(TypeOrmModule.forFeature([KycEntity]));
+            exports.push(TypeOrmModule);
         }
 
         if (options.addTestEndpoints) {
