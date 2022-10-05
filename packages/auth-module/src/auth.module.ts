@@ -21,7 +21,7 @@ export interface AuthModuleOptions {
     validateEmail?: boolean;
     recoverPassword?: boolean;
     twoFA?: boolean;
-    NotificationService?: Provider;
+    NotificationService?: Type;
 }
 
 @Module({})
@@ -68,10 +68,11 @@ export class AuthModule {
                 providers.push(RecoverPasswordService);
                 exports.push(RecoverPasswordService);
                 controllers.push(AuthRecoverController);
-                providers.push(options.NotificationService);
+                providers.push({ provide: "NotificationService", useClass: options.NotificationService });
             }
             if (entities.length > 0) {
                 imports.push(TypeOrmModule.forFeature(entities));
+                exports.push(TypeOrmModule);
             }
         }
 
