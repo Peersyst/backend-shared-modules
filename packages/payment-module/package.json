@@ -1,6 +1,6 @@
 {
   "name": "@peersyst/payment-module",
-  "version": "0.12.65",
+  "version": "0.12.67",
   "description": "Payment gateway module",
   "author": "Adrià Carrera <acarrera@peersyst.com>",
   "main": "index.js",
@@ -33,7 +33,7 @@
     "@nestjs/bull": "^0.5.5",
     "@nestjs/config": "^2.1.0",
     "@nestjs/swagger": "^5.2.1",
-    "@peersyst/auth-module": "^0.12.65",
+    "@peersyst/auth-module": "^0.12.67",
     "axios": "^0.27.2",
     "bull": "^4.8.3",
     "stripe": "^8.202.0"
