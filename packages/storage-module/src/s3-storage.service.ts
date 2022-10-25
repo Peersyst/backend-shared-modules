@@ -1,25 +1,26 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
 import * as AWS from "aws-sdk";
 import * as stream from "stream";
 import { StorageBusinessException } from "./exception/business.exception";
 import { StorageErrorCode } from "./exception/error-codes";
 import { FileInformation, StorageServiceInterface } from "./storage.module";
+import { StorageModuleOptions } from "./storage.module";
+import { STORAGE_MODULE_OPTIONS } from "./storage.constants";
 
 @Injectable()
 export class S3StorageService implements StorageServiceInterface {
     private s3: AWS.S3;
     private bucketName: string;
 
-    constructor(@Inject(ConfigService) private readonly configService: ConfigService) {
+    constructor(@Inject(STORAGE_MODULE_OPTIONS) readonly config: StorageModuleOptions) {
         AWS.config.update({
-            region: this.configService.get("aws.region"),
-            accessKeyId: this.configService.get("aws.accessKeyId"),
-            secretAccessKey: this.configService.get("aws.secretAccessKey"),
+            region: config.awsRegion,
+            accessKeyId: config.awsAccessKeyId,
+            secretAccessKey: config.awsSecretAccessKey,
         });
-        
+
         this.s3 = new AWS.S3();
-        this.bucketName = this.configService.get("aws.bucketName");
+        this.bucketName = config.awsBucket;
     }
 
     async getFileAsBuffer(filePath: string): Promise<Buffer> {
@@ -70,7 +71,7 @@ export class S3StorageService implements StorageServiceInterface {
         Bucket: this.bucketName,
         Key: filePath,
       }).promise();
-  
+
       return head.ContentLength;
     }
 

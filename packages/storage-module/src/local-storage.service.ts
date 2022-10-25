@@ -1,18 +1,19 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
 import * as stream from "stream";
 import * as path from "path";
 import * as fs from "fs";
 import { StorageBusinessException } from "./exception/business.exception";
 import { StorageErrorCode } from "./exception/error-codes";
 import { FileInformation, StorageServiceInterface } from "./storage.module";
+import { STORAGE_MODULE_OPTIONS } from "./storage.constants";
+import { StorageModuleOptions } from "./storage.module";
 
 @Injectable()
 export class LocalStorageService implements StorageServiceInterface {
     private rootPath: string;
 
-    constructor(@Inject(ConfigService) private readonly configService: ConfigService) {
-        this.rootPath = this.configService.get("local.rootPath");
+    constructor(@Inject(STORAGE_MODULE_OPTIONS)  private readonly config: StorageModuleOptions) {
+        this.rootPath = config.rootPath;
     }
 
     async getFileAsBuffer(fileRelPath: string): Promise<Buffer> {
