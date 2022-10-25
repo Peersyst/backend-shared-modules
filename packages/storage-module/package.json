@@ -1,6 +1,6 @@
 {
   "name": "@peersyst/storage-module",
-  "version": "0.12.66",
+  "version": "0.12.69",
   "description": "Peersyst storage module",
   "author": "Joan Grau <jgrau@peersyst.com>",
   "main": "index.js",
