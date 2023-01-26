@@ -11392,7 +11392,7 @@ xtraverse@0.1.x:
   dependencies:
     xmldom "0.1.x"
 
-xumm-sdk@^1.0.3:
+xumm-sdk@^1.3.4:
   version "1.7.1"
   resolved "https://registry.yarnpkg.com/xumm-sdk/-/xumm-sdk-1.7.1.tgz#d493d40cf907f67458e58860bd4a8f43a7ed9afd"
   integrity sha512-bqeLVW2sBuh6rzROI1tozK9zK2KPyIRm0jWpgOfJmKyXz45zl8zGB3jBHH+a8Ri+BOXVEx0z0zXNPsou1ddMyg==

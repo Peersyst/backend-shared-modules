@@ -22,6 +22,7 @@ class XummPayloadMetaDto implements XummPayloadMeta {
     uuid: string;
     multisign: boolean;
     submit: boolean;
+    pathfinding: boolean | null;
     destination: string;
     resolved_destination: string;
     resolved: boolean;
@@ -78,4 +79,5 @@ export class XummPayloadResponseDto implements XummPayloadResponse {
     account: string | null;
     signer: string | null;
     approved_with?: XummTransactionApprovalType;
+    user: string | null;
 }
