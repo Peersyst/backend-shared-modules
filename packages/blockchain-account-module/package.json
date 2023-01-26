@@ -12,7 +12,7 @@
   "devDependencies": {
     "@nestjs/common": "8.0.6",
     "@nestjs/core": "8.0.6",
-    "@nestjs/sequelize": "8.0.1",
+    "@nestjs/sequelize": "0.2.0",
     "@peersyst/crypto-backend-module": "^0.12.40",
     "@peersyst/symbol-backend-module": "^0.12.40",
     "@types/node": "^16.7.6",
@@ -25,7 +25,7 @@
   },
   "peerDependencies": {
     "@nestjs/common": "^6.0.0 || ^7.0.0 || ^8.0.0",
-    "@nestjs/sequelize": "8.0.1",
+    "@nestjs/sequelize": "0.2.0",
     "sequelize": "^6.3.5",
     "sequelize-typescript": "^2.0.0"
   },
