@@ -1,15 +1,13 @@
-import { XummGetPayloadResponse } from "xumm-sdk/dist/src/types";
 import {
     XrplTransactionType,
     XummCustomMeta,
     XummJsonTransaction,
-    XummPayloadMeta,
     XummTransactionApprovalType,
     XummTransactionType,
 } from "xumm-sdk/dist/src/types/xumm-api";
 
 // Object properties are not parsed correctly by openapi as they are not classes and cannot be classes
-export class XummPayloadDto implements XummGetPayloadResponse {
+export class XummPayloadDto {
     meta: XummPayloadMetaDto;
     application: XummPayloadApplicationDto;
     payload: XummPayloadPayloadDto;
@@ -17,12 +15,11 @@ export class XummPayloadDto implements XummGetPayloadResponse {
     custom_meta: XummCustomMeta;
 }
 
-class XummPayloadMetaDto implements XummPayloadMeta {
+class XummPayloadMetaDto {
     exists: boolean;
     uuid: string;
     multisign: boolean;
     submit: boolean;
-    pathfinding: boolean | null;
     destination: string;
     resolved_destination: string;
     resolved: boolean;
@@ -40,8 +37,7 @@ class XummPayloadMetaDto implements XummPayloadMeta {
     signers: string[] | null;
 }
 
-type XummPayloadApplication = XummGetPayloadResponse["application"];
-export class XummPayloadApplicationDto implements XummPayloadApplication {
+export class XummPayloadApplicationDto{
     name: string;
     description: string;
     disabled: 0 | 1;
@@ -50,8 +46,7 @@ export class XummPayloadApplicationDto implements XummPayloadApplication {
     issued_user_token: string | null;
 }
 
-type XummPayloadPayload = XummGetPayloadResponse["payload"];
-export class XummPayloadPayloadDto implements XummPayloadPayload {
+export class XummPayloadPayloadDto {
     tx_type: XummTransactionType | XrplTransactionType;
     tx_destination: string;
     tx_destination_tag: number | null;
@@ -64,8 +59,7 @@ export class XummPayloadPayloadDto implements XummPayloadPayload {
     computed?: Record<string, unknown>;
 }
 
-type XummPayloadResponse = XummGetPayloadResponse["response"];
-export class XummPayloadResponseDto implements XummPayloadResponse {
+export class XummPayloadResponseDto {
     hex: string | null;
     txid: string | null;
     resolved_at: string | null;
@@ -79,5 +73,4 @@ export class XummPayloadResponseDto implements XummPayloadResponse {
     account: string | null;
     signer: string | null;
     approved_with?: XummTransactionApprovalType;
-    user: string | null;
 }
