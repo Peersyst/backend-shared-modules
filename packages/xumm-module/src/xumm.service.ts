@@ -2,7 +2,7 @@ import { Inject, Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { XummSdk } from "xumm-sdk";
 import { PayloadAndSubscription, XummJsonTransaction, XummPostPayloadResponse } from "xumm-sdk/dist/src/types";
-import { XummI, XummStatus } from "./dto";
+import { XummI, XummStatus, XummPayloadDto } from "./dto";
 import { XummBusinessException } from "./exception/business.exception";
 import { XummErrorCode } from "./exception";
 import { verifySignature } from "verify-xrpl-signature";
@@ -109,6 +109,12 @@ export class XummService {
             },
             callback,
         );
+    }
+
+    async getPayload(uuid: string): Promise<XummPayloadDto> {
+        const payload = await this.xummSdk.payload.get(uuid);
+        if (!payload) throw new XummBusinessException(XummErrorCode.PAYLOAD_NOT_FOUND);
+        return payload;
     }
 
     async getStatus(uuid: string): Promise<XummStatus> {

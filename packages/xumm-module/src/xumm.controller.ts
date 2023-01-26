@@ -2,7 +2,7 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { Controller, Get, Param, UseGuards, Request } from "@nestjs/common";
 import { ApiErrorDecorators } from "./exception/error-response.decorator";
 import { XummService } from "./xumm.service";
-import { XummTransactionStatusDTO, XummSignInResponseDto, XummVerifiedSignInResponseDto } from "./dto";
+import { XummTransactionStatusDTO, XummSignInResponseDto, XummVerifiedSignInResponseDto, XummPayloadDto } from "./dto";
 import { XummAuthService } from "./xumm-auth.service";
 import { XummBusinessException } from "./exception/business.exception";
 import { XummErrorCode } from "./exception";
@@ -14,6 +14,12 @@ import { ApiException } from "@nanogiants/nestjs-swagger-api-exception-decorator
 @ApiErrorDecorators()
 export class XummController {
     constructor(private readonly xummService: XummService) {}
+
+    @ApiOperation({ summary: "Get XUMM payload by uuid" })
+    @Get(":uuid")
+    async getPayload(@Param("uuid") uuid: string): Promise<XummPayloadDto> {
+        return await this.xummService.getPayload(uuid);
+    }
 
     @ApiOperation({ summary: "Get XUMM transaction status by uuid" })
     @Get("status/:uuid")
