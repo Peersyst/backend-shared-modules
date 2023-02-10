@@ -1,19 +1,19 @@
 import { DynamicModule, Module, Provider, Type, ForwardReference } from "@nestjs/common";
 import { JwtModule } from "@nestjs/jwt";
-import { PassportModule } from "@nestjs/passport";
+import { AuthModuleAsyncOptions, AuthOptionsFactory, PassportModule } from "@nestjs/passport";
 import { AuthController, AuthGoogleController, AuthRecoverController, AuthTwitterController, AuthValidateController } from "./auth.controller";
 import { AuthService } from "./auth.service";
-import { JwtStrategy } from "./strategies/jwt.strategy";
-import { LocalStrategy } from "./strategies/local.strategy";
-import { GoogleStrategy } from "./strategies/google.strategy";
-import { TwitterStrategy } from "./strategies/twitter.strategy";
+import { JwtStrategy } from "./strategies";
+import { LocalStrategy } from "./strategies";
+import { GoogleStrategy } from "./strategies";
+import { TwitterStrategy } from "./strategies";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { VerifyEmailToken } from "./entities/VerifyEmailToken";
+import { VerifyEmailToken } from "./entities";
 import { EntityClassOrSchema } from "@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type";
-import { ResetToken } from "./entities/ResetToken";
+import { ResetToken } from "./entities";
 import { ValidateEmailService } from "./validate-email.service";
 import { RecoverPasswordService } from "./recover-password.service";
-import { BlockDeletedGuard } from "./guards/block-deleted.guard";
+import { BlockDeletedGuard } from "./guards";
 
 export interface AuthModuleOptions {
     googleAuth?: boolean;
@@ -84,6 +84,71 @@ export class AuthModule {
             exports,
         };
     }
+
+    static forRootAsync(options: AuthModuleAsyncOptions): DynamicModule {
+        const { useFactory, inject } = options;
+
+        let providers: Provider[] = [
+            ...this.createAsyncProviders(options),
+            AuthService,
+        ];
+        const exports: Provider[] = [AuthService];
+        const controllers: Type[] = [AuthController];
+        const imports: Array<Type | DynamicModule | Promise<DynamicModule> | ForwardReference> = [
+            ...(options.imports || []),
+            PassportModule,
+            JwtModule.registerAsync({
+                inject: inject,
+                useFactory: async (...providers) => {
+                    const options = await useFactory(...providers) ;
+                    return {
+                        ...options,
+                        signOptions: { expiresIn: "7d" },
+                    }
+                }
+            })
+        ]
+
+        return {
+            module: AuthModule,
+            global: true,
+            imports,
+            providers,
+            controllers,
+            exports,
+        };
+
+    }
+
+    private static createAsyncProviders(options: AuthModuleAsyncOptions): Provider[] {
+        if (options.useExisting || options.useFactory) {
+            return [this.createAsyncOptionsProvider(options)];
+        }
+        return [
+            this.createAsyncOptionsProvider(options),
+            {
+                provide: options.useClass,
+                useClass: options.useClass,
+            },
+        ];
+    }
+
+    private static createAsyncOptionsProvider(options: AuthModuleAsyncOptions): Provider {
+        if (options.useFactory) {
+            return {
+                provide: "AUTH_MODULE_OPTIONS",
+                useFactory: options.useFactory,
+                inject: options.inject || [],
+            };
+        }
+        return {
+            provide: "AUTH_MODULE_OPTIONS",
+            useFactory: async (optionsFactory: AuthOptionsFactory) =>
+                await optionsFactory.createAuthOptions(),
+            inject: [options.useExisting || options.useClass],
+        };
+    }
+
 }
 
 
