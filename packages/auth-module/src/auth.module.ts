@@ -15,7 +15,7 @@ import { ValidateEmailService } from "./validate-email.service";
 import { RecoverPasswordService } from "./recover-password.service";
 import { BlockDeletedGuard } from "./guards";
 
-export interface AuthModuleOptions {
+export interface AuthModuleOptions extends AuthModuleAsyncOptions {
     googleAuth?: boolean;
     twitterAuth?: boolean;
     validateEmail?: boolean;
@@ -23,6 +23,8 @@ export interface AuthModuleOptions {
     twoFA?: boolean;
     NotificationModule?: Type;
 }
+
+export const AUTH_MODULE_OPTIONS = "AUTH_MODULE_OPTIONS";
 
 @Module({})
 export class AuthModule {
@@ -85,14 +87,18 @@ export class AuthModule {
         };
     }
 
-    static forRootAsync(options: AuthModuleAsyncOptions): DynamicModule {
-        const { useFactory, inject } = options;
+    static forRootAsync(options: AuthModuleOptions): DynamicModule {
+        const { useFactory, inject, googleAuth, twitterAuth, validateEmail, recoverPassword, NotificationModule } = options;
 
         let providers: Provider[] = [
             ...this.createAsyncProviders(options),
+            LocalStrategy,
+            JwtStrategy,
             AuthService,
+            BlockDeletedGuard,
         ];
         const exports: Provider[] = [AuthService];
+        const entities: EntityClassOrSchema[] = [];
         const controllers: Type[] = [AuthController];
         const imports: Array<Type | DynamicModule | Promise<DynamicModule> | ForwardReference> = [
             ...(options.imports || []),
@@ -108,6 +114,37 @@ export class AuthModule {
                 }
             })
         ]
+
+        if (options) {
+            if (googleAuth) {
+                providers.push(GoogleStrategy);
+                controllers.push(AuthGoogleController);
+            }
+            if (twitterAuth) {
+                providers.push(TwitterStrategy);
+                controllers.push(AuthTwitterController);
+            }
+            if (validateEmail) {
+                entities.push(VerifyEmailToken);
+                providers.push(ValidateEmailService);
+                exports.push(ValidateEmailService);
+                controllers.push(AuthValidateController);
+            }
+            if (recoverPassword && !NotificationModule) {
+                throw new Error("Must indicate NotificationModule when recoverPassword = true");
+            }
+            if (recoverPassword) {
+                entities.push(ResetToken);
+                providers.push(RecoverPasswordService);
+                exports.push(RecoverPasswordService);
+                controllers.push(AuthRecoverController);
+                imports.push(options.NotificationModule);
+            }
+            if (entities.length > 0) {
+                imports.push(TypeOrmModule.forFeature(entities));
+                exports.push(TypeOrmModule);
+            }
+        }
 
         return {
             module: AuthModule,
@@ -136,13 +173,13 @@ export class AuthModule {
     private static createAsyncOptionsProvider(options: AuthModuleAsyncOptions): Provider {
         if (options.useFactory) {
             return {
-                provide: "AUTH_MODULE_OPTIONS",
+                provide: AUTH_MODULE_OPTIONS,
                 useFactory: options.useFactory,
                 inject: options.inject || [],
             };
         }
         return {
-            provide: "AUTH_MODULE_OPTIONS",
+            provide: AUTH_MODULE_OPTIONS,
             useFactory: async (optionsFactory: AuthOptionsFactory) =>
                 await optionsFactory.createAuthOptions(),
             inject: [options.useExisting || options.useClass],
