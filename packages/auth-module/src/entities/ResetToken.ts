@@ -11,7 +11,7 @@ export class ResetToken {
     @Column("varchar", { length: 255 })
     token!: string;
 
-    @Column("datetime")
+    @Column("timestamp")
     expiration!: Date;
 
     @Column("boolean", { name: "verified", default: false })
