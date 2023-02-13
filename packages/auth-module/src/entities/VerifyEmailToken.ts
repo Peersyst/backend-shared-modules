@@ -14,6 +14,6 @@ export class VerifyEmailToken {
     @Column("boolean", { name: "verified", default: false })
     verified = false;
 
-    @CreateDateColumn({ name: "created_at", type: "datetime" })
+    @CreateDateColumn({ name: "created_at", type: "timestamp" })
     createdAt: Date;
 }
