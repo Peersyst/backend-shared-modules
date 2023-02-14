@@ -1,6 +1,6 @@
 {
   "name": "@peersyst/xumm-module",
-  "version": "0.12.73",
+  "version": "0.12.74",
   "description": "XUMM Module",
   "author": "Sergi <scanal@peersyst.com>",
   "main": "index.js",
