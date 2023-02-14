@@ -43,7 +43,7 @@ export interface RecoverPasswordUserServiceI {
 export class AuthService {
     constructor(
         @Inject("UserService") private readonly userService: AuthUserServiceI | ThirdPartyUserServiceI | ValidateEmailUserServiceI | RecoverPasswordUserServiceI,
-        private readonly jwtService: JwtService,
+        @Inject(JwtService) private readonly jwtService: JwtService,
     ) {}
 
     async validateUser(email: string, pass: string): Promise<PrivateAuthUserDtoI> {
