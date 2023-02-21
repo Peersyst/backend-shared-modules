@@ -16,6 +16,7 @@ import { ValidateEmailService } from "./validate-email.service";
 import { RecoverPasswordRequest } from "./requests/recover-password.request";
 import { RecoverPasswordService } from "./recover-password.service";
 import { PrivateAuthUserDtoI } from "./dto/private-user.dto";
+import { RefreshVerificationTokenRequest } from "./requests/refresh-verification-code.request";
 
 @ApiTags("authenticate")
 @Controller("auth")
@@ -118,6 +119,15 @@ export class AuthValidateController {
         const accessToken = await this.authService.validateUserEmail(tokenData.userId);
         return accessToken;
     }
+
+    @Post("verificationToken/")
+    @ApiException(() => new BusinessException(AuthErrorCode.USER_NOT_FOUND))
+    @ApiOperation({ summary: "Resend email verification" })
+    @ApiOkResponse({ type: AuthCredentialsDto })
+    async resendEmailVerification(@Body() refreshVerificationToken: RefreshVerificationTokenRequest): Promise<void> {
+        await this.validateEmailService.createEmailVerificationToken(refreshVerificationToken.userId);
+    }
+
 }
 
 export interface RecoverNotificationServiceI {
