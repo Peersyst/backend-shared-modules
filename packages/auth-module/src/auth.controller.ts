@@ -123,7 +123,6 @@ export class AuthValidateController {
     @Post("verificationToken/")
     @ApiException(() => new BusinessException(AuthErrorCode.USER_NOT_FOUND))
     @ApiOperation({ summary: "Resend email verification" })
-    @ApiOkResponse({ type: AuthCredentialsDto })
     async resendEmailVerification(@Body() refreshVerificationToken: RefreshVerificationTokenRequest): Promise<void> {
         await this.validateEmailService.createEmailVerificationToken(refreshVerificationToken.userId);
     }
