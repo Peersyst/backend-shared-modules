@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Request, UseGuards, Get, Response, Inject, Param, ParseIntPipe } from "@nestjs/common";
+import { Body, Controller, Post, Request, UseGuards, Get, Response, Inject } from "@nestjs/common";
 import { ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { AuthService } from "./auth.service";
 import { LocalAuthGuard } from "./guards/local-auth.guard";
@@ -16,6 +16,7 @@ import { ValidateEmailService } from "./validate-email.service";
 import { RecoverPasswordRequest } from "./requests/recover-password.request";
 import { RecoverPasswordService } from "./recover-password.service";
 import { PrivateAuthUserDtoI } from "./dto/private-user.dto";
+import { RefreshVerificationCode } from "./requests/refresh-verification-code";
 
 @ApiTags("authenticate")
 @Controller("auth")
@@ -119,12 +120,12 @@ export class AuthValidateController {
         return accessToken;
     }
 
-    @Post("verify-email/:id")
+    @Post("verificationCode/")
     @ApiException(() => new BusinessException(AuthErrorCode.USER_NOT_FOUND))
     @ApiOperation({ summary: "Resend email verification" })
     @ApiOkResponse({ type: AuthCredentialsDto })
-    async resendEmailVerification(@Param("id", ParseIntPipe) userId: number): Promise<void> {
-        await this.validateEmailService.createEmailVerificationToken(userId);
+    async resendEmailVerification(@Body() refreshVerificationCode: RefreshVerificationCode): Promise<void> {
+        await this.validateEmailService.createEmailVerificationToken(refreshVerificationCode.userId);
     }
 
 }
