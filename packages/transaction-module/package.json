@@ -27,7 +27,7 @@
     "typeorm": "^0.3.6"
   },
   "publishConfig": {
-    "access": "restricted"
+    "access": "public"
   },
   "dependencies": {
     "@nestjs/bull": "^0.5.5",

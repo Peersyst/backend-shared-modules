@@ -29,7 +29,7 @@
         "ethers": "^5.6.8"
     },
     "publishConfig": {
-        "access": "restricted"
+        "access": "public"
     },
     "dependencies": {
         "@nanogiants/nestjs-swagger-api-exception-decorator": "^1.4.3",

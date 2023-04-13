@@ -26,7 +26,7 @@
     "typeorm": "^0.3.6"
   },
   "publishConfig": {
-    "access": "restricted"
+    "access": "public"
   },
   "dependencies": {
     "@nanogiants/nestjs-swagger-api-exception-decorator": "^1.4.3",
