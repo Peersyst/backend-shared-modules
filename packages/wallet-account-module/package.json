@@ -1,6 +1,6 @@
 {
     "name": "@peersyst/wallet-account-module",
-    "version": "0.12.73",
+    "version": "0.13.0",
     "description": "Wallet Account backend module",
     "author": "Silvap <silvap@peersyst.com>",
     "main": "index.js",
@@ -14,7 +14,7 @@
         "@nestjs/config": "^2.2.0",
         "@nestjs/core": "^8.0.0",
         "@nestjs/typeorm": "^8.0.0",
-        "@peersyst/crypto-backend-module": "^0.12.40",
+        "@peersyst/crypto-backend-module": "^0.13.0",
         "@types/express": "4.17.11",
         "@types/node": "^16.7.6",
         "ethers": "^5.6.8",
