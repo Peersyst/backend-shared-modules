@@ -17,15 +17,14 @@ import { RecoverPasswordRequest } from "./requests/recover-password.request";
 import { RecoverPasswordService } from "./recover-password.service";
 import { PrivateAuthUserDtoI } from "./dto/private-user.dto";
 import { RefreshVerificationTokenRequest } from "./requests/refresh-verification-code.request";
+import { Authenticated } from "./auth.decorator";
+import { ChangePasswordRequest } from "./requests/change-password.request";
 
 @ApiTags("authenticate")
 @Controller("auth")
 @ApiErrorDecorators()
 export class AuthController {
-    constructor(
-        private readonly authService: AuthService,
-        @Inject(ConfigService) private configService: ConfigService
-    ) {}
+    constructor(private readonly authService: AuthService, @Inject(ConfigService) private configService: ConfigService) {}
 
     @ApiOperation({ summary: "Authenticate user with email" })
     @UseGuards(LocalAuthGuard)
@@ -37,16 +36,28 @@ export class AuthController {
         const accessToken = await this.authService.login(req.user);
         return accessToken;
     }
+
+    @ApiOperation({ summary: "Change password" })
+    @Authenticated()
+    @Post("change-password")
+    @ApiException(() => new BusinessException(AuthErrorCode.INVALID_CREDENTIALS))
+    @ApiOkResponse({ type: AuthCredentialsDto })
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    async changePassword(@Body() changePasswordRequest: ChangePasswordRequest, @Request() req): Promise<AuthCredentialsDto> {
+        const credentials = await this.authService.changePassword(
+            req.user,
+            changePasswordRequest.currentPassword,
+            changePasswordRequest.newPassword,
+        );
+        return credentials;
+    }
 }
 
 @ApiTags("authenticate")
 @Controller("auth/google")
 @ApiErrorDecorators()
 export class AuthGoogleController {
-    constructor(
-        private readonly authService: AuthService,
-        @Inject(ConfigService) private configService: ConfigService
-    ) {}
+    constructor(private readonly authService: AuthService, @Inject(ConfigService) private configService: ConfigService) {}
 
     @ApiOperation({ summary: "Authenticate user with Google" })
     @UseGuards(GoogleAuthGuard)
@@ -73,10 +84,7 @@ export class AuthGoogleController {
 @Controller("auth/twitter")
 @ApiErrorDecorators()
 export class AuthTwitterController {
-    constructor(
-        private readonly authService: AuthService,
-        @Inject(ConfigService) private configService: ConfigService
-    ) {}
+    constructor(private readonly authService: AuthService, @Inject(ConfigService) private configService: ConfigService) {}
 
     @ApiOperation({ summary: "Authenticate user with Twitter" })
     @UseGuards(TwitterAuthGuard)
@@ -103,10 +111,7 @@ export class AuthTwitterController {
 @Controller("auth")
 @ApiErrorDecorators()
 export class AuthValidateController {
-    constructor(
-        private readonly authService: AuthService,
-        private readonly validateEmailService: ValidateEmailService,
-    ) {}
+    constructor(private readonly authService: AuthService, private readonly validateEmailService: ValidateEmailService) {}
 
     @Post("verify-email")
     @ApiException(() => new BusinessException(AuthErrorCode.TOKEN_NOT_FOUND))
@@ -126,7 +131,6 @@ export class AuthValidateController {
     async resendEmailVerification(@Body() refreshVerificationToken: RefreshVerificationTokenRequest): Promise<void> {
         await this.validateEmailService.createEmailVerificationToken(refreshVerificationToken.userId);
     }
-
 }
 
 export interface RecoverNotificationServiceI {
