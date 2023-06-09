@@ -13,7 +13,6 @@ export class DeletedInterceptor implements NestInterceptor {
                 statusCode: HttpStatus.UNAUTHORIZED,
                 message: "Unauthorized",
             });
-
             return null;
         }
 
