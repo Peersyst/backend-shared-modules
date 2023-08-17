@@ -9,15 +9,13 @@ import { randomString } from "./utils/random";
 
 @Injectable()
 export class ValidateEmailService {
-    constructor(
-        @InjectRepository(VerifyEmailToken) private readonly verifyEmailTokenRepository: Repository<VerifyEmailToken>,
-    ) {}
+    constructor(@InjectRepository(VerifyEmailToken) private readonly verifyEmailTokenRepository: Repository<VerifyEmailToken>) {}
 
-    async createEmailVerificationToken(userId: number): Promise<string> {
-        const token = randomString(16);
+    async createEmailVerificationToken(userId: number, token?: string): Promise<string> {
+        const finalToken = token || randomString(16);
         await this.verifyEmailTokenRepository.delete({ userId });
-        await this.verifyEmailTokenRepository.save({ userId, token });
-        return token;
+        await this.verifyEmailTokenRepository.save({ userId, finalToken });
+        return finalToken;
     }
 
     async verifyEmailVerificationToken(token: string): Promise<VerifyEmailTokenDTO> {
