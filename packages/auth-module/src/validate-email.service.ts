@@ -11,7 +11,7 @@ import { Charset, randomString } from "./utils/random";
 export class ValidateEmailService {
     constructor(@InjectRepository(VerifyEmailToken) private readonly verifyEmailTokenRepository: Repository<VerifyEmailToken>) {}
 
-    async createEmailVerificationToken(userId: number, length = 16, charset: Charset): Promise<string> {
+    async createEmailVerificationToken(userId: number, length = 16, charset?: Charset): Promise<string> {
         const token = randomString(length, charset);
         await this.verifyEmailTokenRepository.delete({ userId });
         await this.verifyEmailTokenRepository.save({ userId, token });
