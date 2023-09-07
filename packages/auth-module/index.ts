@@ -10,3 +10,4 @@ export * from "./src/exception";
 export * from "./src/guards";
 export * from "./src/requests";
 export * from "./src/strategies";
+export * from "./src/utils";
