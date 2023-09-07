@@ -1,6 +1,8 @@
 import * as crypto from "crypto";
 
-export const randomString = (length: number, charset?: "mayus" | "minus" | "numeric" | "all"): string => {
+export type Charset = "mayus" | "minus" | "numeric" | "all";
+
+export const randomString = (length: number, charset?: Charset): string => {
     let characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     if (charset === "mayus") {
         characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";

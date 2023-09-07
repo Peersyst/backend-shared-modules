@@ -5,17 +5,17 @@ import { VerifyEmailTokenDTO } from "./dto/verify-email-token.dto";
 import { VerifyEmailToken } from "./entities/VerifyEmailToken";
 import { BusinessException } from "./exception/business.exception";
 import { AuthErrorCode } from "./exception/error-codes";
-import { randomString } from "./utils/random";
+import { Charset, randomString } from "./utils/random";
 
 @Injectable()
 export class ValidateEmailService {
     constructor(@InjectRepository(VerifyEmailToken) private readonly verifyEmailTokenRepository: Repository<VerifyEmailToken>) {}
 
-    async createEmailVerificationToken(userId: number, token?: string): Promise<string> {
-        const finalToken = token || randomString(16);
+    async createEmailVerificationToken(userId: number, length = 6, charset: Charset = "numeric"): Promise<string> {
+        const token = randomString(length, charset);
         await this.verifyEmailTokenRepository.delete({ userId });
-        await this.verifyEmailTokenRepository.save({ userId, finalToken });
-        return finalToken;
+        await this.verifyEmailTokenRepository.save({ userId, token });
+        return token;
     }
 
     async verifyEmailVerificationToken(token: string): Promise<VerifyEmailTokenDTO> {
