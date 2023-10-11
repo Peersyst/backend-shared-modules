@@ -6,7 +6,6 @@ import { AuthService } from "./auth.service";
 import { JwtStrategy } from "./strategies";
 import { LocalStrategy } from "./strategies";
 import { GoogleStrategy } from "./strategies";
-import { TwitterStrategy } from "./strategies";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { VerifyEmailToken } from "./entities";
 import { EntityClassOrSchema } from "@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type";
@@ -53,7 +52,7 @@ export class AuthModule {
                 controllers.push(AuthGoogleController);
             }
             if (options.twitterAuth) {
-                providers.push(TwitterStrategy);
+                // providers.push(TwitterStrategy);
                 controllers.push(AuthTwitterController);
             }
             if (options.validateEmail) {
@@ -121,7 +120,7 @@ export class AuthModule {
                 controllers.push(AuthGoogleController);
             }
             if (twitterAuth) {
-                providers.push(TwitterStrategy);
+                // providers.push(TwitterStrategy);
                 controllers.push(AuthTwitterController);
             }
             if (validateEmail) {
