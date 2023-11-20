@@ -7,7 +7,7 @@
     "types": "index.d.ts",
     "scripts": {
         "prepublishOnly": "npm run build",
-        "clean": "rm -f *.js *.js.* *.d.ts src/**/*.js* src/*.js* src/**/*.d.ts src/*.d.ts *.tsbuildinfo && rm -rf node_modules/"
+        "clean": "rm -f *.js *.js.* *.d.ts src/**/*.js* src/*.js* src/**/*.d.ts src/*.d.ts *.tsbuildinfo && rm -rf node_modules/ dist/"
     },
     "dependencies": {
         "@nanogiants/nestjs-swagger-api-exception-decorator": "^1.4.3",
