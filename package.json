@@ -10,7 +10,8 @@
         "lint": "lerna run lint",
         "build": "lerna run build",
         "version": "lerna version",
-        "publish": "lerna publish"
+        "publish": "lerna publish",
+        "repair": "lerna repair"
     },
     "devDependencies": {
         "@types/node": "^20.9.2",
