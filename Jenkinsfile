@@ -18,13 +18,13 @@ pipeline {
                 }
             }
         }
-        stage('Lerna bootstrap') {
+        stage('Prebuild packages') {
             when {
                 branch 'main'
             }
             steps {
                 withCredentials([string(credentialsId: 'npm-publish-token', variable: 'NPM_TOKEN')]) {
-                    sh 'npx lerna bootstrap'
+                    sh 'npm run prebuild'
                 }
             }
         }
