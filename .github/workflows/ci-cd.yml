@@ -1,4 +1,4 @@
-name: backend-shared-modules publish
+name: "Shared modules: CI / CD"
 
 on:
     pull_request:
