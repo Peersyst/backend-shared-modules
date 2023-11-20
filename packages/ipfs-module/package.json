@@ -1,43 +1,44 @@
 {
-  "name": "@peersyst/ipfs-module",
-  "version": "0.13.0",
-  "description": "IPFS Module",
-  "author": "Sergi <scanal@peersyst.com>",
-  "main": "index.js",
-  "types": "index.d.ts",
-  "scripts": {
-    "build": "rimraf dist && tsc",
-    "prepublishOnly": "npm run build"
-  },
-  "dependencies": {
-    "@nanogiants/nestjs-swagger-api-exception-decorator": "^1.4.3",
-    "@nestjs/common": "^6.0.0 || ^7.0.0 || ^8.0.0",
-    "@nestjs/config": "~0.6.3",
-    "@nestjs/core": "~7.6.15",
-    "@nestjs/sequelize": "0.2.0",
-    "@nestjs/swagger": "~4.8.0",
-    "@nestjs/typeorm": "^8.0.2",
-    "class-transformer": "~0.4.0",
-    "class-validator": "~0.13.2",
-    "express-openapi-validator": "^4.12.12",
-    "form-data": "^4.0.0",
-    "formdata-node": "^4.3.2",
-    "ipfs": "0.62.2",
-    "reflect-metadata": "0.1.13",
-    "rxjs": "^6.0.0",
-    "stream": "0.0.2"
-  },
-  "devDependencies": {
-    "@types/express": "4.17.11",
-    "@types/node": "^16.7.6",
-    "@types/validator": "^13.7.0",
-    "rimraf": "^3.0.2",
-    "typescript": "^4.4.2"
-  },
-  "peerDependencies": {
-    "@nestjs/common": "^6.0.0 || ^7.0.0 || ^8.0.0"
-  },
-  "publishConfig": {
-    "access": "public"
-  }
+    "name": "@peersyst/ipfs-module",
+    "version": "0.13.0",
+    "description": "IPFS Module",
+    "author": "Sergi <scanal@peersyst.com>",
+    "main": "index.js",
+    "types": "index.d.ts",
+    "scripts": {
+        "build": "rimraf dist && tsc",
+        "prepublishOnly": "npm run build",
+        "clean": "rm -f src/**/*.js* && rm -f src/*.js* && rm -f src/**/*.d.ts && rm -f src/*.d.ts"
+    },
+    "dependencies": {
+        "@nanogiants/nestjs-swagger-api-exception-decorator": "^1.4.3",
+        "@nestjs/common": "^6.0.0 || ^7.0.0 || ^8.0.0",
+        "@nestjs/config": "~0.6.3",
+        "@nestjs/core": "~7.6.15",
+        "@nestjs/sequelize": "0.2.0",
+        "@nestjs/swagger": "~4.8.0",
+        "@nestjs/typeorm": "^8.0.2",
+        "class-transformer": "~0.4.0",
+        "class-validator": "~0.13.2",
+        "express-openapi-validator": "^4.12.12",
+        "form-data": "^4.0.0",
+        "formdata-node": "^4.3.2",
+        "ipfs": "0.62.2",
+        "reflect-metadata": "0.1.13",
+        "rxjs": "^6.0.0",
+        "stream": "0.0.2"
+    },
+    "devDependencies": {
+        "@types/express": "4.17.11",
+        "@types/node": "^16.7.6",
+        "@types/validator": "^13.7.0",
+        "rimraf": "^3.0.2",
+        "typescript": "^4.4.2"
+    },
+    "peerDependencies": {
+        "@nestjs/common": "^6.0.0 || ^7.0.0 || ^8.0.0"
+    },
+    "publishConfig": {
+        "access": "public"
+    }
 }

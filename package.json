@@ -1,21 +1,32 @@
 {
-  "name": "backend-shared-modules",
-  "version": "0.0.0",
-  "description": "Peersyst backend shared modules",
-  "author": "Adrià Carrera <acarrera@peersyst.com>",
-  "private": true,
-  "workspaces": [
-    "packages/*"
-  ],
-  "scripts": {
-    "clean": "lerna run clean",
-    "build": "lerna run build",
-    "version": "lerna version",
-    "publish": "lerna publish"
-  },
-  "devDependencies": {
-    "@types/node": "^16.7.6",
-    "lerna": "^4.0.0",
-    "typescript": "^4.4.2"
-  }
+    "name": "backend-shared-modules",
+    "version": "0.0.0",
+    "description": "Peersyst backend shared modules",
+    "author": "Adrià Carrera <acarrera@peersyst.com>",
+    "private": true,
+    "scripts": {
+        "install:auth": "npm i -C packages/auth-module",
+        "install:blockchain-account": "npm i -C packages/blockchain-account-module",
+        "install:cache": "npm i -C packages/cache-module",
+        "install:crypto": "npm i -C packages/crypto-module",
+        "install:ipfs": "npm i -C packages/ipfs-module",
+        "install:kyc": "npm i -C packages/kyc-module",
+        "install:payment": "npm i -C packages/payment-module",
+        "install:storage": "npm i -C packages/storage-module",
+        "install:symbol": "npm i -C packages/symbol-module",
+        "install:transaction": "npm i -C packages/transaction-module",
+        "install:unleash": "npm i -C packages/unleash-module",
+        "install:wallet-account": "npm i -C packages/wallet-account-module",
+        "install:xumm": "npm i -C packages/xumm-module",
+        "install:all": "npm run install:auth & npm run install:blockchain-account & npm run install:cache & npm run install:crypto & npm run install:ipfs & npm run install:kyc & npm run install:payment & npm run install:storage & npm run install:symbol & npm run install:transaction & npm run install:unleash & npm run install:wallet-account & npm run install:xumm",
+        "clean": "lerna run clean",
+        "build": "lerna run build",
+        "version": "lerna version",
+        "publish": "lerna publish"
+    },
+    "devDependencies": {
+        "@types/node": "^20.9.2",
+        "lerna": "7.4.2",
+        "typescript": "^5.2.2"
+    }
 }

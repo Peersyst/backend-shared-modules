@@ -1,39 +1,39 @@
 {
-  "name": "@peersyst/transaction-module",
-  "version": "0.13.0",
-  "description": "Transaction module",
-  "author": "Sergi Canal <scanal@peersyst.com>",
-  "main": "index.js",
-  "types": "index.d.ts",
-  "scripts": {
-    "build": "rimraf dist && tsc",
-    "prepublishOnly": "npm run build",
-    "clean": "rm -f src/**/*.js* && rm -f src/*.js* && rm -f src/**/*.d.ts && rm -f src/*.d.ts && rm tsconfig.tsbuildinfo"
-  },
-  "devDependencies": {
-    "@nestjs/common": "^8.0.6",
-    "@nestjs/core": "^8.0.6",
-    "@nestjs/typeorm": "^8.0.0",
-    "@types/node": "^16.7.6",
-    "reflect-metadata": "0.1.13",
-    "rimraf": "^3.0.2",
-    "typeorm": "^0.3.6",
-    "typescript": "^4.4.2"
-  },
-  "peerDependencies": {
-    "@nestjs/common": "^8.0.6",
-    "@nestjs/core": "^8.0.6",
-    "@nestjs/typeorm": "^8.0.0",
-    "typeorm": "^0.3.6"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
-  "dependencies": {
-    "@nestjs/bull": "^0.5.5",
-    "@nestjs/config": "^2.1.0",
-    "@nestjs/swagger": "^5.2.1",
-    "bull": "^4.8.3",
-    "ethers": "^5.6.8"
-  }
+    "name": "@peersyst/transaction-module",
+    "version": "0.13.0",
+    "description": "Transaction module",
+    "author": "Sergi Canal <scanal@peersyst.com>",
+    "main": "index.js",
+    "types": "index.d.ts",
+    "scripts": {
+        "build": "rimraf dist && tsc",
+        "prepublishOnly": "npm run build",
+        "clean": "rm -f src/**/*.js* && rm -f src/*.js* && rm -f src/**/*.d.ts && rm -f src/*.d.ts"
+    },
+    "devDependencies": {
+        "@nestjs/common": "^8.0.6",
+        "@nestjs/core": "^8.0.6",
+        "@nestjs/typeorm": "^8.0.0",
+        "@types/node": "^16.7.6",
+        "reflect-metadata": "0.1.13",
+        "rimraf": "^3.0.2",
+        "typeorm": "^0.3.6",
+        "typescript": "^4.4.2"
+    },
+    "peerDependencies": {
+        "@nestjs/common": "^8.0.6",
+        "@nestjs/core": "^8.0.6",
+        "@nestjs/typeorm": "^8.0.0",
+        "typeorm": "^0.3.6"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "dependencies": {
+        "@nestjs/bull": "^0.5.5",
+        "@nestjs/config": "^2.1.0",
+        "@nestjs/swagger": "^5.2.1",
+        "bull": "^4.8.3",
+        "ethers": "^5.6.8"
+    }
 }

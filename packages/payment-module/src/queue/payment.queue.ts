@@ -6,7 +6,6 @@ import { PaymentBusinessException } from "../exception/business.exception";
 import { PaymentErrorCode } from "../exception/error-codes";
 import { PaymentStatus } from "../entities/Payment";
 
-
 export interface CheckPayment {
     paymentId: number;
 }

@@ -1,35 +1,36 @@
 {
-  "name": "@peersyst/blockchain-account-backend-module",
-  "version": "0.13.0",
-  "description": "Blockchain Account backend module",
-  "author": "Adrià Carrera <acarrera@peersyst.com>",
-  "main": "index.js",
-  "types": "index.d.ts",
-  "scripts": {
-    "build": "rimraf dist && tsc",
-    "prepublishOnly": "npm run build"
-  },
-  "devDependencies": {
-    "@nestjs/common": "8.0.6",
-    "@nestjs/core": "8.0.6",
-    "@nestjs/sequelize": "0.2.0",
-    "@peersyst/crypto-backend-module": "^0.13.0",
-    "@peersyst/symbol-backend-module": "^0.13.0",
-    "@types/node": "^16.7.6",
-    "reflect-metadata": "0.1.13",
-    "rimraf": "^3.0.2",
-    "sequelize": "^6.3.5",
-    "sequelize-typescript": "^2.0.0",
-    "symbol-sdk": "^1.0.1",
-    "typescript": "^4.4.2"
-  },
-  "peerDependencies": {
-    "@nestjs/common": "^6.0.0 || ^7.0.0 || ^8.0.0",
-    "@nestjs/sequelize": "0.2.0",
-    "sequelize": "^6.3.5",
-    "sequelize-typescript": "^2.0.0"
-  },
-  "publishConfig": {
-    "access": "public"
-  }
+    "name": "@peersyst/blockchain-account-backend-module",
+    "version": "0.13.0",
+    "description": "Blockchain Account backend module",
+    "author": "Adrià Carrera <acarrera@peersyst.com>",
+    "main": "index.js",
+    "types": "index.d.ts",
+    "scripts": {
+        "build": "rimraf dist && tsc",
+        "prepublishOnly": "npm run build",
+        "clean": "rm -f src/**/*.js* && rm -f src/*.js* && rm -f src/**/*.d.ts && rm -f src/*.d.ts"
+    },
+    "devDependencies": {
+        "@nestjs/common": "8.0.6",
+        "@nestjs/core": "8.0.6",
+        "@nestjs/sequelize": "0.2.0",
+        "@peersyst/crypto-backend-module": "^0.13.0",
+        "@peersyst/symbol-backend-module": "^0.13.0",
+        "@types/node": "^16.7.6",
+        "reflect-metadata": "0.1.13",
+        "rimraf": "^3.0.2",
+        "sequelize": "^6.3.5",
+        "sequelize-typescript": "^2.0.0",
+        "symbol-sdk": "^1.0.1",
+        "typescript": "^4.4.2"
+    },
+    "peerDependencies": {
+        "@nestjs/common": "^6.0.0 || ^7.0.0 || ^8.0.0",
+        "@nestjs/sequelize": "0.2.0",
+        "sequelize": "^6.3.5",
+        "sequelize-typescript": "^2.0.0"
+    },
+    "publishConfig": {
+        "access": "public"
+    }
 }
