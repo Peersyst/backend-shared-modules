@@ -42,7 +42,8 @@ export interface RecoverPasswordUserServiceI {
 @Injectable()
 export class AuthService {
     constructor(
-        @Inject("UserService") private readonly userService: AuthUserServiceI | ThirdPartyUserServiceI | ValidateEmailUserServiceI | RecoverPasswordUserServiceI,
+        @Inject("UserService")
+        private readonly userService: AuthUserServiceI | ThirdPartyUserServiceI | ValidateEmailUserServiceI | RecoverPasswordUserServiceI,
         private readonly jwtService: JwtService,
     ) {}
 
@@ -67,7 +68,7 @@ export class AuthService {
         return user;
     }
 
-    async userDeletedOrBlocked(userId: number): Promise<{ deleted: boolean, blocked: boolean}> {
+    async userDeletedOrBlocked(userId: number): Promise<{ deleted: boolean; blocked: boolean }> {
         const resp = { deleted: false, blocked: false };
 
         try {
@@ -89,6 +90,12 @@ export class AuthService {
         return {
             access_token: this.jwtService.sign(payload),
         };
+    }
+
+    async changePassword(user: PrivateAuthUserDtoI, currentPassword: string, newPassword: string): Promise<AuthCredentialsDtoI> {
+        await this.validateUser(user.email, currentPassword);
+        await this.userService.resetPassword(user.id, newPassword);
+        return this.login(user);
     }
 
     async validateUserEmail(userId: number): Promise<AuthCredentialsDtoI> {

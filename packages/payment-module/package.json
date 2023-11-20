@@ -1,41 +1,41 @@
 {
-  "name": "@peersyst/payment-module",
-  "version": "0.13.0",
-  "description": "Payment gateway module",
-  "author": "Adrià Carrera <acarrera@peersyst.com>",
-  "main": "index.js",
-  "types": "index.d.ts",
-  "scripts": {
-    "build": "rimraf dist && tsc",
-    "prepublishOnly": "npm run build",
-    "clean": "rm -f src/**/*.js* && rm -f src/*.js* && rm -f src/**/*.d.ts && rm -f src/*.d.ts && rm tsconfig.tsbuildinfo"
-  },
-  "devDependencies": {
-    "@nestjs/common": "^7.0.0 || ^8.0.0",
-    "@nestjs/core": "^7.0.0 || ^8.0.0",
-    "@nestjs/typeorm": "^7.1.5",
-    "@types/node": "^16.7.6",
-    "reflect-metadata": "0.1.13",
-    "rimraf": "^3.0.2",
-    "typeorm": "^0.3.6",
-    "typescript": "^4.4.2"
-  },
-  "peerDependencies": {
-    "@nestjs/common": "^7.0.0 || ^8.0.0",
-    "@nestjs/typeorm": "^7.1.5",
-    "typeorm": "^0.3.6"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
-  "dependencies": {
-    "@nanogiants/nestjs-swagger-api-exception-decorator": "^1.4.3",
-    "@nestjs/bull": "^0.5.5",
-    "@nestjs/config": "^2.1.0",
-    "@nestjs/swagger": "^5.2.1",
-    "@peersyst/auth-module": "^0.13.0",
-    "axios": "^0.27.2",
-    "bull": "^4.8.3",
-    "stripe": "^8.202.0"
-  }
+    "name": "@peersyst/payment-module",
+    "version": "0.13.3",
+    "description": "Payment gateway module",
+    "author": "Adrià Carrera <acarrera@peersyst.com>",
+    "main": "index.js",
+    "types": "index.d.ts",
+    "scripts": {
+        "build": "rimraf dist && tsc",
+        "prepublishOnly": "npm run build",
+        "clean": "rm -f src/**/*.js* && rm -f src/*.js* && rm -f src/**/*.d.ts && rm -f src/*.d.ts && rm tsconfig.tsbuildinfo"
+    },
+    "devDependencies": {
+        "@nestjs/common": "^7.0.0 || ^8.0.0",
+        "@nestjs/core": "^7.0.0 || ^8.0.0",
+        "@nestjs/typeorm": "^7.1.5",
+        "@types/node": "^16.7.6",
+        "reflect-metadata": "0.1.13",
+        "rimraf": "^3.0.2",
+        "typeorm": "^0.3.6",
+        "typescript": "^4.4.2"
+    },
+    "peerDependencies": {
+        "@nestjs/common": "^7.0.0 || ^8.0.0",
+        "@nestjs/typeorm": "^7.1.5",
+        "typeorm": "^0.3.6"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "dependencies": {
+        "@nanogiants/nestjs-swagger-api-exception-decorator": "^1.4.3",
+        "@nestjs/bull": "^0.5.5",
+        "@nestjs/config": "^2.1.0",
+        "@nestjs/swagger": "^5.2.1",
+        "@peersyst/auth-module": "^0.13.3",
+        "axios": "^0.27.2",
+        "bull": "^4.8.3",
+        "stripe": "^8.202.0"
+    }
 }
