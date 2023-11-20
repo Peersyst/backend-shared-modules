@@ -9,7 +9,8 @@
         "prebuild": "npm i",
         "build": "rimraf dist && tsc",
         "prepublishOnly": "npm run build",
-        "clean": "rm -f *.js *.js.* *.d.ts src/**/*.js* src/*.js* src/**/*.d.ts src/*.d.ts *.tsbuildinfo && rm -rf node_modules/"
+        "clean": "rm -f *.js *.js.* *.d.ts src/**/*.js* src/*.js* src/**/*.d.ts src/*.d.ts *.tsbuildinfo && rm -rf node_modules/",
+        "lint": "tsc --noemit"
     },
     "dependencies": {
         "aws-sdk": "^2.1046.0",
