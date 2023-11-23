@@ -6,14 +6,16 @@
     "main": "index.js",
     "types": "index.d.ts",
     "scripts": {
+        "prebuild": "npm i",
         "build": "rimraf dist && tsc",
         "prepublishOnly": "npm run build",
-        "clean": "rm -f src/**/*.js* && rm -f src/*.js* && rm -f src/**/*.d.ts && rm -f src/*.d.ts && rm tsconfig.tsbuildinfo"
+        "clean": "rm -f *.js *.js.* *.d.ts src/**/*.js* src/*.js* src/**/*.d.ts src/*.d.ts *.tsbuildinfo && rm -rf node_modules/ dist/",
+        "lint": "tsc --noemit"
     },
     "devDependencies": {
         "@nestjs/common": "^7.0.0 || ^8.0.0",
         "@nestjs/core": "^7.0.0 || ^8.0.0",
-        "@nestjs/typeorm": "^7.1.5",
+        "@nestjs/typeorm": "^8.0.0",
         "@types/node": "^16.7.6",
         "reflect-metadata": "0.1.13",
         "rimraf": "^3.0.2",
@@ -22,7 +24,7 @@
     },
     "peerDependencies": {
         "@nestjs/common": "^7.0.0 || ^8.0.0",
-        "@nestjs/typeorm": "^7.1.5",
+        "@nestjs/typeorm": "^8.0.0",
         "typeorm": "^0.3.6"
     },
     "publishConfig": {
@@ -33,7 +35,7 @@
         "@nestjs/bull": "^0.5.5",
         "@nestjs/config": "^2.1.0",
         "@nestjs/swagger": "^5.2.1",
-        "@peersyst/auth-module": "^0.13.3",
+        "@peersyst/auth-module": "0.12.72",
         "axios": "^0.27.2",
         "bull": "^4.8.3",
         "stripe": "^8.202.0"
