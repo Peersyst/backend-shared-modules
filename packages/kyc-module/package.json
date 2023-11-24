@@ -6,14 +6,17 @@
     "main": "index.js",
     "types": "index.d.ts",
     "scripts": {
+        "prebuild": "npm i",
         "build": "rimraf dist && tsc",
-        "prepublishOnly": "npm run build"
+        "prepublishOnly": "npm run build",
+        "clean": "rm -f *.js *.js.* *.d.ts src/**/*.js* src/*.js* src/**/*.d.ts src/*.d.ts *.tsbuildinfo && rm -rf node_modules/ dist/",
+        "lint": "tsc --noemit"
     },
     "dependencies": {
         "@nanogiants/nestjs-swagger-api-exception-decorator": "^1.6.3",
         "@nestjs/sequelize": "^8.0.0",
         "@nestjs/swagger": "^5.0.0",
-        "@peersyst/auth-module": "^0.13.3",
+        "@peersyst/auth-module": "0.12.72",
         "class-transformer": "~0.4.0",
         "class-validator": "~0.13.2",
         "express-openapi-validator": "^4.12.12",
