@@ -14,4 +14,4 @@ FROM build as test
 RUN npm run lint
 
 FROM test as publish
-RUN npx lerna publish --no-git-tag-version --no-push --yes from-package
+RUN npx lerna publish --yes from-package
