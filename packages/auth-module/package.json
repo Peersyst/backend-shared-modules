@@ -1,9 +1,9 @@
 {
     "name": "@peersyst/auth-module",
-    "version": "0.14.0",
+    "version": "0.14.1",
     "description": "Auth module",
     "author": "Joan Grau <jgrau@peersyst.com>",
-    "main": "index.js",
+    "main": "dist/index.js",
     "types": "index.d.ts",
     "scripts": {
         "prebuild": "npm i",
