@@ -14,4 +14,4 @@ FROM build as test
 RUN npm run lint
 
 FROM test as publish
-RUN npx lerna publish --yes from-package
+RUN npm run publish
