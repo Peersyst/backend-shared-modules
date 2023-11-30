@@ -18,7 +18,7 @@ export class PaymentConsumer {
 
     @Process("check-payment")
     async checkPayment(job: Job<CheckPayment>): Promise<void> {
-        this.logger.log(`Processing Approve Transaction ${job.data.transactionId}`);
+        this.logger.log(`Processing Approve Transaction ${job.data.paymentId}`);
         try {
             const payment = await this.paymentService.getById(job.data.paymentId);
             if (!payment) {
