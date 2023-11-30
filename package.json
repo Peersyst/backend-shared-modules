@@ -10,7 +10,7 @@
         "lint": "lerna run lint",
         "build": "lerna run build",
         "version": "lerna version",
-        "publish": "lerna publish",
+        "publish": "lerna publish --yes from-package",
         "repair": "lerna repair"
     },
     "devDependencies": {
