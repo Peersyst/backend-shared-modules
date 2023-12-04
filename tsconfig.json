@@ -13,6 +13,5 @@
         "incremental": true,
         "skipLibCheck": true
     },
-    "include": ["/**/*.ts", "/**/*.spec.ts"],
-    "exclude": ["./playground"]
+    "include": ["/**/*.ts", "/**/*.spec.ts"]
 }
