@@ -1,27 +1,43 @@
 import { DynamicModule, Module, Provider, Type } from "@nestjs/common";
 import { MailerService } from "./mailer.service";
-import { MAILER_MODULE_OPTIONS } from "./common/constants/mailer-options";
-import { MailerModuleOptions } from "./common/types/mailer-options.types";
+import { MAILER_MODULE_OPTIONS } from "./constants/mailer-options";
+import { MailerModuleOptions } from "./types/mailer-options.types";
 
 @Module({})
 export class MailerModule {
     static forRootAsync(options: MailerModuleOptions): DynamicModule {
-        const exports: Provider[] = [MailerService];
-        const imports = [];
-        const providers: Provider[] = [
-            {
-                provide: MAILER_MODULE_OPTIONS,
-                useValue: options,
-            },
-            MailerService,
-        ];
+        const providers = this.createAsyncProviders(options);
 
         return {
             module: MailerModule,
             global: true,
-            imports,
-            exports,
-            providers,
+            imports: options.imports,
+            exports: [MailerService],
+            providers: [...providers, MailerService, ...(options.extraProviders || [])],
         };
+    }
+
+    private static createAsyncProviders(options: MailerModuleOptions): Provider[] {
+        const providers: Provider[] = [this.createAsyncOptionsProvider(options)];
+
+        if (options.useClass) {
+            providers.push({
+                provide: options.useClass,
+                useClass: options.useClass,
+            });
+        }
+
+        return providers;
+    }
+
+    private static createAsyncOptionsProvider(options: MailerModuleOptions): Provider {
+        if (options.useFactory) {
+            return {
+                name: MAILER_MODULE_OPTIONS,
+                provide: MAILER_MODULE_OPTIONS,
+                useFactory: options.useFactory,
+                inject: options.inject || [],
+            };
+        }
     }
 }

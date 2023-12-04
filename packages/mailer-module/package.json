@@ -2,8 +2,8 @@
     "name": "@peersyst/mailer-module",
     "version": "0.1.0",
     "description": "Mailer module",
-    "main": "index.js",
-    "types": "index.d.ts",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
     "scripts": {
         "prebuild": "npm i",
         "build": "rimraf dist && tsc",
