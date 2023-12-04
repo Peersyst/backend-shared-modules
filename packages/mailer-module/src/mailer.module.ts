@@ -6,7 +6,7 @@ import { MailerModuleOptions } from "./common/types/mailer-options.types";
 @Module({})
 export class MailerModule {
     static forRootAsync(options: MailerModuleOptions): DynamicModule {
-        const exports: Provider[] = [];
+        const exports: Provider[] = [MailerService];
         const imports = [];
         const providers: Provider[] = [
             {
