@@ -1,11 +1,17 @@
+export type CompilerType = "handlebars";
+export type TemplateData = Record<string, any>;
+
 export interface CompilerParams {
     /**
      * The directory where are the templates stored.
      */
-    templateDir: string;
-}
+    templatePath: string;
 
-export type TemplateData = Record<string, any>;
+    /**
+     * The compiler used to render the email content
+     */
+    compiler: "handlebars";
+}
 
 export interface CompileOptions {
     /**
