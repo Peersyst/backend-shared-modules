@@ -10,9 +10,9 @@
         "target": "es2017",
         "sourceMap": true,
         "baseUrl": "./",
+        "outDir": "./dist",
         "incremental": true,
         "skipLibCheck": true
     },
-    "include": ["/**/*.ts", "/**/*.spec.ts"],
-    "exclude": ["./playground"]
+    "include": ["/**/*.ts"]
 }
