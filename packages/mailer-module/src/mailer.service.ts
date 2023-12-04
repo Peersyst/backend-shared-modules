@@ -1,7 +1,7 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { Transporter, createTransport } from "nodemailer";
 import { ICompiler } from "./compilers/compiler.types";
-import { MAILER_MODULE_OPTIONS } from "./constants/mailer-options";
+import { MAILER_MODULE_OPTIONS } from "./constants";
 import { HandlebarsCompiler } from "./compilers/handlebars.compiler";
 import { MailerOptions } from "./types/mailer-options.types";
 import { EnhancedSendMailOptions } from "./types/mailer.types";

@@ -1,1 +1,1 @@
-export * from "./mailer-options";
+export const MAILER_MODULE_OPTIONS = "MAILER_OPTIONS";

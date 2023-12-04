@@ -1,6 +1,6 @@
 import { DynamicModule, Module, Provider, Type } from "@nestjs/common";
 import { MailerService } from "./mailer.service";
-import { MAILER_MODULE_OPTIONS } from "./constants/mailer-options";
+import { MAILER_MODULE_OPTIONS } from "./constants";
 import { MailerModuleOptions } from "./types/mailer-options.types";
 
 @Module({})
