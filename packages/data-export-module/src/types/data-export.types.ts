@@ -20,3 +20,7 @@ export interface DataExportAsyncService<TParams = DataExportInput, TData = any> 
     generateAsync(data: TParams[], options?: GenerateOptions): Promise<TData>;
     generateAsyncAndSend(res: Response, data: TParams[], options?: GenerateOptions): Promise<void>;
 }
+
+export interface DataExportModuleOptions {
+    pdf: ExportPDFOptions;
+}

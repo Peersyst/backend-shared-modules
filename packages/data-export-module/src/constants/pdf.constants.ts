@@ -37,3 +37,5 @@ export const PUPPETEER_ARGS = [
     "--use-gl=swiftshader",
     "--use-mock-keychain",
 ];
+
+export const DATA_EXPORT_PDF_OPTIONS = "DATA_EXPORT_PDF_OPTIONS";
