@@ -33,7 +33,7 @@ export class PDFService<TParams> implements DataExportAsyncService<TParams, void
 
         /* Load template */
 
-        const templateHtml = fs.readFileSync(path.join(templateDir, templateName), "utf8");
+        const templateHtml = fs.readFileSync(path.join(templateDir, `${templateName}.hbs`), "utf8");
         const template = handlebars.compile(templateHtml);
 
         const html = template(data);

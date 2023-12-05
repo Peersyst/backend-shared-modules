@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { ExportPDFOptions } from "../modules/pdf/pdf.types";
+import { ExportPDFOptions, ModulePDFOptions } from "../modules/pdf/pdf.types";
 import { ExportCSVOptions } from "../modules/csv/csv.types";
 
 /* Variables */
@@ -22,5 +22,5 @@ export interface DataExportAsyncService<TParams = DataExportInput, TData = any> 
 }
 
 export interface DataExportModuleOptions {
-    pdf: ExportPDFOptions;
+    pdf: ModulePDFOptions;
 }
