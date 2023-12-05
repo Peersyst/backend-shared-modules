@@ -10,4 +10,7 @@ export interface ModulePDFOptions {
     exportDir: string;
     temporary?: boolean;
     puppeteer?: PuppeteerLaunchOptions;
+    hanldebars?: {
+        helpers?: Record<string, any>;
+    };
 }

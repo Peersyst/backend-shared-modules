@@ -4,7 +4,7 @@ import { DataExportService } from "../../types/data-export.types";
 import { ExportCSVOptions } from "./csv.types";
 
 @Injectable()
-export class CSVService<T> implements DataExportService<T> {
+export class CSVService<T> implements DataExportService<T, void, ExportCSVOptions> {
     private formatData<T extends Record<string, any>>(headers: string[], data: T | T[]): string {
         const header = headers.join(",");
         const rows = data.map((item: T) => Object.values(item).join(","));

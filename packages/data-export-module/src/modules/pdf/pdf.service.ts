@@ -9,8 +9,10 @@ import handlebars from "handlebars";
 import { DATA_EXPORT_PDF_OPTIONS, PUPPETEER_ARGS } from "../../constants/pdf.constants";
 
 @Injectable()
-export class PDFService<TParams> implements DataExportAsyncService<TParams, void> {
-    constructor(@Inject(DATA_EXPORT_PDF_OPTIONS) private readonly pdfOptions: ModulePDFOptions) {}
+export class PDFService<TParams> implements DataExportAsyncService<TParams, void, ExportPDFOptions> {
+    constructor(@Inject(DATA_EXPORT_PDF_OPTIONS) private readonly pdfOptions: ModulePDFOptions) {
+        if (pdfOptions.hanldebars.helpers) handlebars.registerHelper(pdfOptions.hanldebars.helpers);
+    }
 
     public async generateAsync(data: TParams | TParams[], options: ExportPDFOptions) {
         const { exportDir, templateDir, puppeteer: puppeteerOptions } = this.pdfOptions;
