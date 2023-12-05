@@ -1,36 +1,39 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { Response } from "express";
 import { DataExportAsyncService } from "../../types/data-export.types";
 import puppeteer from "puppeteer";
-import { ExportPDFOptions } from "./pdf.types";
+import { ExportPDFOptions, ModulePDFOptions } from "./pdf.types";
 import * as fs from "fs";
 import * as path from "path";
 import handlebars from "handlebars";
-import { PUPPETEER_ARGS } from "../../constants/pdf.constants";
+import { DATA_EXPORT_PDF_OPTIONS, PUPPETEER_ARGS } from "../../constants/pdf.constants";
 
 @Injectable()
 export class PDFService<TParams> implements DataExportAsyncService<TParams, void> {
-    public async generateAsync(
-        data: TParams | TParams[],
-        options: ExportPDFOptions = { exportPath: "files", fileName: "export", templatePath: process.cwd() },
-    ) {
-        const { fileName, exportPath, templatePath, ...restOptions } = options;
+    constructor(@Inject(DATA_EXPORT_PDF_OPTIONS) private readonly pdfOptions: ModulePDFOptions) {}
+
+    public async generateAsync(data: TParams | TParams[], options: ExportPDFOptions) {
+        const { exportDir, templateDir, puppeteer: puppeteerOptions } = this.pdfOptions;
+
+        const { fileName, templateName, ...restOptions } = options;
 
         /* Set puppeteer launch options */
-        const browser = await puppeteer.launch({
-            headless: "new",
-            defaultViewport: {
-                width: 595,
-                height: 842,
-                deviceScaleFactor: 1,
+        const browser = await puppeteer.launch(
+            puppeteerOptions || {
+                headless: "new",
+                defaultViewport: {
+                    width: 595,
+                    height: 842,
+                    deviceScaleFactor: 1,
+                },
+                args: PUPPETEER_ARGS,
             },
-            args: PUPPETEER_ARGS,
-        });
+        );
         const page = await browser.newPage();
 
         /* Load template */
 
-        const templateHtml = fs.readFileSync(path.join(process.cwd(), templatePath), "utf8");
+        const templateHtml = fs.readFileSync(path.join(templateDir, templateName), "utf8");
         const template = handlebars.compile(templateHtml);
 
         const html = template(data);
@@ -39,7 +42,7 @@ export class PDFService<TParams> implements DataExportAsyncService<TParams, void
         await page.evaluateHandle("document.fonts.ready");
         await page.emulateMediaType("screen");
 
-        const filePath = `${process.cwd()}/${exportPath + "/"}${fileName}.pdf`;
+        const filePath = path.join(exportDir, `${fileName}.pdf`);
 
         /* Generate PDF */
         await page.pdf({ ...restOptions, path: filePath });
@@ -48,14 +51,12 @@ export class PDFService<TParams> implements DataExportAsyncService<TParams, void
         return;
     }
 
-    public async generateAsyncAndSend(
-        res: Response,
-        data: TParams | TParams[],
-        options: ExportPDFOptions = { exportPath: "files", fileName: "export", templatePath: process.cwd() },
-    ) {
+    public async generateAsyncAndSend(res: Response, data: TParams | TParams[], options: ExportPDFOptions) {
+        const { exportDir, temporary } = this.pdfOptions;
+
         await this.generateAsync(data, options);
 
-        const filePath = `${process.cwd()}/${options.exportPath + "/"}${options.fileName}.pdf`;
+        const filePath = path.join(exportDir, `${options.fileName}.pdf`);
 
         const stat = fs.statSync(filePath);
 
@@ -67,7 +68,7 @@ export class PDFService<TParams> implements DataExportAsyncService<TParams, void
         readStream.pipe(res);
 
         // Delete file
-        if (options.temporary) {
+        if (temporary) {
             fs.unlink(filePath, () => undefined);
         }
     }
