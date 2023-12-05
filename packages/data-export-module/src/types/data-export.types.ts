@@ -12,8 +12,6 @@ export type GenerateOptions = ExportPDFOptions | ExportCSVOptions;
 export interface DataExportService<TParams = DataExportInput, TData = any> {
     generate(data: TParams[], options?: GenerateOptions): TData;
     generateAndSend(res: Response, data: TParams[], options?: GenerateOptions): void;
-    /* Other methods */
-    // import(data: string): DataExportInput;
 }
 
 export interface DataExportAsyncService<TParams = DataExportInput, TData = any> {

@@ -1,4 +1,4 @@
-import { PDFOptions, Puppeteer, PuppeteerLaunchOptions } from "puppeteer";
+import { PDFOptions, PuppeteerLaunchOptions } from "puppeteer";
 
 export interface ExportPDFOptions extends Omit<PDFOptions, "path"> {
     templateName: string;
