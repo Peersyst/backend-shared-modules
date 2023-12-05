@@ -21,7 +21,7 @@ export class CSVService<T> implements DataExportService<T> {
         return this.formatData(headers, data);
     }
 
-    public generateAndSend(res: Response, data: T | T[], options: ExportCSVOptions = {}) {
+    public generateAndSend(res: Response, data: T | T[], options: ExportCSVOptions = { fileName: "data" }) {
         const csv = this.generate(data);
 
         res.setHeader("Content-Type", "text/csv");
