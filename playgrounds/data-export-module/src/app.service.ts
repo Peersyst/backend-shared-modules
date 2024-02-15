@@ -19,7 +19,10 @@ export class AppService {
   async exportPDF(res: Response): Promise<void> {
     return await this.pdfService.generateAsyncAndSend(
       res,
-      { data: 'data', message: 'test with commas , in between' },
+      {
+        data: 'data',
+        message: 'test with commas , in between',
+      },
       { fileName: 'data-test', templateName: 'test' },
     );
   }
@@ -27,7 +30,12 @@ export class AppService {
   async exportCSV(res: Response): Promise<void> {
     return this.csvService.generateAndSend(
       res,
-      [{ data: 'data', message: 'test with commas , in between' }],
+      [
+        {
+          data: 'data',
+          message: '""Hola, "Guillem"", com va""',
+        },
+      ],
       {
         fileName: 'test',
       },
