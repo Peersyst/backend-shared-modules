@@ -2,12 +2,21 @@ import { Injectable } from "@nestjs/common";
 import { Response } from "express";
 import { DataExportService } from "../../types/data-export.types";
 import { ExportCSVOptions } from "./csv.types";
+import { escapeString } from "./utils/escape";
 
 @Injectable()
 export class CSVService<T> implements DataExportService<T, void, ExportCSVOptions> {
     private formatData<T extends Record<string, any>>(headers: string[], data: T | T[]): string {
         const header = headers.join(",");
-        const rows = data.map((item: T) => Object.values(item).join(","));
+        const rows = data.map((item: T) => {
+            const escapedValues = Object.values(item).map((value) => {
+                if (typeof value === "string" && value.includes(",")) {
+                    return `"${escapeString(value)}"`;
+                }
+                return value;
+            });
+            return escapedValues.join(",");
+        });
         return [header, ...rows].join("\n");
     }
 
