@@ -12,5 +12,4 @@ export * from "./src/dto/kyc-token.dto";
 export * from "./src/dto/kyc.dto";
 export * from "./src/exception/error-codes";
 export * from "./src/exception/business.exception";
-export * from "./src/sequelize/KycModel";
 export * from "./src/typeorm/KycEntity";
