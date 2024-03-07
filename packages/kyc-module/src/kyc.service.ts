@@ -6,18 +6,6 @@ import { KycTokenDtoI } from "./dto/kyc-token.dto";
 import { SumsubService } from "./sumsub.service";
 import { ReviewResultProp } from "./requests/applicant-reviewed.request";
 
-export interface KycUserServiceI {
-    findById: (userId: number) => Promise<any>;
-    findByExternalId: (externalId: string) => Promise<any>;
-    getKycExternalId: (userId: number) => Promise<string>;
-    assignKyc: (userId: number, kyc: KycI) => Promise<any>;
-}
-
-export interface KycNotificationInterface {
-    sendKycPendingNotification: (email: string) => Promise<void>;
-    sendKycPassedNotification: (email: string) => Promise<void>;
-    sendKycRetryNotification: (email: string, moderationComment: string) => Promise<void>;
-}
 
 export interface KycRepositoryInterface {
     create: (userId: number, applicantId: string) => Promise<KycI>;
@@ -25,14 +13,13 @@ export interface KycRepositoryInterface {
     findByUserIdSimplified: (userId: number) => Promise<SimplifiedKycI>;
     findByApplicantId: (applicantId: string) => Promise<KycI>;
     update: (id: number, updateData: Partial<KycI>) => Promise<void>;
+    getKycExternalId: (userId: number) => Promise<string>;
 }
 
 @Injectable()
 export class KycService {
     constructor(
-        @Inject("UserService") private readonly userService: KycUserServiceI,
         @Inject("KycRepository") private readonly kycRepository: KycRepositoryInterface,
-        @Inject("NotificationService") private readonly notificationService: KycNotificationInterface,
         private readonly sumsubService: SumsubService,
     ) {}
 
@@ -45,7 +32,7 @@ export class KycService {
     }
 
     async getToken(userId: number): Promise<KycTokenDtoI> {
-        const externalId = await this.userService.getKycExternalId(userId);
+        const externalId = await this.kycRepository.getKycExternalId(userId);
         const accessToken = await this.sumsubService.generateAccessToken(externalId);
         return { accessToken };
     }
@@ -70,16 +57,10 @@ export class KycService {
     // Webhook functions
     // ----------------------------------------------------------------------
     async create(externalUserId: string, applicantId: string): Promise<void> {
-        const user = await this.userService.findByExternalId(externalUserId);
-        if (!user) {
-            throw new KycBusinessException(KycErrorCode.USER_NOT_FOUND);
-        }
-
-        let kyc = await this.kycRepository.findByUserId(user.id);
+        let kyc = await this.kycRepository.findByUserId(Number(externalUserId));
         if (!kyc) {
-            kyc = await this.kycRepository.create(user.id, applicantId);
+            kyc = await this.kycRepository.create(Number(externalUserId), applicantId);
         }
-        await this.userService.assignKyc(user.id, kyc);
     }
 
     async pending(applicantId: string, reviewStatus: KycStatus) {
@@ -87,13 +68,8 @@ export class KycService {
         if (!kyc) {
             throw new KycBusinessException(KycErrorCode.KYC_NOT_FOUND);
         }
-        const user = await this.userService.findById(kyc.userId);
-        if (!user) {
-            throw new KycBusinessException(KycErrorCode.USER_NOT_FOUND);
-        }
 
         await this.kycRepository.update(kyc.id, { status: reviewStatus });
-        await this.notificationService.sendKycPendingNotification(user.email);
     }
 
     async reviewed (applicantId: string, reviewStatus: KycStatus, reviewResult: ReviewResultProp) {
@@ -101,14 +77,9 @@ export class KycService {
         if (!kyc) {
             throw new KycBusinessException(KycErrorCode.KYC_NOT_FOUND);
         }
-        const user = await this.userService.findById(kyc.userId);
-        if (!user) {
-            throw new KycBusinessException(KycErrorCode.USER_NOT_FOUND);
-        }
 
         if (reviewResult.reviewAnswer === KycAnswer.GREEN) {
             await this.kycRepository.update(kyc.id, { status: reviewStatus, reviewAnswer: KycAnswer.GREEN });
-            await this.notificationService.sendKycPassedNotification(user.email);
         } else {
             await this.kycRepository.update(kyc.id, {
                 status: reviewStatus,
@@ -118,9 +89,6 @@ export class KycService {
                 rejectLabels: reviewResult.rejectLabels,
                 reviewRejectType: reviewResult.reviewRejectType
             });
-            if (reviewResult.reviewRejectType === KycRejectType.RETRY) {
-                await this.notificationService.sendKycRetryNotification(user.email, reviewResult.moderationComment);
-            }
         }
     }
 

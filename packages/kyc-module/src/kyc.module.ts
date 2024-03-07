@@ -1,57 +1,31 @@
 import { DynamicModule, Module, Provider, Type, ForwardReference } from "@nestjs/common";
-import { SequelizeModule } from "@nestjs/sequelize";
-import { TypeOrmModule } from "@nestjs/typeorm";
-import { DefaultNotificationService } from "./default-notification.service";
 import { KycTestController } from "./kyc-test.controller";
 import { KycController } from "./kyc.controller";
 import { KycService } from "./kyc.service";
-import { KycSequelizeRepository } from "./sequelize/kyc-sequelize.repository";
-import { KycModel } from "./sequelize/KycModel";
 import { SumsubController } from "./sumsub.controller";
 import { SumsubService } from "./sumsub.service";
 import { KycTypeormRepository } from "./typeorm/kyc-typeorm.repository";
 import { KycEntity } from "./typeorm/KycEntity";
+import { ConfigService } from "@nestjs/config";
 
-
-export enum OrmType {
-    TYPEORM = "typeorm",
-    SEQUELIZE = "sequelize",
-}
 export interface KycModuleOptions {
-    ormType: OrmType;
     addTestEndpoints: boolean;
-    notifications?: boolean;
-    NotificationModule?: Type;
 }
 
 @Module({})
 export class KycModule {
-    static register(UserModule: Type, ConfigModule: Type, options: KycModuleOptions): DynamicModule {
-        const providers: Provider[] = [KycService, SumsubService];
+    static register(UserModule:Type,ConfigModule: Type, TypeOrmModule:any,  options: KycModuleOptions): DynamicModule {
+        const providers: Provider[] = [ConfigService,KycService, SumsubService];
         const controllers: Type<any>[] = [SumsubController, KycController];
         const imports: Array<Type<any> | DynamicModule | Promise<DynamicModule> | ForwardReference> = [
-            ConfigModule,
-            UserModule,            
+            ConfigModule, 
+            UserModule   
         ];
         const exports: Provider[] = [KycService, SumsubService];
-
-        if (options.notifications && !options.NotificationModule) {
-            throw new Error("Must indicate NotificationModule when notifications = true");
-        }
-        if (options.notifications) {
-            imports.push(options.NotificationModule);
-        } else {
-            providers.push({ provide: "NotificationService", useClass: DefaultNotificationService });
-        }
-
-        if (options.ormType === OrmType.SEQUELIZE) {
-            providers.push({ provide: "KycRepository", useClass: KycSequelizeRepository });
-            imports.push(SequelizeModule.forFeature([KycModel]));
-        } else if (options.ormType === OrmType.TYPEORM) {
-            providers.push({ provide: "KycRepository", useClass: KycTypeormRepository });
-            imports.push(TypeOrmModule.forFeature([KycEntity]));
-            exports.push(TypeOrmModule);
-        }
+        providers.push({ provide: "KycRepository", useClass: KycTypeormRepository });
+        imports.push(TypeOrmModule.forFeature([KycEntity]));
+        exports.push(TypeOrmModule);
+        
 
         if (options.addTestEndpoints) {
             controllers.push(KycTestController);

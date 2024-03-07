@@ -12,6 +12,9 @@ export class KycEntity {
     @Column("varchar", { length: 255, name: "applicant_id" })
     applicantId: string;
 
+    @Column("varchar", { length: 255, name: "kyc_external_id" })
+    kycExternalId: string;
+
     @Column({ type: "enum", enum: KycStatus })
     status: KycStatus;
 
@@ -30,9 +33,9 @@ export class KycEntity {
     @Column("varchar", { length: 255, name: "reject_labels", nullable: true })
     rejectLabels?: string;
 
-    @CreateDateColumn({ name: "created_at", type: "datetime" })
+    @CreateDateColumn({ name: "created_at", type: "timestamp" })
     createdAt: Date;
 
-    @UpdateDateColumn({ name: "updated_at", type: "datetime" })
+    @UpdateDateColumn({ name: "updated_at", type: "timestamp" })
     updatedAt: Date;
 }
