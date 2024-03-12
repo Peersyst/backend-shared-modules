@@ -57,6 +57,7 @@ export class KycService {
     // Webhook functions
     // ----------------------------------------------------------------------
     async create(externalUserId: string, applicantId: string): Promise<void> {
+    
         let kyc = await this.kycRepository.findByUserId(Number(externalUserId));
         if (!kyc) {
             kyc = await this.kycRepository.create(Number(externalUserId), applicantId);

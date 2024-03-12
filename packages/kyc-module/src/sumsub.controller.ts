@@ -14,7 +14,7 @@ import { ApplicantPrecheckedRequest } from "./requests/applicant-prechecked.requ
 import { ApplicantDeletedRequest } from "./requests/applicant-deleted.request";
 import { DigestedFromSumsub } from "./sumsub.decorator";
 
-@ApiTags("sumsub")
+@ApiTags("kyc")
 @Controller("kyc")
 @ApiErrorDecorators()
 @DigestedFromSumsub()
