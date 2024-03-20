@@ -33,6 +33,11 @@ export class KycTypeormRepository implements KycRepositoryInterface {
         return kycModel ? this.transformEntityToDto(kycModel): null;
     }
 
+    async getKycExternalId(userId: number): Promise<string> {
+        const kycModel = await this.kycRepository.findOne({ where: { userId } });
+        return kycModel ? kycModel.kycExternalId: null;
+    }
+
     async update(id: number, updateData: Partial<KycI>): Promise<void> {
         const updateInfo: any = {
             ...updateData,
