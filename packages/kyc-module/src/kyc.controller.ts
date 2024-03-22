@@ -21,10 +21,8 @@ export class KycController {
     @ApiException(() => new KycBusinessException(KycErrorCode.KYC_NOT_FOUND))
     @ApiException(() => new KycBusinessException(KycErrorCode.SUMSUB_REQUEST_ERROR))
     @ApiOkResponse({ type: Kyc })
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     async getMe(@Request() req): Promise<Kyc> {
-        const simplifiedKyc = await this.kycService.getKyc(req.user.id);
-        return simplifiedKyc;
+        return this.kycService.getKyc(req.user.id);
     }
 
     @ApiOperation({ summary: "Get authenticated user kyc token" })
@@ -33,7 +31,6 @@ export class KycController {
     @ApiException(() => new KycBusinessException(KycErrorCode.KYC_NOT_FOUND))
     @ApiException(() => new KycBusinessException(KycErrorCode.SUMSUB_REQUEST_ERROR))
     @ApiOkResponse({ type: KycTokenDto })
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     async getToken(@Request() req): Promise<KycTokenDto> {
         return this.kycService.getToken(req.user.id);
     }
@@ -44,9 +41,7 @@ export class KycController {
     @ApiException(() => new KycBusinessException(KycErrorCode.KYC_NOT_FOUND))
     @ApiException(() => new KycBusinessException(KycErrorCode.SUMSUB_REQUEST_ERROR))
     @ApiOkResponse({ type: SimplifiedKyc })
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     async getUserSimplified(@Param("id") id: number): Promise<SimplifiedKyc> {
-        const simplifiedKyc = await this.kycService.getSimplifiedKyc(id);
-        return simplifiedKyc;
+        return this.kycService.getSimplifiedKyc(id);
     }
 }
