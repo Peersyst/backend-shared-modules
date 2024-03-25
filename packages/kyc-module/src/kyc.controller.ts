@@ -32,7 +32,7 @@ export class KycController {
     @ApiException(() => new KycBusinessException(KycErrorCode.SUMSUB_REQUEST_ERROR))
     @ApiOkResponse({ type: KycTokenDto })
     async getToken(@Request() req): Promise<KycTokenDto> {
-        return this.kycService.getToken(req.user.id);
+        return await this.kycService.getToken(req.user.id);
     }
 
     @ApiOperation({ summary: "Get user simplified kyc" })
@@ -42,6 +42,6 @@ export class KycController {
     @ApiException(() => new KycBusinessException(KycErrorCode.SUMSUB_REQUEST_ERROR))
     @ApiOkResponse({ type: SimplifiedKyc })
     async getUserSimplified(@Param("id") id: number): Promise<SimplifiedKyc> {
-        return this.kycService.getSimplifiedKyc(id);
+        return await this.kycService.getSimplifiedKyc(id);
     }
 }
