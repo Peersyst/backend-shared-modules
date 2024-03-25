@@ -22,7 +22,7 @@ export class KycController {
     @ApiException(() => new KycBusinessException(KycErrorCode.SUMSUB_REQUEST_ERROR))
     @ApiOkResponse({ type: Kyc })
     async getMe(@Request() req): Promise<Kyc> {
-        return this.kycService.getKyc(req.user.id);
+        return await this.kycService.getKyc(req.user.id);
     }
 
     @ApiOperation({ summary: "Get authenticated user kyc token" })

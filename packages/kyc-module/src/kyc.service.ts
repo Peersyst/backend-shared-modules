@@ -22,6 +22,22 @@ export class KycService {
         private readonly sumsubService: SumsubService,
     ) {}
 
+    private async getKycByUserId(userId: number): Promise<KycI> {
+        const kyc = await this.kycRepository.findByUserId(userId);
+
+        if (!kyc) throw new KycBusinessException(KycErrorCode.KYC_NOT_FOUND);
+
+        return kyc;
+    }
+
+    private async getKycByApplicantId(applicantId: string): Promise<KycI> {
+        const kyc = await this.kycRepository.findByApplicantId(applicantId);
+
+        if (!kyc) throw new KycBusinessException(KycErrorCode.KYC_NOT_FOUND);
+
+        return kyc;
+    }
+
     async getKyc(userId: number): Promise<KycI> {
         return this.getKycByUserId(userId);
     }
@@ -106,21 +122,5 @@ export class KycService {
         const kyc = await this.getKycByApplicantId(applicantId);
 
         await this.kycRepository.update(kyc.id, { status: reviewStatus, reviewAnswer: KycAnswer.GREEN });
-    }
-
-    private async getKycByUserId(userId: number): Promise<KycI> {
-        const kyc = await this.kycRepository.findByUserId(userId);
-
-        if (!kyc) throw new KycBusinessException(KycErrorCode.KYC_NOT_FOUND);
-
-        return kyc;
-    }
-
-    private async getKycByApplicantId(applicantId: string): Promise<KycI> {
-        const kyc = await this.kycRepository.findByApplicantId(applicantId);
-
-        if (!kyc) throw new KycBusinessException(KycErrorCode.KYC_NOT_FOUND);
-
-        return kyc;
     }
 }
