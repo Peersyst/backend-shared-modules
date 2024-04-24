@@ -9,8 +9,8 @@ export class KycEntity {
     @Column("int", { name: "user_id", unique: true })
     userId: number;
 
-    @Column("varchar", { length: 255, name: "applicant_id" })
-    applicantId: string;
+    @Column("varchar", { length: 255, name: "applicant_id", nullable: true })
+    applicantId?: string;
 
     @Column("varchar", { length: 255, name: "kyc_external_id" })
     kycExternalId: string;

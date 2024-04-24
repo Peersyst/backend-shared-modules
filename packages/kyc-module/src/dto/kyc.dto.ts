@@ -1,6 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 
 export enum KycStatus {
+    NOT_STARTED = "not-started",
     INIT = "init",
     PENDING = "pending",
     QUEUED = "queued",

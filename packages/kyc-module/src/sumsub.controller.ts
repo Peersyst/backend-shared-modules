@@ -29,7 +29,7 @@ export class SumsubController {
     @ApiException(() => new KycBusinessException(KycErrorCode.USER_NOT_FOUND))
     @ApiOkResponse()
     async applicantCreated(@Body() applicantCreatedRequest: ApplicantCreatedRequest): Promise<void> {
-        await this.kycService.create(applicantCreatedRequest.externalUserId, applicantCreatedRequest.applicantId);
+        await this.kycService.create(applicantCreatedRequest);
     };
 
     @ApiOperation({ summary: "Webhook for sumsub of applicant pending" })

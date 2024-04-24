@@ -1,18 +1,18 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { KycBusinessException } from "./exception/business.exception";
 import { KycErrorCode } from "./exception/error-codes";
-import { KycAnswer, KycStatus, SimplifiedKycI, KycI } from "./dto/kyc.dto";
+import { KycAnswer, KycI, KycStatus, SimplifiedKycI } from "./dto/kyc.dto";
 import { KycTokenDtoI } from "./dto/kyc-token.dto";
 import { SumsubService } from "./sumsub.service";
 import { ReviewResultProp } from "./requests/applicant-reviewed.request";
+import { ApplicantCreatedRequest } from "./requests/applicant-created.request";
 
 export interface KycRepositoryInterface {
-    create: (userId: number, applicantId: string) => Promise<KycI>;
     findByUserId: (userId: number) => Promise<KycI>;
     findByUserIdSimplified: (userId: number) => Promise<SimplifiedKycI>;
     findByApplicantId: (applicantId: string) => Promise<KycI>;
     update: (id: number, updateData: Partial<KycI>) => Promise<void>;
-    getKycExternalId: (userId: number) => Promise<string>;
+    getKycExternalId: (userId: number) => Promise<string | null>;
 }
 
 @Injectable()
@@ -71,10 +71,14 @@ export class KycService {
     // ----------------------------------------------------------------------
     // Webhook functions
     // ----------------------------------------------------------------------
-    async create(externalUserId: string, applicantId: string): Promise<void> {
-        const kyc = await this.kycRepository.findByUserId(Number(externalUserId));
+    async create(applicantCreatedRequest: ApplicantCreatedRequest): Promise<void> {
+        const kyc = await this.getKycByApplicantId(applicantCreatedRequest.applicantId);
 
-        if (!kyc) await this.kycRepository.create(Number(externalUserId), applicantId);
+        await this.kycRepository.update(kyc.id, {
+            applicantId: applicantCreatedRequest.applicantId,
+            status: applicantCreatedRequest.reviewStatus,
+            reviewAnswer: KycAnswer.GREEN,
+        });
     }
 
     async pending(applicantId: string, reviewStatus: KycStatus) {

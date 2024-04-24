@@ -3,16 +3,15 @@ import { Repository } from "typeorm";
 import { KycAnswer, KycI, KycRejectType, KycStatus, SimplifiedKycI } from "../dto/kyc.dto";
 import { KycRepositoryInterface } from "../kyc.service";
 import { KycEntity } from "./KycEntity";
+import { randomUUID } from "crypto";
 
 export class KycTypeormRepository implements KycRepositoryInterface {
     constructor(@InjectRepository(KycEntity) private readonly kycRepository: Repository<KycEntity>) {}
 
-    async create(userId: number, applicantId: string): Promise<KycI> {
-        const kycModel = await this.kycRepository.save({
-            userId, applicantId, status: KycStatus.INIT, reviewAnswer: KycAnswer.GREEN
+    async create(userId: number, kycExternalId: string): Promise<KycEntity> {
+        return this.kycRepository.save({
+            userId, kycExternalId, status: KycStatus.NOT_STARTED,
         });
-
-        return this.transformEntityToDto(kycModel);
     }
 
     async findByUserId(userId: number): Promise<KycI> {
@@ -34,8 +33,11 @@ export class KycTypeormRepository implements KycRepositoryInterface {
     }
 
     async getKycExternalId(userId: number): Promise<string> {
-        const kycModel = await this.kycRepository.findOne({ where: { userId } });
-        return kycModel ? kycModel.kycExternalId: null;
+        let kycModel = await this.kycRepository.findOne({ where: { userId } });
+        if (!kycModel) {
+            kycModel = await this.create(userId, randomUUID());
+        }
+        return kycModel.kycExternalId;
     }
 
     async update(id: number, updateData: Partial<KycI>): Promise<void> {
