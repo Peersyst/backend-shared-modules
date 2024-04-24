@@ -77,7 +77,6 @@ export class KycService {
         await this.kycRepository.update(kyc.id, {
             applicantId: applicantCreatedRequest.applicantId,
             status: applicantCreatedRequest.reviewStatus,
-            reviewAnswer: KycAnswer.GREEN,
         });
     }
 
