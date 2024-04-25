@@ -6,7 +6,7 @@
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "scripts": {
-        "prebuild": "npm i",
+        "prebuild": "npm ci",
         "build": "rimraf dist && tsc",
         "prepublishOnly": "npm run build",
         "clean": "rm -f *.js *.js.* *.d.ts src/**/*.js* src/*.js* src/**/*.d.ts src/*.d.ts *.tsbuildinfo && rm -rf node_modules/ dist/",
