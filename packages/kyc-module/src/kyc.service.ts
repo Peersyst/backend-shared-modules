@@ -11,6 +11,7 @@ export interface KycRepositoryInterface {
     findByUserId: (userId: number) => Promise<KycI>;
     findByUserIdSimplified: (userId: number) => Promise<SimplifiedKycI>;
     findByApplicantId: (applicantId: string) => Promise<KycI>;
+    findByExternalUserId: (externalUserId: string) => Promise<KycI | null>;
     update: (id: number, updateData: Partial<KycI>) => Promise<void>;
     getKycExternalId: (userId: number) => Promise<string | null>;
 }
@@ -72,8 +73,8 @@ export class KycService {
     // Webhook functions
     // ----------------------------------------------------------------------
     async create(applicantCreatedRequest: ApplicantCreatedRequest): Promise<void> {
-        const kyc = await this.getKycByApplicantId(applicantCreatedRequest.applicantId);
-
+        const kyc = await this.kycRepository.findByExternalUserId(applicantCreatedRequest.externalUserId);
+        if (!kyc) throw new KycBusinessException(KycErrorCode.KYC_NOT_FOUND);
         await this.kycRepository.update(kyc.id, {
             applicantId: applicantCreatedRequest.applicantId,
             status: applicantCreatedRequest.reviewStatus,
