@@ -1,7 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Source } from "src/types";
 
-export class RecoverPasswordRequest {
+export class RecoverPasswordRequest<TSource> {
     @ApiProperty({
         type: "string",
         required: true,
@@ -13,5 +12,5 @@ export class RecoverPasswordRequest {
         type: "string",
         required: true,
     })
-    source: Source;
+    source: TSource;
 }
