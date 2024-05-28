@@ -19,6 +19,7 @@ import { PrivateAuthUserDtoI } from "./dto/private-user.dto";
 import { RefreshVerificationTokenRequest } from "./requests/refresh-verification-code.request";
 import { Authenticated } from "./auth.decorator";
 import { ChangePasswordRequest } from "./requests/change-password.request";
+import { Source } from "./types";
 
 @ApiTags("authenticate")
 @Controller("auth")
@@ -134,7 +135,7 @@ export class AuthValidateController {
 }
 
 export interface RecoverNotificationServiceI {
-    notificateRecoverPassword: (user: PrivateAuthUserDtoI, resetToken: string) => Promise<void>;
+    notificateRecoverPassword: (user: PrivateAuthUserDtoI, resetToken: string, source: Source) => Promise<void>;
 }
 
 @ApiTags("authenticate")
@@ -155,7 +156,7 @@ export class AuthRecoverController {
     async requestResetPassword(@Body() recoverPasswordRequest: RecoverPasswordRequest): Promise<void> {
         const user = await this.authService.getUserByEmail(recoverPasswordRequest.email);
         const resetToken = await this.recoverPasswordService.createResetToken(user.id);
-        await this.notificationService.notificateRecoverPassword(user, resetToken);
+        await this.notificationService.notificateRecoverPassword(user, resetToken, recoverPasswordRequest.source);
     }
 
     @Post("reset-password")

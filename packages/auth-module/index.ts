@@ -11,3 +11,4 @@ export * from "./src/guards";
 export * from "./src/requests";
 export * from "./src/strategies";
 export * from "./src/utils";
+export * from "./src/types";
