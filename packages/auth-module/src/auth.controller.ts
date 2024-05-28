@@ -133,8 +133,8 @@ export class AuthValidateController {
     }
 }
 
-export interface RecoverNotificationServiceI {
-    notificateRecoverPassword: (user: PrivateAuthUserDtoI, resetToken: string) => Promise<void>;
+export interface RecoverNotificationServiceI<TSource = any> {
+    notificateRecoverPassword: (user: PrivateAuthUserDtoI, resetToken: string, source: TSource) => Promise<void>;
 }
 
 @ApiTags("authenticate")
@@ -152,10 +152,10 @@ export class AuthRecoverController {
     @ApiOkResponse()
     @ApiOperation({ summary: "Request Password Reset" })
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types,@typescript-eslint/no-unused-vars
-    async requestResetPassword(@Body() recoverPasswordRequest: RecoverPasswordRequest): Promise<void> {
+    async requestResetPassword<TSource>(@Body() recoverPasswordRequest: RecoverPasswordRequest<TSource>): Promise<void> {
         const user = await this.authService.getUserByEmail(recoverPasswordRequest.email);
         const resetToken = await this.recoverPasswordService.createResetToken(user.id);
-        await this.notificationService.notificateRecoverPassword(user, resetToken);
+        await this.notificationService.notificateRecoverPassword(user, resetToken, recoverPasswordRequest.source);
     }
 
     @Post("reset-password")
