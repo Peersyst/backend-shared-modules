@@ -11,7 +11,7 @@ import { DATA_EXPORT_PDF_OPTIONS, PUPPETEER_ARGS } from "../../constants/pdf.con
 @Injectable()
 export class PDFService<TParams> implements DataExportAsyncService<TParams, void, ExportPDFOptions> {
     constructor(@Inject(DATA_EXPORT_PDF_OPTIONS) private readonly pdfOptions: ModulePDFOptions) {
-        if (pdfOptions.hanldebars.helpers) handlebars.registerHelper(pdfOptions.hanldebars.helpers);
+        if (pdfOptions?.handlebars?.helpers) handlebars.registerHelper(pdfOptions.handlebars.helpers);
     }
 
     public async generateAsync(data: TParams | TParams[], options: ExportPDFOptions) {

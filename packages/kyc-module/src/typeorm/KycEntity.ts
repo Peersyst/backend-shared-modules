@@ -9,14 +9,17 @@ export class KycEntity {
     @Column("int", { name: "user_id", unique: true })
     userId: number;
 
-    @Column("varchar", { length: 255, name: "applicant_id" })
-    applicantId: string;
+    @Column("varchar", { length: 255, name: "applicant_id", nullable: true })
+    applicantId?: string;
+
+    @Column("varchar", { length: 255, name: "kyc_external_id" })
+    kycExternalId: string;
 
     @Column({ type: "enum", enum: KycStatus })
     status: KycStatus;
 
-    @Column({ type: "enum", enum: KycAnswer, name: "review_answer" })
-    reviewAnswer: KycAnswer;
+    @Column({ type: "enum", enum: KycAnswer, name: "review_answer", nullable: true })
+    reviewAnswer?: KycAnswer;
 
     @Column({ type: "text", name: "moderation_comment", nullable: true })
     moderationComment?: string;
@@ -30,9 +33,9 @@ export class KycEntity {
     @Column("varchar", { length: 255, name: "reject_labels", nullable: true })
     rejectLabels?: string;
 
-    @CreateDateColumn({ name: "created_at", type: "datetime" })
+    @CreateDateColumn({ name: "created_at", type: "timestamp" })
     createdAt: Date;
 
-    @UpdateDateColumn({ name: "updated_at", type: "datetime" })
+    @UpdateDateColumn({ name: "updated_at", type: "timestamp" })
     updatedAt: Date;
 }

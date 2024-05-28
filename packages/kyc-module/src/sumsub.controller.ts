@@ -14,7 +14,7 @@ import { ApplicantPrecheckedRequest } from "./requests/applicant-prechecked.requ
 import { ApplicantDeletedRequest } from "./requests/applicant-deleted.request";
 import { DigestedFromSumsub } from "./sumsub.decorator";
 
-@ApiTags("sumsub")
+@ApiTags("kyc")
 @Controller("kyc")
 @ApiErrorDecorators()
 @DigestedFromSumsub()
@@ -29,7 +29,7 @@ export class SumsubController {
     @ApiException(() => new KycBusinessException(KycErrorCode.USER_NOT_FOUND))
     @ApiOkResponse()
     async applicantCreated(@Body() applicantCreatedRequest: ApplicantCreatedRequest): Promise<void> {
-        await this.kycService.create(applicantCreatedRequest.externalUserId, applicantCreatedRequest.applicantId);
+        await this.kycService.create(applicantCreatedRequest);
     };
 
     @ApiOperation({ summary: "Webhook for sumsub of applicant pending" })
