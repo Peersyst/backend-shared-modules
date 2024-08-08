@@ -1,6 +1,6 @@
 {
     "name": "@peersyst/data-export",
-    "version": "0.1.4",
+    "version": "0.1.5",
     "description": "NestJS module to export data",
     "keywords": [],
     "author": "Guillem Garcia <ggarcia@peersyst.com>",

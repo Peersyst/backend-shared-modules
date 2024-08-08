@@ -1,6 +1,6 @@
 {
     "name": "@peersyst/kyc-module",
-    "version": "0.13.8",
+    "version": "0.13.9",
     "description": "Know Your Customer module",
     "author": "Joan Grau <jgrau@peersyst.com>",
     "main": "dist/index.js",
@@ -15,7 +15,7 @@
     "dependencies": {
         "@nanogiants/nestjs-swagger-api-exception-decorator": "^1.6.11",
         "@nestjs/swagger": "~7.1.16",
-        "@peersyst/auth-module": "^0.14.3",
+        "@peersyst/auth-module": "^0.14.5",
         "class-transformer": "0.5.1",
         "class-validator": "0.14.0",
         "express-openapi-validator": "^5.1.0",

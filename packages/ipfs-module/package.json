@@ -1,6 +1,6 @@
 {
     "name": "@peersyst/ipfs-module",
-    "version": "0.13.0",
+    "version": "0.13.1",
     "description": "IPFS Module",
     "author": "Sergi <scanal@peersyst.com>",
     "main": "index.js",
