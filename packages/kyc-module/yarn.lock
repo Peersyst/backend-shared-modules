@@ -147,10 +147,10 @@
     consola "^2.15.0"
     node-fetch "^2.6.1"
 
-"@peersyst/auth-module@^0.14.5":
-  version "0.14.5"
-  resolved "https://registry.yarnpkg.com/@peersyst/auth-module/-/auth-module-0.14.5.tgz#a521a11fe7970cb602643c0d353482c9c5651681"
-  integrity sha512-pZ1Nf8W5U0OcatADRj3EL1GV1erAenkejgUaNsJR+khJfekyiNjmL5fzf7YTWDksLUr+QdZBW4gmh5QQCDdyfA==
+"@peersyst/auth-module@^0.14.6":
+  version "0.14.6"
+  resolved "https://registry.yarnpkg.com/@peersyst/auth-module/-/auth-module-0.14.6.tgz#5d890ba0d4faf2da84555cd207b4a9eab1730d2a"
+  integrity sha512-KiZFDCttQ4kRo4fWj4DlU2VnoQHmmRrr+KXFH1ikM+VPQP25aD17PXjFjTVaMAwKl8x7uxj9blamIO99tifxmQ==
   dependencies:
     "@nanogiants/nestjs-swagger-api-exception-decorator" "^1.6.11"
     "@nestjs/jwt" "10.2.0"
