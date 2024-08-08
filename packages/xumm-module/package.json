@@ -1,6 +1,6 @@
 {
     "name": "@peersyst/xumm-module",
-    "version": "0.13.1",
+    "version": "0.13.0",
     "description": "XUMM Module",
     "author": "Sergi <scanal@peersyst.com>",
     "main": "index.js",
@@ -43,5 +43,6 @@
     },
     "files": [
         "dist"
-    ]
+    ],
+    "gitHead": "9b470642fdb86257e0c21cfdcae8399df5aba15b"
 }
