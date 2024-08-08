@@ -1,10 +1,10 @@
 {
     "name": "@peersyst/payment-module",
-    "version": "0.13.4",
+    "version": "0.13.3",
     "description": "Payment gateway module",
     "author": "Adrià Carrera <acarrera@peersyst.com>",
-    "main": "index.js",
-    "types": "index.d.ts",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
     "scripts": {
         "build": "rimraf dist && tsc",
         "prepublishOnly": "npm run build",
@@ -42,5 +42,5 @@
     "files": [
         "dist"
     ],
-    "gitHead": "d2cb78df825f3fe323e8b78bbac96dfd6a37e7d0"
+    "gitHead": "4a54d7648fafe9a67bc0ea3cc421001d3a0cc3b4"
 }
